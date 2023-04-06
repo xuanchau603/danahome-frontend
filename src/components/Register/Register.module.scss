@@ -1,0 +1,107 @@
+.background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  > img {
+    width: 100%;
+    height: 10rem;
+    border-end-start-radius: 10rem;
+    border-top-right-radius: 0.6rem;
+  }
+}
+
+.wrapper {
+  padding: 4rem 2rem;
+  .title {
+    z-index: 10;
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+
+  .form-group {
+    height: 6rem;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #ccc;
+    overflow: hidden;
+    transition: 0.2s linear;
+    &:focus-within {
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      border-radius: 0.6rem;
+    }
+
+    > input {
+      padding-left: 5rem;
+      padding-bottom: 1rem;
+      border: none;
+      font-weight: 600;
+      &:focus {
+        + label {
+          top: 0;
+          font-size: 1.3rem;
+          color: #6b6b6b;
+        }
+      }
+      &:not(:placeholder-shown) {
+        + label {
+          top: 0;
+          font-size: 1.3rem;
+          color: #6b6b6b;
+        }
+      }
+    }
+    > input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none;
+      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+    .icon {
+      position: absolute;
+      left: 1rem;
+      top: 2rem;
+      > svg {
+        font-size: 2.4rem;
+      }
+    }
+    > label {
+      position: absolute;
+      left: 5rem;
+      top: 2rem;
+      color: #cbcbcb;
+      font-weight: 500;
+      pointer-events: none;
+      transition: 0.05s linear;
+    }
+  }
+  .btn {
+    display: flex;
+    justify-content: right;
+    .btn-register {
+      font-size: 2rem;
+      padding: 2.8rem 2.5rem;
+      margin-top: 1rem;
+      cursor: not-allowed;
+      opacity: 0.4;
+      .loading {
+        animation: spin 0.4s infinite linear;
+      }
+    }
+  }
+}
+.register {
+  text-align: center;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

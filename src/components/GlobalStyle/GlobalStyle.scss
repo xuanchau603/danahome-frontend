@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+
+:root {
+  --primary-color: #30d180;
+  --success-color: #9df99d;
+  --warning-color: #e1ec86;
+  --pending-color: #bfbeef;
+  --error-color: #efcaca;
+  --text-color: #333;
+  --white-color: #fff;
+  --background-color: #fff;
+  --shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.3);
+  --button-color: rgb(87, 87, 87);
+  --button-background: linear-gradient(
+    90deg,
+    hsla(173, 67%, 76%, 1) 0%,
+    hsla(115, 94%, 67%, 1) 100%
+  );
+}
+
+html {
+  font-size: 62.5%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 1.6rem;
+  font-family: "Jost";
+}
+
+a[href] {
+  text-decoration: none;
+}
+ul,
+p {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+input {
+  box-sizing: border-box;
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+button {
+  border: none;
+  background: none;
+}
+
+//Scroll-Bar
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 3px grey;
+  border-radius: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(161, 161, 161);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background: rgb(131, 131, 131);
+}
+.slick-slide > div {
+  padding: 0 5px;
+}

@@ -1,0 +1,37 @@
+.wrapper {
+  width: fit-content;
+  height: 3rem;
+  padding: 2.2rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  > svg {
+    padding-left: 0.6rem;
+    font-size: 3rem;
+  }
+}
+
+.primary {
+  background: linear-gradient(
+    90deg,
+    rgb(128, 250, 156) 16%,
+    rgba(144, 249, 167, 1) 21%,
+    rgb(48, 245, 31) 100%
+  );
+  color: #507d2e;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.outline {
+  background: rgb(213, 254, 223) 16%;
+  border: 1px solid rgb(36, 251, 83);
+  color: rgb(2, 143, 2);
+  &:hover {
+    background: rgb(191, 255, 207) 16%;
+  }
+}
