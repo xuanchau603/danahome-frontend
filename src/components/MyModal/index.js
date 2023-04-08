@@ -4,6 +4,7 @@ function MyModal(props) {
   return (
     <>
       <Modal
+        className={props.classes}
         cancelText="Hủy"
         open={props.status}
         onCancel={props.onCancel}

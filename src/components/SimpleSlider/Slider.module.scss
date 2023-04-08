@@ -1,0 +1,17 @@
+.btn {
+  position: absolute;
+  top: -12rem;
+  padding: 3rem 2.2rem;
+  z-index: 99;
+}
+
+.btn-prev {
+  background: #dcdcdc;
+  color: #4f4f4f;
+  right: 9.4rem;
+}
+.btn-next {
+  right: 0;
+  background: #00a439;
+  color: #fff;
+}
