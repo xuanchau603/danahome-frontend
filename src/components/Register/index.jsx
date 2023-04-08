@@ -13,6 +13,7 @@ import classNames from "classnames/bind";
 import { background } from "../../Image/index";
 
 import { useState } from "react";
+import MyInput from "./../MyInput/index";
 
 const cx = classNames.bind(style);
 
@@ -26,42 +27,32 @@ function Register(props) {
       </div>
       <div className={cx("wrapper")}>
         <h1 className={cx("title")}>Tạo tài khoản</h1>
-        <div className={cx("form-group")}>
-          <input id="fullName" type="text" placeholder=" "></input>
-          <label htmlFor="email">HỌ VÀ TÊN</label>
-          <span className={cx("icon")}>
-            <PersonOutlineIcon></PersonOutlineIcon>
-          </span>
-        </div>
+        <MyInput
+          type="text"
+          label="HỌ VÀ TÊN"
+          icon={<PersonOutlineIcon></PersonOutlineIcon>}
+        ></MyInput>
+        <MyInput
+          type="email"
+          label="EMAIL"
+          icon={<MailOutlineIcon></MailOutlineIcon>}
+        ></MyInput>
+        <MyInput
+          type="number"
+          label="ĐIỆN THOẠI"
+          icon={<PhoneIphoneIcon></PhoneIphoneIcon>}
+        ></MyInput>
+        <MyInput
+          type="password"
+          label="MẬT KHẨU"
+          icon={<LockIcon></LockIcon>}
+        ></MyInput>
+        <MyInput
+          type="password"
+          label="NHẬP LẠI MẬT KHẨU"
+          icon={<LockIcon></LockIcon>}
+        ></MyInput>
 
-        <div className={cx("form-group")}>
-          <input id="email" type="email" placeholder=" "></input>
-          <label htmlFor="email">EMAIL</label>
-          <span className={cx("icon")}>
-            <MailOutlineIcon></MailOutlineIcon>
-          </span>
-        </div>
-        <div className={cx("form-group")}>
-          <input id="phone" type="number" placeholder=" "></input>
-          <label htmlFor="email">SỐ ĐIỆN THOẠI</label>
-          <span className={cx("icon")}>
-            <PhoneIphoneIcon></PhoneIphoneIcon>
-          </span>
-        </div>
-        <div className={cx("form-group")}>
-          <input id="password" type="password" placeholder=" "></input>
-          <label htmlFor="email">MẬT KHẨU</label>
-          <span className={cx("icon")}>
-            <LockIcon></LockIcon>
-          </span>
-        </div>
-        <div className={cx("form-group")}>
-          <input id="password-agian" type="password" placeholder=" "></input>
-          <label htmlFor="email">NHẬP LẠI MẬT KHẨU</label>
-          <span className={cx("icon")}>
-            <LockIcon></LockIcon>
-          </span>
-        </div>
         <div className={cx("btn")}>
           <MyButton primary classes={cx("btn-register")}>
             Đăng ký <EastIcon></EastIcon>{" "}

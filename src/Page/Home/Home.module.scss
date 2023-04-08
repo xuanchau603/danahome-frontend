@@ -1,0 +1,119 @@
+.wrapper {
+  max-width: var(--l-witdh);
+  margin: 0 auto;
+  margin-top: -10rem;
+  z-index: 9;
+
+  .nav {
+    .nav-left {
+      padding-top: 20rem;
+      .slogan {
+        > p {
+          padding: 0.4rem 0;
+          font-size: 4rem;
+          font-weight: 800;
+          color: #000c4d;
+          > b {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+              1px 1px 0 #000;
+          }
+        }
+      }
+      .sub-slogan {
+        padding: 3rem 0;
+        > p {
+          padding-bottom: 0.4rem;
+          font-size: 2rem;
+          font-weight: 400;
+          color: #7c7c7c;
+        }
+      }
+      .partner {
+        > p {
+          font-size: 2.2rem;
+          font-weight: 500;
+          margin-bottom: 2rem;
+        }
+        .list-partner {
+          height: 6rem;
+          display: flex;
+          > li {
+            width: 25%;
+            padding-right: 3rem;
+            > img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+      }
+    }
+    .nav-right {
+      .banner {
+        height: 72rem;
+        > img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          border-end-start-radius: 14rem;
+        }
+      }
+    }
+  }
+
+  .search-box {
+    margin-top: 6rem;
+    border: 2px solid #ccc;
+    padding: 0 2rem;
+    .title {
+      padding: 1rem 0;
+      font-size: 2rem;
+    }
+    .search-action {
+      padding: 2rem 0;
+      padding-bottom: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .search-input {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .form-group {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          padding-right: 4rem;
+          color: #575757;
+          > input {
+            text-align: left;
+            padding: 0.6rem 4rem;
+            width: 100%;
+            border: 2px solid #ccc;
+            background: #fff;
+            font-weight: 600;
+            border-radius: 0.4rem;
+            color: #575757;
+            cursor: pointer;
+          }
+          > label {
+            position: absolute;
+            top: 0.6rem;
+            left: 1rem;
+          }
+        }
+      }
+
+      .btn-search {
+        color: #616161;
+        font-size: 2rem;
+        padding: 2.2rem 3rem;
+      }
+    }
+  }
+}

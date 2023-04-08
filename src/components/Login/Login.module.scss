@@ -17,64 +17,12 @@
   .title {
     font-size: 3rem;
     font-weight: 600;
+    color: #000;
   }
   .please {
     font-weight: 500;
     color: #7d7d7d;
     margin-bottom: 4rem;
-  }
-  .form-group {
-    height: 6rem;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 3rem;
-    border-bottom: 1px solid #ccc;
-    overflow: hidden;
-    transition: 0.2s linear;
-
-    &:focus-within {
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-      border-radius: 1rem;
-    }
-
-    > input {
-      padding-left: 5rem;
-      padding-bottom: 1rem;
-      font-weight: 600;
-      border: none;
-      &:focus {
-        + label {
-          top: 0;
-          font-size: 1.3rem;
-          color: #6b6b6b;
-        }
-      }
-      &:not(:placeholder-shown) {
-        + label {
-          top: 0;
-          font-size: 1.3rem;
-          color: #6b6b6b;
-        }
-      }
-    }
-    .icon {
-      position: absolute;
-      left: 1rem;
-      top: 2rem;
-      > svg {
-        font-size: 2.4rem;
-      }
-    }
-    > label {
-      position: absolute;
-      left: 5rem;
-      top: 2rem;
-      color: #cbcbcb;
-      font-weight: 500;
-      pointer-events: none;
-      transition: 0.05s linear;
-    }
   }
   .btn {
     display: flex;

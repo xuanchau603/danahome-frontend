@@ -1,11 +1,13 @@
 .wrapper {
   height: 10rem;
-  background: #ccc;
-  padding: 3rem 16rem;
+  max-width: var(--l-witdh);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+  position: relative;
+  z-index: 99;
   .logo {
     width: 16rem;
     height: 100%;
@@ -19,37 +21,38 @@
   .action {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .action-item {
       display: flex;
       align-items: center;
-      margin: 0 2rem;
-      padding: 0.6rem 2rem;
-      border: 0.4px solid #fff;
+      padding: 0.8rem 1.6rem;
+      margin: 0 1rem;
+      border: 0.4px solid #6b6b6b;
       border-radius: 30px;
+      color: #6b6b6b;
       font-weight: 500;
-      color: #fff;
       transition: 0.4s;
       > svg {
         padding-left: 0.6rem;
-        font-size: 2.4rem;
+        font-size: 2rem;
       }
 
       &:hover {
-        background: #dedede;
+        background: #d0ffdb;
         cursor: pointer;
-        color: #4a4a4a;
+        color: #313131;
       }
       &:first-child:hover > svg {
         color: red;
       }
     }
     .login {
-      margin: 0 2rem;
+      margin-left: 2rem;
       padding: 1rem 2rem;
-      border: 0.4px solid #fff;
+      border: 1px solid #00b42a;
       border-radius: 30px;
       font-weight: 500;
-      color: #16bf3d;
+      color: #00b42a;
       font-weight: 600;
       background: #d0ffdb;
       display: flex;

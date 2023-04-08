@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800");
 :root {
   --primary-color: #30d180;
   --success-color: #9df99d;
@@ -16,10 +15,13 @@
     hsla(173, 67%, 76%, 1) 0%,
     hsla(115, 94%, 67%, 1) 100%
   );
+  --l-witdh: 1248px;
+  --s-witdh: 576px;
 }
 
 html {
   font-size: 62.5%;
+  font-weight: 400;
 }
 
 * {
@@ -27,7 +29,24 @@ html {
   margin: 0;
   padding: 0;
   font-size: 1.6rem;
-  font-family: "Jost";
+  font-family: "Inter";
+}
+body {
+  background-image: radial-gradient(
+    circle,
+    #ffffff,
+    #fdfeff,
+    #fbfdff,
+    #f7fcff,
+    #f3fcff,
+    #eefbff,
+    #e8fbff,
+    #e3faff,
+    #dcf8ff,
+    #d5f7ff,
+    #cdf5ff,
+    #c6f3ff
+  );
 }
 
 a[href] {

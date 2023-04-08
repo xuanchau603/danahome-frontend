@@ -10,6 +10,7 @@ import { Checkbox, Spin } from "antd";
 import classNames from "classnames/bind";
 import { background } from "../../Image";
 import { useState } from "react";
+import MyInput from "../MyInput";
 
 const cx = classNames.bind(style);
 
@@ -24,20 +25,16 @@ function Login(props) {
       <div className={cx("wrapper")}>
         <h1 className={cx("title")}>Đăng nhập</h1>
         <p className={cx("please")}>Vui lòng đăng nhập để tiếp tục.</p>
-        <div className={cx("form-group")}>
-          <input id="email" type="email" placeholder=" "></input>
-          <label htmlFor="email">EMAIL</label>
-          <span className={cx("icon")}>
-            <MailOutlineIcon></MailOutlineIcon>
-          </span>
-        </div>
-        <div className={cx("form-group")}>
-          <input id="password" type="password" placeholder=" "></input>
-          <label htmlFor="email">MẬT KHẨU</label>
-          <span className={cx("icon")}>
-            <LockIcon></LockIcon>
-          </span>
-        </div>
+        <MyInput
+          type="email"
+          label="EMAIL"
+          icon={<MailOutlineIcon></MailOutlineIcon>}
+        ></MyInput>
+        <MyInput
+          type="password"
+          label="MẬT KHẨU"
+          icon={<LockIcon></LockIcon>}
+        ></MyInput>
         <div className={cx("btn")}>
           <div className={cx("remember")}>
             <Checkbox onChange={() => console.log("checked")}>

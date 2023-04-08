@@ -1,0 +1,199 @@
+.footer {
+  max-width: var(--l-witdh);
+  margin: 10rem auto 0 auto;
+  .subcribe {
+    display: block;
+    margin: 0 0 6rem 0;
+    border: 1px solid #d1ffe1;
+    border-radius: 4rem;
+    background-image: linear-gradient(
+      to left bottom,
+      #ffffff,
+      #fcfeff,
+      #f6feff,
+      #efffff,
+      #eafffd,
+      #e7fff9,
+      #e5fff4,
+      #e6ffed,
+      #e2ffea,
+      #dfffe8,
+      #dbffe5,
+      #d8ffe2
+    );
+    height: 30rem;
+    > h1 {
+      font-size: 2.8rem;
+      text-align: center;
+      position: relative;
+      font-weight: 800;
+      top: 6rem;
+    }
+    .form-group {
+      height: 6rem;
+      position: relative;
+      width: 50%;
+      top: 10rem;
+      left: 50%;
+
+      border-radius: 3rem;
+      transform: translateX(-50%);
+      background-color: #fff;
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid #ccc;
+      overflow: hidden;
+      transition: 0.2s linear;
+
+      &:focus-within {
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      }
+
+      > input {
+        padding-left: 6rem;
+        padding-bottom: 1.4rem;
+        padding-top: 1rem;
+        font-weight: 600;
+        background-color: transparent;
+        border: none;
+        &:focus {
+          + label {
+            top: 0;
+            font-size: 1.3rem;
+            color: #6b6b6b;
+          }
+        }
+        &:not(:placeholder-shown) {
+          + label {
+            top: 0;
+            font-size: 1.3rem;
+            color: #6b6b6b;
+          }
+        }
+      }
+      .icon {
+        position: absolute;
+        left: 2rem;
+        top: 1.8rem;
+        > svg {
+          font-size: 2.4rem;
+        }
+      }
+      > label {
+        position: absolute;
+        left: 6rem;
+        top: 2rem;
+        color: #cbcbcb;
+        font-weight: 500;
+        pointer-events: none;
+        transition: 0.05s linear;
+      }
+      .button {
+        position: absolute;
+        right: 0.3rem;
+        top: 0.3rem;
+        height: 91%;
+        width: 30%;
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: #3d3d3d;
+      }
+    }
+  }
+  .wrapper {
+    padding: 3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .social {
+      padding: 1.4rem;
+      height: 100%;
+    }
+    .logo {
+      width: 16rem;
+      height: 100%;
+
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+    .introduction {
+      width: 50rem;
+      padding-bottom: 1.4rem;
+      font-size: 1.6rem;
+    }
+    .social-media {
+      .social-app {
+        padding: 1.6rem;
+        &:nth-child(1) {
+          padding-left: 0;
+        }
+        > svg {
+          font-size: 4rem;
+        }
+        &:nth-child(1):hover > svg {
+          color: #3b5998;
+          cursor: pointer;
+        }
+        &:nth-child(2):hover > svg {
+          color: #1da1f2;
+          cursor: pointer;
+        }
+        &:nth-child(3):hover > svg {
+          color: #e1306c;
+          cursor: pointer;
+        }
+      }
+    }
+    .property {
+      position: relative;
+      font-size: 1.6rem;
+      > h1 {
+        padding-bottom: 2rem;
+      }
+      .type > li {
+        padding-bottom: 1rem;
+      }
+      .type > li > a {
+        color: #b2b0b0;
+        &:hover {
+          font-weight: 600;
+          color: #383636;
+        }
+      }
+    }
+    .article {
+      position: relative;
+      top: 1.8rem;
+      font-size: 1.6rem;
+      > h1 {
+        padding-bottom: 2rem;
+      }
+      .type > li {
+        padding-bottom: 1rem;
+      }
+      .type > li > a {
+        color: #b2b0b0;
+        &:hover {
+          font-weight: 600;
+          color: #383636;
+        }
+      }
+    }
+    .contact {
+      position: relative;
+      top: 0.6rem;
+      font-size: 1.6rem;
+      > h1 {
+        padding-bottom: 2rem;
+      }
+      > p {
+        padding-bottom: 1rem;
+        color: #b2b0b0;
+      }
+    }
+  }
+}
