@@ -1,0 +1,102 @@
+.search-box {
+  margin: 6rem 0 10rem 0;
+  border: 2px solid #ccc;
+  padding: 0 2rem;
+  .title {
+    padding: 1rem 0;
+    font-size: 2rem;
+  }
+  .search-action {
+    padding: 2rem 0;
+    padding-bottom: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .search-input {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .form-group {
+        position: relative;
+        width: 26rem;
+        height: 100%;
+        padding-right: 4rem;
+        color: #575757;
+        .data {
+          width: 100%;
+          padding: 0.6rem 1rem 0.6rem 0;
+          border: 2px solid #ccc;
+          background: #fff;
+          border-radius: 0.4rem;
+          cursor: pointer;
+          > p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
+            color: #575757;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding-left: 4rem;
+          }
+        }
+        > label {
+          position: absolute;
+          top: 0.6rem;
+          left: 1rem;
+        }
+        .more {
+          position: absolute;
+          right: 4.2rem;
+          top: 0.6rem;
+          pointer-events: none;
+        }
+      }
+    }
+
+    .btn-search {
+      color: #616161;
+      font-size: 2rem;
+      padding: 2.2rem 3rem;
+    }
+  }
+}
+
+.list-option {
+  margin-top: 1rem;
+  overflow-y: auto;
+  max-height: 60rem;
+}
+.range-price {
+  > h1 {
+    text-align: center;
+    padding-bottom: 2rem;
+    font-size: 2rem;
+  }
+  .quick-select {
+    margin-bottom: 2rem;
+    > h1 {
+      margin: 4rem 0;
+    }
+    .quick-option {
+      display: flex;
+      flex-wrap: wrap;
+      .quick-item {
+        margin: 0 1rem 1.4rem 0;
+        font-size: 1.4rem;
+        padding: 0.6rem 1.4rem;
+        font-weight: 500;
+        cursor: pointer;
+        background: #ebebeb;
+        border-radius: 4px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  .btn {
+    width: 100%;
+  }
+}

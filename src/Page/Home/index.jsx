@@ -3,66 +3,50 @@ import style from "./Home.module.scss";
 import classNames from "classnames/bind";
 import { banner } from "../../Image";
 import MyButton from "./../../components/MyButton/index";
-import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import MoneyIcon from "@mui/icons-material/Money";
-import AspectRatioIcon from "@mui/icons-material/AspectRatio";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import StarIcon from "@mui/icons-material/Star";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import StairsIcon from "@mui/icons-material/Stairs";
+import CallIcon from "@mui/icons-material/Call";
+import CarRepairIcon from "@mui/icons-material/CarRepair";
+import BathtubIcon from "@mui/icons-material/Bathtub";
+import KingBedIcon from "@mui/icons-material/KingBed";
 import CabinIcon from "@mui/icons-material/Cabin";
 import HouseIcon from "@mui/icons-material/House";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import Menu from "../../components/Menu";
 import Format from "../../components/Format";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import SimpleSlider from "../../components/SimpleSlider";
+import SearchBox from "../../components/SearchBox";
 const cx = classNames.bind(style);
 
 function Home() {
-  const [showMenuType, setShowMenuType] = useState(false);
-  const [province, setProvince] = useState([]);
-
-  const onCancelMenuType = () => {
-    setShowMenuType(false);
+  const settingsSliderNewsBox = {
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    prevArrow: (
+      <MyButton classes={cx("btn-prev", "btn")} primary>
+        <ArrowBackIosIcon></ArrowBackIosIcon>
+      </MyButton>
+    ),
+    nextArrow: (
+      <MyButton classes={cx("btn-next", "btn")} primary>
+        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+      </MyButton>
+    ),
   };
 
-  const getProvince = async () => {
-    const res = await axios.get("https://provinces.open-api.vn/api/?depth=1");
-    setProvince(res.data);
+  const settingNewsReview = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    prevArrow: <></>,
+    nextArrow: <></>,
   };
-  useEffect(() => {
-    getProvince();
-  }, []);
-
-  // const menuItemsType1 = [
-  //   {
-  //     code: 1,
-  //     value: "Nhà",
-  //     children: {
-  //       data: [
-  //         {
-  //           code: 1,
-  //           value: "Nhà 1",
-  //         },
-  //         {
-  //           code: 2,
-  //           value: "Nhà 2",
-  //         },
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     code: 2,
-  //     value: "Phòng trọ",
-  //   },
-  //   {
-  //     code: 3,
-  //     value: "Chung cư",
-  //   },
-  // ];
 
   return (
     <div className={cx("wrapper")}>
@@ -122,67 +106,7 @@ function Home() {
         </Row>
       </div>
 
-      <div className={cx("search-box")}>
-        <h2 className={cx("title")}>Tìm kiếm nơi ở phù hợp với bản thân</h2>
-        <div className={cx("search-action")}>
-          <div className={cx("search-input")}>
-            <div
-              onClick={() => setShowMenuType(true)}
-              className={cx("form-group")}
-            >
-              <label htmlFor="type">
-                <MapsHomeWorkIcon fontSize="large"></MapsHomeWorkIcon>
-              </label>
-              <input id="type" type="submit" value={"Loại"} />
-              <span className={cx("more")}>
-                <ChevronRightIcon fontSize="large"></ChevronRightIcon>
-              </span>
-            </div>
-            <div className={cx("form-group")}>
-              <label htmlFor="type">
-                <LocationOnIcon fontSize="large"></LocationOnIcon>
-              </label>
-              <input id="type" type="submit" value={"Địa chỉ"} />
-              <span className={cx("more")}>
-                <ChevronRightIcon fontSize="large"></ChevronRightIcon>
-              </span>
-            </div>
-            <div className={cx("form-group")}>
-              <label htmlFor="type">
-                <MoneyIcon fontSize="large"></MoneyIcon>{" "}
-              </label>
-              <input id="type" type="submit" value={"Giá cả"} />
-              <span className={cx("more")}>
-                <ChevronRightIcon fontSize="large"></ChevronRightIcon>
-              </span>
-            </div>
-            <div className={cx("form-group")}>
-              <label htmlFor="type">
-                <AspectRatioIcon fontSize="large"></AspectRatioIcon>
-              </label>
-              <input id="type" type="submit" value={"Diện tích"} />
-              <span className={cx("more")}>
-                <ChevronRightIcon fontSize="large"></ChevronRightIcon>
-              </span>
-            </div>
-          </div>
-
-          <MyButton
-            onClick={() => alert("thanh ngu")}
-            classes={cx("btn-search")}
-            primary
-          >
-            Tìm kiếm
-          </MyButton>
-          <Menu
-            classes={cx("menu-type")}
-            open={showMenuType}
-            onCancel={onCancelMenuType}
-            title={"Chọn loại bất động sản"}
-            items={province}
-          ></Menu>
-        </div>
-      </div>
+      <SearchBox></SearchBox>
 
       <div className={cx("news-box")}>
         <div className={cx("sub-title")}>
@@ -212,7 +136,7 @@ function Home() {
           </div>
         </div>
 
-        <SimpleSlider>
+        <SimpleSlider settings={settingsSliderNewsBox}>
           <div>
             <div className={cx("new-items")}>
               <div className={cx("news-image")}>
@@ -364,6 +288,231 @@ function Home() {
             </div>
           </div>
         </SimpleSlider>
+      </div>
+
+      <div className={cx("sale-ready")}>
+        <Row gutter={30}>
+          <Col span={12}>
+            <div className={cx("sale-info")}>
+              <div className={cx("sub-title")}>
+                <p></p>
+                <span>Sẵn sàng để lên sàng</span>
+              </div>
+              <h1 className={cx("title")}>
+                CÙNG THAM QUAN NHÀ CỦA<br></br> CHÚNG TÔI NÀO!
+              </h1>
+              <p className={cx("description")}>
+                Căn nhà được đề xuất bởi đồng nghiệp của chúng tôi đã sẵn sàng
+                trở thành căn nhà mơ ước cho giấc mơ của bạn
+              </p>
+              <div className={cx("house-detail")}>
+                <h2>Mô tả chi tiết</h2>
+                <div className={cx("info")}>
+                  <span>
+                    <KingBedIcon fontSize="large"></KingBedIcon> 4 phòng ngủ
+                  </span>
+                  <span>
+                    <BathtubIcon fontSize="large"></BathtubIcon> 2 phòng tắm
+                  </span>
+                </div>
+                <div className={cx("info")}>
+                  <span>
+                    <CarRepairIcon fontSize="large"></CarRepairIcon> 1 bãi đỗ xe
+                  </span>
+                  <span>
+                    <StairsIcon fontSize="large"></StairsIcon> 2 tầng lầu
+                  </span>
+                </div>
+              </div>
+              <div className={cx("contact")}>
+                <div className={cx("actor-info")}>
+                  <div className={cx("actor-image")}>
+                    <img src={banner} alt=""></img>
+                  </div>
+                  <div className={cx("detail")}>
+                    <p className={cx("actor-name")}>Lê Xuân Châu</p>
+                    <p className={cx("actor-address")}>
+                      123 Nguyễn Tất Thành , Đà Nẵng
+                    </p>
+                  </div>
+                </div>
+                <MyButton classes={cx("btn-contact")} primary>
+                  <CallIcon></CallIcon> Liên hệ ngay
+                </MyButton>
+              </div>
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className={cx("sale-image")}>
+              <div className={cx("main-image")}>
+                <img src={banner} alt=""></img>
+              </div>
+              <div className={cx("sub-image1")}>
+                <img src={banner} alt=""></img>
+              </div>
+              <div className={cx("sub-image2")}>
+                <img src={banner} alt=""></img>
+                <img src={banner} alt=""></img>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
+
+      <div className={cx("review")}>
+        <div className={cx("sub-title")}>
+          <p></p>
+          <span>Xem đánh giá</span>
+        </div>
+        <h1 className={cx("title")}>Xem người dùng nói gì về chúng tôi</h1>
+        <div className={cx("news-review")}>
+          <SimpleSlider settings={settingNewsReview}>
+            <div>
+              <div className={cx("news-review-item")}>
+                <div className={cx("main-image")}>
+                  <img src={banner} alt=""></img>
+                </div>
+                <div className={cx("review")}>
+                  <p className={cx("review-title")}>
+                    Thật tuyệt! Tôi đã tìm thấy một ngôi nhà trong mơ thông qua
+                    DaNaHome
+                  </p>
+                  <p className={cx("review-content")}>
+                    Nhờ website này mà tôi đã kiếm được một ngôi nhà phù hợp với
+                    lối sống và sở thích của mình một cách dễ dàng mà không cần
+                    thông qua các bước phức tạp
+                  </p>
+                  <div className={cx("review-user")}>
+                    <div className={cx("user-info")}>
+                      <div className={cx("user-image")}>
+                        <img src={banner} alt=""></img>
+                      </div>
+                      <div className={cx("user-detail")}>
+                        <p className={cx("user-name")}>Lê Xuân Châu</p>
+                        <p className={cx("user-address")}>
+                          352 Nguyễn Tất Thành, Đà Nẵng
+                        </p>
+                      </div>
+                    </div>
+                    <div className={cx("vote")}>
+                      <span>
+                        <StarIcon></StarIcon> 4.6
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className={cx("news-review-item")}>
+                <div className={cx("main-image")}>
+                  <img src={banner} alt=""></img>
+                </div>
+                <div className={cx("review")}>
+                  <p className={cx("review-title")}>
+                    Thật tuyệt! Tôi đã tìm thấy một ngôi nhà trong mơ thông qua
+                    DaNaHome
+                  </p>
+                  <p className={cx("review-content")}>
+                    Nhờ website này mà tôi đã kiếm được một ngôi nhà phù hợp với
+                    lối sống và sở thích của mình một cách dễ dàng mà không cần
+                    thông qua các bước phức tạp
+                  </p>
+                  <div className={cx("review-user")}>
+                    <div className={cx("user-info")}>
+                      <div className={cx("user-image")}>
+                        <img src={banner} alt=""></img>
+                      </div>
+                      <div className={cx("user-detail")}>
+                        <p className={cx("user-name")}>Lê Xuân Châu</p>
+                        <p className={cx("user-address")}>
+                          352 Nguyễn Tất Thành, Đà Nẵng
+                        </p>
+                      </div>
+                    </div>
+                    <div className={cx("vote")}>
+                      <span>
+                        <StarIcon></StarIcon> 4.6
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className={cx("news-review-item")}>
+                <div className={cx("main-image")}>
+                  <img src={banner} alt=""></img>
+                </div>
+                <div className={cx("review")}>
+                  <p className={cx("review-title")}>
+                    Thật tuyệt! Tôi đã tìm thấy một ngôi nhà trong mơ thông qua
+                    DaNaHome
+                  </p>
+                  <p className={cx("review-content")}>
+                    Nhờ website này mà tôi đã kiếm được một ngôi nhà phù hợp với
+                    lối sống và sở thích của mình một cách dễ dàng mà không cần
+                    thông qua các bước phức tạp
+                  </p>
+                  <div className={cx("review-user")}>
+                    <div className={cx("user-info")}>
+                      <div className={cx("user-image")}>
+                        <img src={banner} alt=""></img>
+                      </div>
+                      <div className={cx("user-detail")}>
+                        <p className={cx("user-name")}>Lê Xuân Châu</p>
+                        <p className={cx("user-address")}>
+                          352 Nguyễn Tất Thành, Đà Nẵng
+                        </p>
+                      </div>
+                    </div>
+                    <div className={cx("vote")}>
+                      <span>
+                        <StarIcon></StarIcon> 4.6
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className={cx("news-review-item")}>
+                <div className={cx("main-image")}>
+                  <img src={banner} alt=""></img>
+                </div>
+                <div className={cx("review")}>
+                  <p className={cx("review-title")}>
+                    Thật tuyệt! Tôi đã tìm thấy một ngôi nhà trong mơ thông qua
+                    DaNaHome
+                  </p>
+                  <p className={cx("review-content")}>
+                    Nhờ website này mà tôi đã kiếm được một ngôi nhà phù hợp với
+                    lối sống và sở thích của mình một cách dễ dàng mà không cần
+                    thông qua các bước phức tạp
+                  </p>
+                  <div className={cx("review-user")}>
+                    <div className={cx("user-info")}>
+                      <div className={cx("user-image")}>
+                        <img src={banner} alt=""></img>
+                      </div>
+                      <div className={cx("user-detail")}>
+                        <p className={cx("user-name")}>Lê Xuân Châu</p>
+                        <p className={cx("user-address")}>
+                          352 Nguyễn Tất Thành, Đà Nẵng
+                        </p>
+                      </div>
+                    </div>
+                    <div className={cx("vote")}>
+                      <span>
+                        <StarIcon></StarIcon> 4.6
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SimpleSlider>
+        </div>
       </div>
     </div>
   );

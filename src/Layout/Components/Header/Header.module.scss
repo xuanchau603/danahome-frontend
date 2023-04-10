@@ -46,24 +46,52 @@
         color: red;
       }
     }
-    .login {
+    .user {
       margin-left: 2rem;
-      padding: 1rem 2rem;
-      border: 1px solid #00b42a;
-      border-radius: 30px;
-      font-weight: 500;
-      color: #00b42a;
-      font-weight: 600;
-      background: #d0ffdb;
-      display: flex;
-      align-items: center;
-      > svg {
-        padding-left: 0.8rem;
-        font-size: 3rem;
+      .login {
+        padding: 1rem 2rem;
+        border: 1px solid #00b42a;
+        border-radius: 30px;
+        font-weight: 500;
+        color: #00b42a;
+        font-weight: 600;
+        background: #d0ffdb;
+        display: flex;
+        align-items: center;
+        > svg {
+          padding-left: 0.8rem;
+          font-size: 3rem;
+        }
+        &:hover {
+          cursor: pointer;
+          background: #c4ffd2;
+        }
       }
-      &:hover {
-        cursor: pointer;
-        background: #c4ffd2;
+      .avatar {
+        display: flex;
+        align-items: center;
+        .image {
+          margin-left: 2rem;
+          width: 6rem;
+          height: 6rem;
+          cursor: pointer;
+          > img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+          }
+        }
+        .btn-news {
+          width: 4rem;
+          height: 4rem;
+          > svg {
+            padding: 0;
+            font-size: 2rem;
+          }
+          margin: 0;
+          padding: 0rem;
+        }
       }
     }
   }
@@ -72,4 +100,36 @@
   cursor: pointer;
   font-weight: 500;
   width: 10rem;
+}
+
+.menu {
+  width: 20rem;
+  padding: 0 1rem;
+  .menu-item {
+    cursor: pointer;
+    padding: 1rem 0 0.4rem 0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    > span {
+      margin-left: 1rem;
+    }
+    > svg {
+      font-size: 2rem;
+    }
+
+    &:last-child {
+      color: red;
+      margin-top: 2rem;
+      border: none;
+      &:hover {
+        color: red;
+      }
+    }
+    &:hover {
+      text-decoration: underline;
+      color: #00b42a;
+    }
+  }
 }
