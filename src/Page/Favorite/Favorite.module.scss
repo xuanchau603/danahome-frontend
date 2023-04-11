@@ -1,0 +1,15 @@
+.favorite {
+  color: red;
+  max-width: var(--l-witdh);
+  margin: 0 auto;
+
+  .title {
+    color: green;
+  }
+  .list-favorite {
+    > li {
+      color: rgb(134, 134, 0);
+      padding: 10px 0;
+    }
+  }
+}
