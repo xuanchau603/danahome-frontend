@@ -79,7 +79,7 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: var(--shadow);
+            filter: drop-shadow(var(--shadow));
           }
         }
         .btn-news {

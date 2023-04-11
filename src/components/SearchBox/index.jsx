@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import MyButton from "../MyButton";
 import Menu from "../Menu";
 import { Radio, Slider, Space, Tooltip } from "antd";
-import axios from "axios";
 import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MoneyIcon from "@mui/icons-material/Money";
 import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import addressAPI from "../../API/addressAPI";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(style);
 
@@ -28,32 +29,24 @@ function SearchBox() {
   const [price, setPrice] = useState("");
   const [size, setSize] = useState("");
 
+  const navigate = useNavigate();
+
   const getProvince = async () => {
-    const res = await axios.get("https://provinces.open-api.vn/api/?depth=1");
-    setListProvince(res.data);
+    const response = await addressAPI.getProvince();
+    setListProvince(response);
   };
   useEffect(() => {
     getProvince();
   }, []);
 
-  const HandleDistricts = (code) => {
-    const getDistrict = async () => {
-      const res = await axios.get(
-        `https://provinces.open-api.vn/api/p/${code}?depth=2`,
-      );
-      setListDistrict(res.data.districts);
-    };
-    getDistrict();
+  const HandleDistricts = async (code) => {
+    const response = await addressAPI.getDistrictByCode(code);
+    setListDistrict(response.districts);
   };
 
-  const HandleWards = (code) => {
-    const getWards = async () => {
-      const res = await axios.get(
-        `https://provinces.open-api.vn/api/d/${code}?depth=2`,
-      );
-      setListWards(res.data.wards);
-    };
-    getWards();
+  const HandleWards = async (code) => {
+    const response = await addressAPI.getWardsByCode(code);
+    setListWards(response.wards);
   };
 
   const onChangeMenuType = (e) => {
@@ -217,7 +210,7 @@ function SearchBox() {
         </div>
 
         <MyButton
-          onClick={() => alert("thanh ngu")}
+          onClick={() => navigate("/search-result")}
           classes={cx("btn-search")}
           primary
         >
