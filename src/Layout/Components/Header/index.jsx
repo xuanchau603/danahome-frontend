@@ -22,7 +22,7 @@ const cx = classNames.bind(style);
 function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [currentUser] = useState(false);
+  const [currentUser] = useState(true);
 
   const onCancelLogin = () => {
     setShowLogin(false);
@@ -79,9 +79,9 @@ function Header() {
 
   return (
     <div className={cx("wrapper")}>
-      <div className={cx("logo")}>
+      <Link to={"/"} className={cx("logo")}>
         <img src={logo} alt="logo"></img>
-      </div>
+      </Link>
       <div className={cx("action")}>
         <Link to={"/favorite"} className={cx("action-item")}>
           Yêu thích <FavoriteBorderIcon></FavoriteBorderIcon>
@@ -109,12 +109,16 @@ function Header() {
               </Tooltip>
 
               <Popover content={contentMenu} trigger="click">
-                <div className={cx("image")}>
-                  <img
-                    alt=""
-                    src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/308991716_1225308318318724_7314307188888730009_n.jpg?stp=dst-jpg_p160x160&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=LBvpPuuXD3YAX_dz3GW&_nc_ht=scontent.fdad3-1.fna&oh=00_AfBTb1xrkHPNs0M5zHXlH3YmPNq91UVT6enhNybZZO7ZbQ&oe=6438E426"
-                  ></img>
-                </div>
+                <Tooltip title="Tài khoản">
+                  <span>
+                    <div className={cx("image")}>
+                      <img
+                        alt=""
+                        src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/308991716_1225308318318724_7314307188888730009_n.jpg?stp=dst-jpg_p160x160&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=LBvpPuuXD3YAX_dz3GW&_nc_ht=scontent.fdad3-1.fna&oh=00_AfBTb1xrkHPNs0M5zHXlH3YmPNq91UVT6enhNybZZO7ZbQ&oe=6438E426"
+                      ></img>
+                    </div>
+                  </span>
+                </Tooltip>
               </Popover>
             </div>
           ) : (
