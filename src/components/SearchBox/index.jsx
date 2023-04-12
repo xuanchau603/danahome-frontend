@@ -178,9 +178,9 @@ function SearchBox() {
             <label htmlFor="type">
               <MoneyIcon fontSize="large"></MoneyIcon>{" "}
             </label>
-            <Tooltip title={price + " triệu đồng" || "Giá cả"}>
+            <Tooltip title={price ? price + " triệu đồng" : "Giá cả"}>
               <div id="type" className={cx("data")}>
-                <p>{price + " triệu đồng" || "Giá cả"}</p>
+                <p>{price ? price + " triệu đồng" : "Giá cả"}</p>
               </div>
             </Tooltip>
             {!price && (
@@ -196,9 +196,9 @@ function SearchBox() {
             <label htmlFor="type">
               <AspectRatioIcon fontSize="large"></AspectRatioIcon>
             </label>
-            <Tooltip title={size || "Diện tích"}>
+            <Tooltip title={size ? size + "m2" : "Diện tích"}>
               <div id="type" className={cx("data")}>
-                <p>{size + " m2" || "Diện tích"}</p>
+                <p>{size ? size + "m2" : "Diện tích"}</p>
               </div>
             </Tooltip>
             {!size && (

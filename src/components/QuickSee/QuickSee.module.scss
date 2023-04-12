@@ -1,0 +1,39 @@
+.quick-see {
+  border: 1px solid #ccc;
+  margin: 3rem 0;
+  border-radius: 4px;
+  padding: 2rem 1.4rem;
+  .quick-title {
+    font-size: 2rem;
+    padding-bottom: 2rem;
+  }
+  .quick-list {
+    display: flex;
+    flex-wrap: wrap;
+    .quick-item {
+      width: 50%;
+      cursor: pointer;
+      padding: 1rem 0;
+      border-bottom: 1px dashed #c0c0c0;
+      &:last-child {
+        border: none;
+      }
+      > span {
+        display: flex;
+        align-items: center;
+        font-size: 1.4rem;
+        &:hover {
+          color: #03c303;
+        }
+        &:hover > svg {
+          transform: rotate(90deg);
+        }
+        > svg {
+          font-size: 2rem;
+          transition: 0.2s ease-in;
+          color: #8f8f8f;
+        }
+      }
+    }
+  }
+}

@@ -11,11 +11,27 @@ import classNames from "classnames/bind";
 import { background } from "../../Image";
 import { useState } from "react";
 import MyInput from "../MyInput";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../Redux/authSlice";
 
 const cx = classNames.bind(style);
 
 function Login(props) {
   const [loading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispath = useDispatch();
+
+  const login = async () => {
+    const response = await axios.post("http://localhost:8000/api/login", {
+      email: email,
+      password: password,
+    });
+    dispath(loginSuccess(response.data));
+    props.onCancel();
+  };
 
   return (
     <MyModal status={props.isOpen} onCancel={props.onCancel} onOk={props.onOk}>
@@ -29,13 +45,19 @@ function Login(props) {
           type="email"
           label="EMAIL"
           icon={<MailOutlineIcon></MailOutlineIcon>}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
         ></MyInput>
         <MyInput
           type="password"
           label="MẬT KHẨU"
           icon={<LockIcon></LockIcon>}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         ></MyInput>
-        <div className={cx("btn")}>
+        <div onClick={login} className={cx("btn")}>
           <div className={cx("remember")}>
             <Checkbox onChange={() => console.log("checked")}>
               Ghi nhớ đăng nhập

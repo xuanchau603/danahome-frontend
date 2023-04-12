@@ -1,15 +1,75 @@
 .favorite {
-
   max-width: var(--l-witdh);
   margin: 0 auto;
+  margin-top: -8rem;
 
   .title {
     color: green;
+    font-size: 2.8rem;
+    margin-bottom: 1.4rem;
   }
   .list-favorite {
-    > li {
-      color: rgb(134, 134, 0);
-      padding: 10px 0;
+    border: 1px solid #ccc;
+    margin: 3rem 0;
+    border-radius: 4px;
+    padding: 2rem 1.4rem;
+  }
+  .sidebar {
+    .category {
+      margin-bottom: 2rem;
+      padding: 2rem;
+      border: 1px solid #dedede;
+      background-color: #fff;
+      border-radius: 0.8rem;
+      > h1 {
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        font-weight: 600;
+      }
+      .main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        .cate-items {
+          display: flex;
+          align-items: center;
+          > h2 {
+            > a {
+              font-size: 1.4rem;
+              font-weight: 400;
+              color: black;
+              &:hover {
+                color: #16c784;
+              }
+            }
+          }
+        }
+        > p {
+          margin-left: 5px;
+          font-size: 1.4rem;
+          color: #8a8d91;
+        }
+      }
+      .sub {
+        margin-left: 1.5rem;
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 0;
+        > h2 {
+          > a {
+            color: black;
+            font-size: 1.4rem;
+            font-weight: 400;
+            &:hover {
+              color: #16c784;
+            }
+          }
+        }
+      }
+    }
+    .care {
+      width: 100%;
     }
   }
 }

@@ -16,13 +16,20 @@ import Login from "../../../components/Login";
 import Register from "../../../components/Register";
 import { Link } from "react-router-dom";
 import MyButton from "../../../components/MyButton";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../../../Redux/authSlice";
 
 const cx = classNames.bind(style);
 
 function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [currentUser] = useState(true);
+
+  const dispath = useDispatch();
+
+  const currentUser = useSelector((state) => {
+    return state.auth.login.currentUser;
+  });
 
   const onCancelLogin = () => {
     setShowLogin(false);
@@ -72,7 +79,13 @@ function Header() {
       </li>
       <li className={cx("menu-item")}>
         <LogoutIcon></LogoutIcon>
-        <span>Đăng xuất</span>
+        <span
+          onClick={() => {
+            dispath(logoutSuccess());
+          }}
+        >
+          Đăng xuất
+        </span>
       </li>
     </div>
   );
@@ -109,13 +122,12 @@ function Header() {
               </Tooltip>
 
               <Popover content={contentMenu} trigger="click">
-                <Tooltip title="Tài khoản">
+                <Tooltip
+                  title={currentUser ? currentUser.full_name : "Tài khoản"}
+                >
                   <span>
                     <div className={cx("image")}>
-                      <img
-                        alt=""
-                        src="https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-1/308991716_1225308318318724_7314307188888730009_n.jpg?stp=dst-jpg_p160x160&_nc_cat=110&ccb=1-7&_nc_sid=7206a8&_nc_ohc=LBvpPuuXD3YAX_dz3GW&_nc_ht=scontent.fdad3-1.fna&oh=00_AfBTb1xrkHPNs0M5zHXlH3YmPNq91UVT6enhNybZZO7ZbQ&oe=6438E426"
-                      ></img>
+                      <img alt="" src={currentUser.image}></img>
                     </div>
                   </span>
                 </Tooltip>

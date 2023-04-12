@@ -3,13 +3,35 @@ import ReactDOM from "react-dom/client";
 import App from "./App.js";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyle from "./components/GlobalStyle/index.js";
+import MapsUgcIcon from "@mui/icons-material/MapsUgc";
+import { FloatButton, Tooltip } from "antd";
+import { Provider } from "react-redux";
+import store from "./Redux/strore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <GlobalStyle>
-      <App />
-    </GlobalStyle>
+    <Provider store={store}>
+      <GlobalStyle>
+        <App />
+        <Tooltip title="Lên đầu trang">
+          <FloatButton.BackTop />
+        </Tooltip>
+        <Tooltip title="Liên hệ tư vấn">
+          <FloatButton
+            onClick={() => {
+              alert("Chat Bot");
+            }}
+            shape="square"
+            type="primary"
+            style={{
+              right: 94,
+            }}
+            icon={<MapsUgcIcon fontSize="large" />}
+          />
+        </Tooltip>
+      </GlobalStyle>
+    </Provider>
   </React.StrictMode>,
 );
 
