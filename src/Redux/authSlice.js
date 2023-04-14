@@ -1,37 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { delete_cookie, setCookie } from "./cookie";
 
 const authSlice = createSlice({
   name: "auth",
   initialState: {
     login: {
       currentUser: null,
-      isFectching: false,
-      error: false,
     },
   },
   reducers: {
-    loginStart: (state) => {
-      state.login.isFectching = true;
-    },
-    loginSuccess: (state, action) => {
-      state.login.isFectching = false;
+    InitUser: (state, action) => {
       state.login.currentUser = action.payload;
-      state.login.error = false;
     },
-    loginFailed: (state) => {
-      state.login.isFectching = false;
-      state.login.error = true;
+    loginUser: (state, action) => {
+      state.login.currentUser = action.payload;
     },
     logoutSuccess: (state) => {
       state.login.currentUser = null;
-      localStorage.removeItem("user");
-      delete_cookie("token");
+      if (localStorage.getItem("user_Id")) {
+        localStorage.removeItem("user_Id");
+      }
+      if (localStorage.getItem("token")) {
+        localStorage.removeItem("token");
+      }
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailed, logoutSuccess } =
-  authSlice.actions;
+export const { loginUser, logoutSuccess, InitUser } = authSlice.actions;
 
 export default authSlice.reducer;

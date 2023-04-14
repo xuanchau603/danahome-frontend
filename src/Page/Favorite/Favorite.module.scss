@@ -4,9 +4,9 @@
   margin-top: -8rem;
 
   .title {
-    color: green;
+    font-weight: 800;
     font-size: 2.8rem;
-    margin-bottom: 1.4rem;
+    margin: 1.4rem 0;
   }
   .list-favorite {
     border: 1px solid #ccc;
@@ -16,24 +16,30 @@
   }
   .sidebar {
     .category {
-      margin-bottom: 2rem;
-      padding: 2rem;
-      border: 1px solid #dedede;
-      background-color: #fff;
-      border-radius: 0.8rem;
+      border: 1px solid #ccc;
+      margin: 3rem 0;
+      border-radius: 4px;
+      padding: 2rem 1.4rem;
       > h1 {
-        margin-bottom: 1.5rem;
         font-size: 2rem;
-        font-weight: 600;
+        padding-bottom: 2rem;
       }
       .main {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0.5rem 0;
+        border-bottom: 1px dashed #c0c0c0;
         .cate-items {
           display: flex;
           align-items: center;
+          cursor: pointer;
+          padding: 1rem 0;
+
+          > p {
+            font-size: 2rem;
+            transition: 0.2s ease-in;
+            color: #8f8f8f;
+          }
           > h2 {
             > a {
               font-size: 1.4rem;
@@ -44,18 +50,31 @@
               }
             }
           }
+          &:hover > p {
+            transform: rotate(90deg);
+          }
         }
         > p {
           margin-left: 5px;
           font-size: 1.4rem;
           color: #8a8d91;
         }
+        &:last-child {
+          border: none;
+        }
       }
       .sub {
         margin-left: 1.5rem;
         display: flex;
         align-items: center;
-        padding: 0.5rem 0;
+        cursor: pointer;
+        padding: 1rem 0;
+        border-bottom: 1px dashed #c0c0c0;
+        > p {
+          font-size: 2rem;
+          transition: 0.2s ease-in;
+          color: #8f8f8f;
+        }
         > h2 {
           > a {
             color: black;
@@ -66,10 +85,13 @@
             }
           }
         }
+        &:hover > p {
+          transform: rotate(90deg);
+        }
       }
     }
     .care {
-      width: 100%;
+      width: 100% !important;
     }
   }
 }

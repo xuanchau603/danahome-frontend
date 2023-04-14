@@ -5,33 +5,79 @@ import style from "./Login.module.scss";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EastIcon from "@mui/icons-material/East";
 import LockIcon from "@mui/icons-material/Lock";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Checkbox, Spin } from "antd";
+import { Checkbox, message } from "antd";
 import classNames from "classnames/bind";
 import { background } from "../../Image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyInput from "../MyInput";
-import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../Redux/authSlice";
+import { loginUser } from "../../Redux/authSlice";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { loadingStart, loadingEnd } from "../../Redux/loadingSlice";
+import authAPI from "../../API/authAPI";
 
 const cx = classNames.bind(style);
 
 function Login(props) {
-  const [loading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
+
+  const passwordRef = useRef();
 
   const dispath = useDispatch();
 
-  const login = async () => {
-    const response = await axios.post("http://localhost:8000/api/login", {
-      email: email,
-      password: password,
-    });
-    dispath(loginSuccess(response.data));
-    props.onCancel();
-  };
+  const refLogin = useRef();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email("Email không hợp lệ!")
+        .required("Vui lòng nhập thông tin này!"),
+      password: Yup.string()
+        .min(6, "Mật khẩu quá ngắn!")
+        .required("Vui lòng nhập thông tin này!"),
+    }),
+    onSubmit: async (values) => {
+      dispath(loadingStart());
+      try {
+        const response = await authAPI.loginUser(values);
+        if (response.status === 200) {
+          dispath(
+            loginUser({
+              ...response.data.user_Info,
+              access_Token: response.data.access_Token,
+            }),
+          );
+          if (remember) {
+            localStorage.setItem("user_Id", response.data.user_Info.ID);
+            localStorage.setItem("token", response.data.access_Token);
+          }
+          dispath(loadingEnd());
+          props.onCancel();
+        } else {
+          dispath(loadingEnd());
+          message.error(response.message, 3);
+        }
+      } catch (error) {
+        dispath(loadingEnd());
+        message.error("Không thể kết nối đến server", 3);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (Object.keys(formik.errors).length === 0 && formik.values.password) {
+      refLogin.current.style.opacity = 1;
+      refLogin.current.style.cursor = "pointer";
+    } else {
+      refLogin.current.style.opacity = 0.4;
+      refLogin.current.style.cursor = "not-allowed";
+    }
+  }, [formik.errors, formik.values.password]);
 
   return (
     <MyModal status={props.isOpen} onCancel={props.onCancel} onOk={props.onOk}>
@@ -39,41 +85,52 @@ function Login(props) {
         <img src={background} alt=""></img>
       </div>
       <div className={cx("wrapper")}>
-        <h1 className={cx("title")}>Đăng nhập</h1>
-        <p className={cx("please")}>Vui lòng đăng nhập để tiếp tục.</p>
+        <div className={cx("header")}>
+          <h1 className={cx("title")}>Đăng nhập</h1>
+          <p className={cx("please")}>Vui lòng đăng nhập để tiếp tục.</p>
+        </div>
         <MyInput
           type="email"
           label="EMAIL"
+          name="email"
+          value={formik.values.email}
           icon={<MailOutlineIcon></MailOutlineIcon>}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          errorMessage={
+            formik.errors.email && formik.touched.email
+              ? formik.errors.email
+              : ""
+          }
         ></MyInput>
         <MyInput
+          ref={passwordRef}
           type="password"
           label="MẬT KHẨU"
+          name="password"
+          value={formik.values.password}
           icon={<LockIcon></LockIcon>}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          errorMessage={
+            formik.errors.password && formik.touched.password
+              ? formik.errors.password
+              : ""
+          }
         ></MyInput>
-        <div onClick={login} className={cx("btn")}>
+        <div className={cx("btn")}>
           <div className={cx("remember")}>
-            <Checkbox onChange={() => console.log("checked")}>
+            <Checkbox onChange={() => setRemember(!remember)}>
               Ghi nhớ đăng nhập
             </Checkbox>
           </div>
-          <MyButton primary classes={cx("btn-login")}>
+          <MyButton
+            ref={refLogin}
+            onClick={formik.handleSubmit}
+            primary
+            classes={cx("btn-login")}
+          >
             Đăng nhập <EastIcon></EastIcon>{" "}
-            {loading && (
-              <Spin
-                indicator={
-                  <LoadingOutlined
-                    style={{ fontSize: 22, color: "#313131" }}
-                  ></LoadingOutlined>
-                }
-              ></Spin>
-            )}
           </MyButton>
         </div>
       </div>

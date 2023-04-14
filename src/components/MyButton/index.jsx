@@ -1,18 +1,13 @@
+import { forwardRef } from "react";
 import style from "./index.module.scss";
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(style);
 
-function MyButton({
-  primary,
-  to,
-  href,
-  children,
-  outline,
-  active,
-  onClick,
-  classes,
-}) {
+function MyButton(
+  { primary, to, href, children, outline, active, onClick, classes },
+  ref,
+) {
   let Comp = "div";
   const props = {
     onClick,
@@ -34,6 +29,7 @@ function MyButton({
         outline,
         active,
       })}
+      ref={ref}
       {...props}
     >
       {children}
@@ -41,4 +37,4 @@ function MyButton({
   );
 }
 
-export default MyButton;
+export default forwardRef(MyButton);

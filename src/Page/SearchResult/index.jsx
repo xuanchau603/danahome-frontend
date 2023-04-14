@@ -1,7 +1,6 @@
 import style from "./SearchResult.module.scss";
 import classNames from "classnames/bind";
-import { Breadcrumb, Col, Pagination, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Col, Pagination, Row } from "antd";
 import { useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewsItem from "../../components/NewsItem";

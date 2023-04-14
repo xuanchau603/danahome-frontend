@@ -4,6 +4,7 @@ import logo from "../../../Image";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import InfoIcon from "@mui/icons-material/Info";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -56,8 +57,14 @@ function Header() {
 
   const content = <div className={cx("popover-item")}>English </div>;
 
-  const contentMenu = (
+  const contentMenu = currentUser ? (
     <div className={cx("menu")}>
+      {currentUser.isAdmin && (
+        <li className={cx("menu-item")}>
+          <AdminPanelSettingsIcon></AdminPanelSettingsIcon>{" "}
+          <span>Quản lý hệ thống</span>
+        </li>
+      )}
       <li className={cx("menu-item")}>
         <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
         <span>Đăng tin cho thuê</span>
@@ -88,6 +95,8 @@ function Header() {
         </span>
       </li>
     </div>
+  ) : (
+    <div></div>
   );
 
   return (
@@ -123,11 +132,11 @@ function Header() {
 
               <Popover content={contentMenu} trigger="click">
                 <Tooltip
-                  title={currentUser ? currentUser.full_name : "Tài khoản"}
+                  title={currentUser ? currentUser.full_Name : "Tài khoản"}
                 >
                   <span>
                     <div className={cx("image")}>
-                      <img alt="" src={currentUser.image}></img>
+                      <img alt="" src={currentUser.image_URL}></img>
                     </div>
                   </span>
                 </Tooltip>
@@ -144,19 +153,23 @@ function Header() {
             </button>
           )}
         </div>
+        {showLogin && (
+          <Login
+            isOpen={showLogin}
+            openRegister={openRegister}
+            onCancel={onCancelLogin}
+            onOk={onOkLogin}
+          ></Login>
+        )}
 
-        <Login
-          isOpen={showLogin}
-          openRegister={openRegister}
-          onCancel={onCancelLogin}
-          onOk={onOkLogin}
-        ></Login>
-        <Register
-          isOpen={showRegister}
-          openLogin={openLogin}
-          onCancel={onCancelRegister}
-          onOk={onOkRegister}
-        ></Register>
+        {showRegister && (
+          <Register
+            isOpen={showRegister}
+            openLogin={openLogin}
+            onCancel={onCancelRegister}
+            onOk={onOkRegister}
+          ></Register>
+        )}
       </div>
     </div>
   );

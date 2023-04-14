@@ -4,9 +4,8 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   border-bottom: 1px solid #ccc;
-  overflow: hidden;
   transition: 0.2s linear;
 
   &:focus-within {
@@ -17,6 +16,7 @@
   > input {
     padding: 1rem 0 1.4rem 5rem;
     font-weight: 600;
+    border-radius: 1rem;
     border: none;
     &:focus {
       + label {
@@ -55,6 +55,13 @@
     font-weight: 500;
     pointer-events: none;
     transition: 0.05s linear;
+  }
+  .error-message {
+    position: absolute;
+    font-size: 1.4rem;
+    color: rgb(255, 65, 65);
+    text-shadow: rgb(255, 46, 46) 1px 0 10px;
+    bottom: -2.6rem;
   }
   .show-pass {
     position: absolute;
