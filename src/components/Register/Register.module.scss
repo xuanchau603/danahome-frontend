@@ -19,64 +19,17 @@
     font-weight: 600;
     margin-bottom: 2rem;
   }
-
-  .form-group {
-    height: 6rem;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 3rem;
-    border-bottom: 1px solid #ccc;
-    overflow: hidden;
-    transition: 0.2s linear;
-    &:focus-within {
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-      border-radius: 0.6rem;
-    }
-
+  .email {
     > input {
-      padding: 1rem 0 1.4rem 5rem;
-      border: none;
-      font-weight: 600;
-      &:focus {
-        + label {
-          top: 0;
-          font-size: 1.3rem;
-          color: #6b6b6b;
-        }
-      }
-      &:not(:placeholder-shown) {
-        + label {
-          top: 0;
-          font-size: 1.3rem;
-          color: #6b6b6b;
-        }
-      }
+      padding-right: 10rem;
     }
-    > input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      /* display: none; <- Crashes Chrome on hover */
-      -webkit-appearance: none;
-      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
-    }
-    .icon {
+    .btn-code {
       position: absolute;
-      left: 1rem;
-      top: 2rem;
-      > svg {
-        font-size: 2.4rem;
-      }
-    }
-    > label {
-      position: absolute;
-      left: 5rem;
-      top: 2rem;
-      color: #cbcbcb;
-      font-weight: 500;
-      pointer-events: none;
-      transition: 0.05s linear;
+      right: 0;
+      bottom: 0;
     }
   }
+
   .btn {
     display: flex;
     justify-content: right;

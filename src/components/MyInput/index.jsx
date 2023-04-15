@@ -53,6 +53,7 @@ function MyInput(props, ref) {
             )}
           </div>
         )}
+        {props.children}
       </div>
     </>
   );

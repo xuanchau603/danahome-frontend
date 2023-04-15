@@ -5,6 +5,7 @@ import style from "./Register.module.scss";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EastIcon from "@mui/icons-material/East";
 import LockIcon from "@mui/icons-material/Lock";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,6 +20,7 @@ import MyInput from "./../MyInput/index";
 import { useDispatch } from "react-redux";
 import authAPI from "../../API/authAPI";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import verifyAPI from "../../API/verifyAPI";
 
 const cx = classNames.bind(style);
 
@@ -26,6 +28,7 @@ function Register(props) {
   const [loading] = useState(false);
   const dispath = useDispatch();
   const refRegister = useRef();
+  const btncode = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
   const phoneRegExp =
@@ -37,6 +40,7 @@ function Register(props) {
       phone: "",
       password: "",
       confirmPassword: "",
+      code: "",
     },
     validationSchema: Yup.object({
       fullName: Yup.string()
@@ -56,6 +60,11 @@ function Register(props) {
       confirmPassword: Yup.string()
         .required("Vui lòng nhập thông tin này!")
         .oneOf([Yup.ref("password")], "Mật khẩu không trùng nhau!"),
+      code: Yup.string()
+        .required("Vui lòng nhập thông tin này!")
+        .min(6, "Mã xác nhận không hợp lệ")
+        .max(6, "Mã xác nhận không hợp lệ")
+        .matches(phoneRegExp, "Số điện thoại không hợp lệ!"),
     }),
     onSubmit: async (values) => {
       dispath(loadingStart());
@@ -78,17 +87,31 @@ function Register(props) {
   });
 
   useEffect(() => {
-    if (
-      Object.keys(formik.errors).length === 0 &&
-      formik.values.confirmPassword
-    ) {
+    if (Object.keys(formik.errors).length === 0 && formik.values.code) {
       refRegister.current.style.opacity = 1;
       refRegister.current.style.cursor = "pointer";
     } else {
       refRegister.current.style.opacity = 0.4;
       refRegister.current.style.cursor = "not-allowed";
     }
-  }, [formik.errors, formik.values.confirmPassword]);
+
+    if (
+      !formik.errors.fullName &&
+      !formik.errors.email &&
+      !formik.errors.phone &&
+      !formik.errors.password &&
+      !formik.errors.confirmPassword &&
+      formik.values.confirmPassword
+    ) {
+      btncode.current.style.opacity = 1;
+      btncode.current.style.cursor = "pointer";
+      btncode.current.style.pointerEvents = "all";
+    } else {
+      btncode.current.style.opacity = 0.4;
+      btncode.current.style.pointerEvents = "none";
+      btncode.current.style.cursor = "not-allowed";
+    }
+  }, [formik.errors, formik.values.code, formik.values.confirmPassword]);
 
   return (
     <MyModal status={props.isOpen} onCancel={props.onCancel} onOk={props.onOk}>
@@ -123,6 +146,7 @@ function Register(props) {
               : ""
           }
         ></MyInput>
+
         <MyInput
           name="phone"
           type="text"
@@ -164,6 +188,42 @@ function Register(props) {
               : ""
           }
         ></MyInput>
+
+        <MyInput
+          classes={cx("email")}
+          name="code"
+          type="text"
+          label="MÃ XÁC NHẬN"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          icon={<VpnKeyIcon></VpnKeyIcon>}
+          errorMessage={
+            formik.errors.code && formik.touched.code ? formik.errors.code : ""
+          }
+        >
+          <MyButton
+            ref={btncode}
+            classes={cx("btn-code")}
+            disible
+            onClick={async () => {
+              try {
+                const response = await verifyAPI.getCode({
+                  email: formik.values.email,
+                });
+                if (response.status === 200) {
+                  message.success(response.data.message, 2);
+                } else {
+                  message.error(response.message, 2);
+                }
+              } catch (error) {
+                message.error("Không thể kết nối đến server", 2);
+              }
+            }}
+            // primary={!formik.errors.code && formik.values.code && "primary"}
+          >
+            Lấy mã
+          </MyButton>
+        </MyInput>
 
         <div className={cx("btn")}>
           <MyButton
