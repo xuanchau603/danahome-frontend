@@ -5,7 +5,18 @@ import classNames from "classnames/bind";
 const cx = classNames.bind(style);
 
 function MyButton(
-  { disible, primary, to, href, children, outline, active, onClick, classes },
+  {
+    primarydisible,
+    disible,
+    primary,
+    to,
+    href,
+    children,
+    outline,
+    active,
+    onClick,
+    classes,
+  },
   ref,
 ) {
   let Comp = "div";
@@ -29,6 +40,7 @@ function MyButton(
         outline,
         disible,
         active,
+        primarydisible,
       })}
       ref={ref}
       {...props}

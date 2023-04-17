@@ -19,7 +19,7 @@
     font-weight: 600;
     margin-bottom: 2rem;
   }
-  .email {
+  .code {
     > input {
       padding-right: 10rem;
     }
@@ -27,6 +27,8 @@
       position: absolute;
       right: 0;
       bottom: 0;
+      height: 100%;
+      border-radius: 8px;
     }
   }
 
@@ -37,8 +39,7 @@
       font-size: 2rem;
       padding: 2.8rem 2.5rem;
       margin-top: 1rem;
-      cursor: not-allowed;
-      opacity: 0.4;
+
       .loading {
         animation: spin 0.4s infinite linear;
       }

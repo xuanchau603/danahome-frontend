@@ -1,0 +1,177 @@
+.house-details {
+  max-width: var(--l-witdh);
+  margin: 0 auto;
+  .left-content {
+    border: 1px solid #ccc;
+    margin-top: 3rem;
+    .post-image {
+      background-color: black;
+      > img {
+        width: 100%;
+        height: 30rem;
+        object-fit: contain;
+      }
+    }
+    .post-header {
+      margin: 2rem 2rem;
+      > a {
+        font-size: 2rem;
+        color: #20710a;
+        font-weight: 700;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      > p {
+        margin: 1rem 0;
+        > a {
+          text-decoration: underline;
+          font-weight: 500;
+          color: #1266dd;
+          &:hover {
+            color: #7dcf66;
+          }
+        }
+      }
+      .post-address {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        > svg {
+          color: red;
+          margin-right: 0.5rem;
+        }
+      }
+      .post-attributes {
+        display: flex;
+        align-items: center;
+        .post-price {
+          display: flex;
+          align-items: center;
+          > svg {
+            color: rgb(165, 166, 163);
+            margin-right: 0.5rem;
+          }
+          > p {
+            color: #0d59bc;
+            font-weight: 800;
+            font-size: 2rem;
+            margin-right: 3rem;
+          }
+        }
+        .post-acreage {
+          display: flex;
+          align-items: center;
+          > svg {
+            color: rgb(165, 166, 163);
+            margin-right: 0.5rem;
+          }
+          > p {
+            margin-right: 3rem;
+          }
+        }
+        .post-published {
+          display: flex;
+          align-items: center;
+          > svg {
+            color: rgb(165, 166, 163);
+            margin-right: 0.5rem;
+          }
+          > p {
+            margin-right: 3rem;
+          }
+        }
+        .post-code {
+          display: flex;
+          align-items: center;
+          > svg {
+            color: rgb(165, 166, 163);
+            margin-right: 0.5rem;
+          }
+          > p {
+            margin-right: 3rem;
+          }
+        }
+      }
+    }
+    .post-description {
+      margin: 2rem 2rem;
+      > h2 {
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      > p {
+        margin: 2rem 0;
+      }
+    }
+    .post-overview {
+      margin: 2rem 2rem;
+      > h2 {
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      > table {
+        margin: 2rem 0;
+        width: 100%;
+        border-spacing: 0;
+        tbody {
+          > tr {
+            > td {
+              padding: 1rem 0;
+              &:nth-child(1) {
+                width: 25%;
+              }
+            }
+            &:nth-of-type(odd) {
+              background-color: #e7e7e7;
+            }
+            &:nth-of-type(even) {
+              background-color: #abdae7;
+            }
+          }
+        }
+      }
+    }
+    .post-contact {
+      margin: 2rem 2rem;
+      > h2 {
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      > table {
+        margin: 2rem 0;
+        width: 100%;
+        border-spacing: 0;
+        tbody {
+          > tr {
+            > td {
+              padding: 1rem 0;
+              &:nth-child(1) {
+                width: 25%;
+              }
+            }
+            &:nth-of-type(odd) {
+              background-color: #e7e7e7;
+            }
+            &:nth-of-type(even) {
+              background-color: #abdae7;
+            }
+          }
+        }
+      }
+    }
+    .post-map {
+      margin: 2rem 2rem;
+      > h2 {
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      > p {
+        margin: 1rem 0;
+      }
+    }
+  }
+  .care {
+    width: 100% !important;
+  }
+}

@@ -8,8 +8,7 @@ import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EastIcon from "@mui/icons-material/East";
 import LockIcon from "@mui/icons-material/Lock";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin, message } from "antd";
+import { message } from "antd";
 import classNames from "classnames/bind";
 import { background } from "../../Image/index";
 import { useFormik } from "formik";
@@ -25,9 +24,10 @@ import verifyAPI from "../../API/verifyAPI";
 const cx = classNames.bind(style);
 
 function Register(props) {
-  const [loading] = useState(false);
+  const [countDown, setCountDown] = useState(0);
+  const [disibleCode, setDisibleCode] = useState(true);
+
   const dispath = useDispatch();
-  const refRegister = useRef();
   const btncode = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
@@ -87,31 +87,17 @@ function Register(props) {
   });
 
   useEffect(() => {
-    if (Object.keys(formik.errors).length === 0 && formik.values.code) {
-      refRegister.current.style.opacity = 1;
-      refRegister.current.style.cursor = "pointer";
-    } else {
-      refRegister.current.style.opacity = 0.4;
-      refRegister.current.style.cursor = "not-allowed";
-    }
+    if (countDown === 0) return setDisibleCode(true);
+    const timer = setInterval(() => {
+      setCountDown((prev) => {
+        return prev - 1;
+      });
+    }, 1000);
 
-    if (
-      !formik.errors.fullName &&
-      !formik.errors.email &&
-      !formik.errors.phone &&
-      !formik.errors.password &&
-      !formik.errors.confirmPassword &&
-      formik.values.confirmPassword
-    ) {
-      btncode.current.style.opacity = 1;
-      btncode.current.style.cursor = "pointer";
-      btncode.current.style.pointerEvents = "all";
-    } else {
-      btncode.current.style.opacity = 0.4;
-      btncode.current.style.pointerEvents = "none";
-      btncode.current.style.cursor = "not-allowed";
-    }
-  }, [formik.errors, formik.values.code, formik.values.confirmPassword]);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [countDown]);
 
   return (
     <MyModal status={props.isOpen} onCancel={props.onCancel} onOk={props.onOk}>
@@ -190,7 +176,8 @@ function Register(props) {
         ></MyInput>
 
         <MyInput
-          classes={cx("email")}
+          classes={cx("code")}
+          disible={disibleCode}
           name="code"
           type="text"
           label="MÃ XÁC NHẬN"
@@ -201,47 +188,67 @@ function Register(props) {
             formik.errors.code && formik.touched.code ? formik.errors.code : ""
           }
         >
-          <MyButton
-            ref={btncode}
-            classes={cx("btn-code")}
-            disible
-            onClick={async () => {
-              try {
-                const response = await verifyAPI.getCode({
-                  email: formik.values.email,
-                });
-                if (response.status === 200) {
-                  message.success(response.data.message, 2);
-                } else {
-                  message.error(response.message, 2);
-                }
-              } catch (error) {
-                message.error("Không thể kết nối đến server", 2);
+          {countDown ? (
+            <MyButton classes={cx("btn-code")} primarydisible>
+              {`Gửi lại: ${countDown}s`}
+            </MyButton>
+          ) : (
+            <MyButton
+              ref={btncode}
+              classes={cx("btn-code")}
+              primarydisible={
+                !(Object.keys(formik.errors).length === 1) ||
+                formik.values.confirmPassword === ""
               }
-            }}
-            // primary={!formik.errors.code && formik.values.code && "primary"}
-          >
-            Lấy mã
-          </MyButton>
+              primary={
+                Object.keys(formik.errors).length === 1 &&
+                formik.values.confirmPassword
+              }
+              onClick={async () => {
+                if (
+                  Object.keys(formik.errors).length === 1 &&
+                  formik.values.confirmPassword
+                ) {
+                  try {
+                    dispath(loadingStart());
+                    const response = await verifyAPI.getCode({
+                      email: formik.values.email,
+                    });
+                    if (response.status === 200) {
+                      message.success(response.data.message, 2);
+                      dispath(loadingEnd());
+                      setCountDown(response.data.Expires_later / 1000);
+                      setDisibleCode(false);
+                    } else {
+                      message.error(response.message, 2);
+                      dispath(loadingEnd());
+                    }
+                  } catch (error) {
+                    message.error("Không thể kết nối đến server", 2);
+                    dispath(loadingEnd());
+                  }
+                }
+              }}
+            >
+              Lấy mã
+            </MyButton>
+          )}
         </MyInput>
 
         <div className={cx("btn")}>
           <MyButton
+            disible={
+              !(Object.keys(formik.errors).length === 0) ||
+              formik.values.code === ""
+            }
             onClick={formik.handleSubmit}
-            ref={refRegister}
-            primary
+            primary={
+              Object.keys(formik.errors).length === 0 &&
+              formik.values.code !== ""
+            }
             classes={cx("btn-register")}
           >
             Đăng ký <EastIcon></EastIcon>{" "}
-            {loading && (
-              <Spin
-                indicator={
-                  <LoadingOutlined
-                    style={{ fontSize: 22, color: "#313131" }}
-                  ></LoadingOutlined>
-                }
-              ></Spin>
-            )}
           </MyButton>
         </div>
       </div>

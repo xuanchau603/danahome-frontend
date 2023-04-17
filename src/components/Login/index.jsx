@@ -8,7 +8,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Checkbox, message } from "antd";
 import classNames from "classnames/bind";
 import { background } from "../../Image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import MyInput from "../MyInput";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/authSlice";
@@ -25,8 +25,6 @@ function Login(props) {
   const passwordRef = useRef();
 
   const dispath = useDispatch();
-
-  const refLogin = useRef();
 
   const formik = useFormik({
     initialValues: {
@@ -68,16 +66,6 @@ function Login(props) {
       }
     },
   });
-
-  useEffect(() => {
-    if (Object.keys(formik.errors).length === 0 && formik.values.password) {
-      refLogin.current.style.opacity = 1;
-      refLogin.current.style.cursor = "pointer";
-    } else {
-      refLogin.current.style.opacity = 0.4;
-      refLogin.current.style.cursor = "not-allowed";
-    }
-  }, [formik.errors, formik.values.password]);
 
   return (
     <MyModal status={props.isOpen} onCancel={props.onCancel} onOk={props.onOk}>
@@ -125,9 +113,14 @@ function Login(props) {
             </Checkbox>
           </div>
           <MyButton
-            ref={refLogin}
             onClick={formik.handleSubmit}
-            primary
+            disible={
+              !(Object.keys(formik.errors).length === 0) ||
+              !formik.values.password
+            }
+            outline={
+              Object.keys(formik.errors).length === 0 && formik.values.password
+            }
             classes={cx("btn-login")}
           >
             Đăng nhập <EastIcon></EastIcon>{" "}

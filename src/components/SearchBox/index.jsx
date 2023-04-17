@@ -33,7 +33,7 @@ function SearchBox() {
 
   const getProvince = async () => {
     const response = await addressAPI.getProvince();
-    setListProvince(response);
+    setListProvince(response.data);
   };
   useEffect(() => {
     getProvince();
@@ -41,12 +41,12 @@ function SearchBox() {
 
   const HandleDistricts = async (code) => {
     const response = await addressAPI.getDistrictByCode(code);
-    setListDistrict(response.districts);
+    setListDistrict(response.data.districts);
   };
 
   const HandleWards = async (code) => {
     const response = await addressAPI.getWardsByCode(code);
-    setListWards(response.wards);
+    setListWards(response.data.wards);
   };
 
   const onChangeMenuType = (e) => {

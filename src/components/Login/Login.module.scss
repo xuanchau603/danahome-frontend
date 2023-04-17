@@ -44,14 +44,6 @@
     .btn-login {
       font-size: 2rem;
       padding: 2.8rem 2.5rem;
-      cursor: not-allowed;
-      opacity: 0.4;
-      &:hover {
-        opacity: 0.8;
-      }
-      .loading {
-        animation: spin 0.4s infinite linear;
-      }
     }
   }
 }

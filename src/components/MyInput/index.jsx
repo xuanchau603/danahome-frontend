@@ -14,9 +14,11 @@ function MyInput(props, ref) {
       <div
         className={cx("form-group", {
           [props.classes]: props.classes,
+          disible: props.disible,
         })}
       >
         <input
+          disabled={props.disible}
           name={props.name}
           value={props.value}
           id={props.id}
