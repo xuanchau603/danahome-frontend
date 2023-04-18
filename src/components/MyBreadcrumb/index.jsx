@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 
 const cx = classNames.bind(style);
 
-function MyBreadCrum(props) {
+function MyBreadCrumb(props) {
   const items = props.items.map((item, index) => {
     const to = item.href ? item.href : "";
     return {
@@ -21,4 +21,4 @@ function MyBreadCrum(props) {
   return <Breadcrumb separator=">" items={items} />;
 }
 
-export default MyBreadCrum;
+export default MyBreadCrumb;

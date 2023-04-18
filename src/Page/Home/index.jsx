@@ -18,9 +18,22 @@ import Format from "../../components/Format";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import SimpleSlider from "../../components/SimpleSlider";
 import SearchBox from "../../components/SearchBox";
+import { useEffect, useState } from "react";
+import NewsAPI from "../../API/newsAPI";
 const cx = classNames.bind(style);
 
 function Home() {
+  const [listHotNews, setListHotNews] = useState([]);
+
+  const getHotNews = async () => {
+    const listHotNews = await NewsAPI.getHotNews();
+    setListHotNews(listHotNews.data.data);
+  };
+
+  useEffect(() => {
+    getHotNews();
+  }, []);
+
   const settingsSliderNewsBox = {
     speed: 500,
     slidesToShow: 3,
@@ -137,156 +150,40 @@ function Home() {
         </div>
 
         <SimpleSlider settings={settingsSliderNewsBox}>
-          <div>
-            <div className={cx("new-items")}>
-              <div className={cx("news-image")}>
-                <img src={banner} alt=""></img>
-                <span className={cx("news-tag")}>
-                  <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                </span>
-                <MyButton classes={cx("btn-detail")} primary>
-                  Xem ngay
-                </MyButton>
-              </div>
-              <div className={cx("news-name")}>
-                <span>Roselands House</span>
-              </div>
-              <div className={cx("news-price")}>
-                <span>{Format.formatPrice(350000000)}</span>
-              </div>
-              <div className={cx("news-actor")}>
-                <div className={cx("actor-avatar")}>
-                  <img src={banner} alt=""></img>
-                </div>
-                <div className={cx("actor-info")}>
-                  <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                  <p className={cx("actor-address")}>
-                    1041 Nguyễn tất thành, Đà Nẵng
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className={cx("new-items")}>
-              <div className={cx("news-image")}>
-                <img src={banner} alt=""></img>
-                <span className={cx("news-tag")}>
-                  <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                </span>
-                <MyButton classes={cx("btn-detail")} primary>
-                  Xem ngay
-                </MyButton>
-              </div>
-              <div className={cx("news-name")}>
-                <span>Roselands House</span>
-              </div>
-              <div className={cx("news-price")}>
-                <span>{Format.formatPrice(350000000)}</span>
-              </div>
-              <div className={cx("news-actor")}>
-                <div className={cx("actor-avatar")}>
-                  <img src={banner} alt=""></img>
-                </div>
-                <div className={cx("actor-info")}>
-                  <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                  <p className={cx("actor-address")}>
-                    1041 Nguyễn tất thành, Đà Nẵng
-                  </p>
+          {listHotNews.map((item) => {
+            return (
+              <div key={item.ID}>
+                <div className={cx("new-items")}>
+                  <div className={cx("news-image")}>
+                    <img src={item.featured_Image} alt=""></img>
+                    <span className={cx("news-tag")}>
+                      <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
+                    </span>
+                    <MyButton classes={cx("btn-detail")} primary>
+                      Xem ngay
+                    </MyButton>
+                  </div>
+                  <div className={cx("news-name")}>
+                    <span>{item.title}</span>
+                  </div>
+                  <div className={cx("news-price")}>
+                    <span>{Format.formatPrice(item.price)}</span>
+                  </div>
+                  <div className={cx("news-actor")}>
+                    <div className={cx("actor-avatar")}>
+                      <img src={banner} alt=""></img>
+                    </div>
+                    <div className={cx("actor-info")}>
+                      <p className={cx("actor-name")}>{item.poster}</p>
+                      <p className={cx("actor-address")}>
+                        {`${item.province} - ${item.district} - ${item.ward} - ${item.house_Number}`}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div>
-            <div className={cx("new-items")}>
-              <div className={cx("news-image")}>
-                <img src={banner} alt=""></img>
-                <span className={cx("news-tag")}>
-                  <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                </span>
-                <MyButton classes={cx("btn-detail")} primary>
-                  Xem ngay
-                </MyButton>
-              </div>
-              <div className={cx("news-name")}>
-                <span>Roselands House</span>
-              </div>
-              <div className={cx("news-price")}>
-                <span>{Format.formatPrice(350000000)}</span>
-              </div>
-              <div className={cx("news-actor")}>
-                <div className={cx("actor-avatar")}>
-                  <img src={banner} alt=""></img>
-                </div>
-                <div className={cx("actor-info")}>
-                  <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                  <p className={cx("actor-address")}>
-                    1041 Nguyễn tất thành, Đà Nẵng
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className={cx("new-items")}>
-              <div className={cx("news-image")}>
-                <img src={banner} alt=""></img>
-                <span className={cx("news-tag")}>
-                  <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                </span>
-                <MyButton classes={cx("btn-detail")} primary>
-                  Xem ngay
-                </MyButton>
-              </div>
-              <div className={cx("news-name")}>
-                <span>Roselands House</span>
-              </div>
-              <div className={cx("news-price")}>
-                <span>{Format.formatPrice(350000000)}</span>
-              </div>
-              <div className={cx("news-actor")}>
-                <div className={cx("actor-avatar")}>
-                  <img src={banner} alt=""></img>
-                </div>
-                <div className={cx("actor-info")}>
-                  <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                  <p className={cx("actor-address")}>
-                    1041 Nguyễn tất thành, Đà Nẵng
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className={cx("new-items")}>
-              <div className={cx("news-image")}>
-                <img src={banner} alt=""></img>
-                <span className={cx("news-tag")}>
-                  <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                </span>
-                <MyButton classes={cx("btn-detail")} primary>
-                  Xem ngay
-                </MyButton>
-              </div>
-              <div className={cx("news-name")}>
-                <span>Roselands House</span>
-              </div>
-              <div className={cx("news-price")}>
-                <span>{Format.formatPrice(350000000)}</span>
-              </div>
-              <div className={cx("news-actor")}>
-                <div className={cx("actor-avatar")}>
-                  <img src={banner} alt=""></img>
-                </div>
-                <div className={cx("actor-info")}>
-                  <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                  <p className={cx("actor-address")}>
-                    1041 Nguyễn tất thành, Đà Nẵng
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </SimpleSlider>
       </div>
 

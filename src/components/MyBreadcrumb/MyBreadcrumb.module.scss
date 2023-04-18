@@ -1,4 +1,9 @@
 .bread-item {
-  display: flex;
-  align-items: flex-start;
+  display: flex !important;
+  align-items: center;
+  height: 3rem !important;
+  font-size: 2rem;
+  > svg {
+    font-size: 2rem;
+  }
 }

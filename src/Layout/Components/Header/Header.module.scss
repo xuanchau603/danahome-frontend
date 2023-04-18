@@ -1,6 +1,6 @@
 .wrapper {
   height: 10rem;
-  max-width: var(--l-witdh);
+  max-width: var(--l-width);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -113,6 +113,7 @@
     display: flex;
     align-items: center;
     border-radius: 4px;
+    color: #313131;
     > span {
       margin-left: 1rem;
     }

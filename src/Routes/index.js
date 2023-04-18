@@ -1,7 +1,9 @@
 import LayoutWithSearchBox from "../Layout/LayoutWithSearchBox";
 import Favorite from "../Page/Favorite";
 import Home from "../Page/Home";
+import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
+import Payment from "../Page/Payment";
 import SearchResult from "../Page/SearchResult";
 
 const publicRoute = [
@@ -22,6 +24,14 @@ const publicRoute = [
   {
     path: "/news-detail",
     component: NewsDetail,
+  },
+  {
+    path: "/new-post",
+    component: NewPost,
+  },
+  {
+    path: "/payment",
+    component: Payment,
   },
 ];
 

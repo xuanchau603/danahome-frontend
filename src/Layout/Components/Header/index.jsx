@@ -15,7 +15,7 @@ import { Popover, Tooltip } from "antd";
 import { useState } from "react";
 import Login from "../../../components/Login";
 import Register from "../../../components/Register";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MyButton from "../../../components/MyButton";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../../Redux/authSlice";
@@ -27,6 +27,7 @@ function Header() {
   const [showRegister, setShowRegister] = useState(false);
 
   const dispath = useDispatch();
+  const navigate = useNavigate();
 
   const currentUser = useSelector((state) => {
     return state.auth.login.currentUser;
@@ -65,10 +66,10 @@ function Header() {
           <span>Quản lý hệ thống</span>
         </li>
       )}
-      <li className={cx("menu-item")}>
+      <Link to={"/new-post"} className={cx("menu-item")}>
         <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
         <span>Đăng tin cho thuê</span>
-      </li>
+      </Link>
       <li className={cx("menu-item")}>
         <ReceiptLongIcon></ReceiptLongIcon> <span>Quản lý tin đăng</span>
       </li>
@@ -89,6 +90,7 @@ function Header() {
         <span
           onClick={() => {
             dispath(logoutSuccess());
+            navigate("/");
           }}
         >
           Đăng xuất

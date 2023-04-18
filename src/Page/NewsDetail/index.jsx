@@ -13,10 +13,13 @@ import SellIcon from "@mui/icons-material/Sell";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import TagIcon from "@mui/icons-material/Tag";
+import Map from "../../components/Map";
 
 const cx = classNames.bind(style);
 
 function NewsDetail() {
+  const key = "AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8";
+
   const itemsQuickSeeNews = [
     <span>
       <ChevronRightIcon></ChevronRightIcon> Nỗi khổ của người thuê phòng trọ gần
@@ -193,6 +196,20 @@ function NewsDetail() {
                 Lệ, Đà Nẵng
               </p>
             </div>
+            <Map
+              googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${key}&callback=initMap`}
+              loadingElement={<div style={{ height: `100%` }} />}
+              containerElement={
+                <div
+                  style={{
+                    height: `90vh`,
+                    margin: `auto`,
+                    border: "2px solid black",
+                  }}
+                />
+              }
+              mapElement={<div style={{ height: `100%` }} />}
+            />
           </div>
         </Col>
         <Col span={8}>

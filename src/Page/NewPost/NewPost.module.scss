@@ -1,0 +1,211 @@
+.new-post {
+  max-width: var(--l-width);
+  margin: 2rem auto;
+  .title {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  .post-input {
+    display: flex;
+    justify-content: space-between;
+    margin: 3rem 0;
+    .form-group {
+      > h2 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .address {
+    margin-bottom: 3rem;
+    > h2 {
+      margin-bottom: 1rem;
+    }
+    .house-number {
+      width: 30rem;
+      border-radius: 0.8rem;
+      padding: 0.6rem;
+      height: 3rem;
+      border: 1px solid #ccc;
+      &:focus {
+        border: 1px solid #80bdff;
+      }
+    }
+  }
+  .full-address {
+    margin-bottom: 3rem;
+    > h2 {
+      margin-bottom: 1rem;
+    }
+    > input {
+      border-radius: 0.8rem;
+      padding: 0.6rem;
+      height: 3rem;
+      border: 1px solid #ccc;
+    }
+  }
+  .detail {
+    > h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+    }
+    > h2 {
+      margin-bottom: 1rem;
+    }
+    .post-title {
+      margin-top: 2rem;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      > input {
+        border-radius: 0.8rem;
+        padding: 0.6rem;
+        height: 3rem;
+        border: 1px solid #ccc;
+        &:focus {
+          border: 1px solid #80bdff;
+        }
+      }
+    }
+    .post-description {
+      margin: 2rem 0;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      .content {
+        width: 100%;
+        height: 25rem;
+        border-radius: 0.8rem;
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        resize: vertical;
+        outline: none;
+        &:focus {
+          border: 1px solid #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+    }
+    .post-contact {
+      margin: 2rem 0;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      > input {
+        width: 50%;
+        border-radius: 0.8rem;
+        padding: 0.6rem;
+        height: 3rem;
+        border: 1px solid #ccc;
+      }
+    }
+    .post-phone {
+      margin: 2rem 0;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      > input {
+        width: 50%;
+        border-radius: 0.8rem;
+        padding: 0.6rem;
+        height: 3rem;
+        border: 1px solid #ccc;
+      }
+    }
+    .post-price {
+      margin: 2rem 0;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      .price-input {
+        display: flex;
+        width: 50%;
+        margin-bottom: 1rem;
+        > input {
+          padding: 0.6rem;
+          height: 3rem;
+          border: 1px solid #ccc;
+          &:first-child {
+            border-bottom-left-radius: 0.8rem;
+            border-top-left-radius: 0.8rem;
+            &:focus {
+              border: 1px solid #80bdff;
+            }
+          }
+          &:last-child {
+            width: 20%;
+            text-align: center;
+            border-bottom-right-radius: 0.8rem;
+            border-top-right-radius: 0.8rem;
+          }
+        }
+      }
+      > p {
+        font-size: 1.2rem;
+        color: #6c757d;
+      }
+    }
+    .post-acreage {
+      margin: 2rem 0;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+      .acreage-input {
+        display: flex;
+        width: 50%;
+        margin-bottom: 1rem;
+        > input {
+          padding: 0.6rem;
+          height: 3rem;
+          border: 1px solid #ccc;
+          &:first-child {
+            border-bottom-left-radius: 0.8rem;
+            border-top-left-radius: 0.8rem;
+            &:focus {
+              border: 1px solid #80bdff;
+            }
+          }
+          &:last-child {
+            width: 20%;
+            text-align: center;
+            border-bottom-right-radius: 0.8rem;
+            border-top-right-radius: 0.8rem;
+          }
+        }
+      }
+    }
+    .post-gender {
+      margin-bottom: 3rem;
+      > h2 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+  .upload-img {
+    > p {
+      padding: 2rem 0;
+    }
+  }
+  .btn-submit {
+    width: 100%;
+    margin-top: 4rem;
+  }
+  .post-note {
+    border: 1px solid #f5c6cb;
+    background: #f8d7da;
+    padding: 1rem;
+    color: #721c24;
+    > h3 {
+      font-size: 2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    > ul {
+      margin-left: 2rem;
+      > li {
+        list-style: square;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

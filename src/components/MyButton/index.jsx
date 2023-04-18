@@ -1,11 +1,13 @@
 import { forwardRef } from "react";
 import style from "./index.module.scss";
 import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(style);
 
 function MyButton(
   {
+    dark,
     primarydisible,
     disible,
     primary,
@@ -16,6 +18,7 @@ function MyButton(
     active,
     onClick,
     classes,
+    state,
   },
   ref,
 ) {
@@ -26,7 +29,7 @@ function MyButton(
 
   if (to) {
     props.to = to;
-    Comp = "Link";
+    Comp = Link;
   } else if (href) {
     props.href = href;
     Comp = "a";
@@ -41,7 +44,9 @@ function MyButton(
         disible,
         active,
         primarydisible,
+        dark,
       })}
+      state={state}
       ref={ref}
       {...props}
     >
