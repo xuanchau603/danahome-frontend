@@ -10,7 +10,7 @@ const NewsAPI = {
     return axiosClient.get(url);
   },
   createNews: (newsData, token) => {
-    return fetch("http://localhost:802/news/create", {
+    return fetch("https://danahome.onrender.com/news/create", {
       method: "post",
       headers: {
         token: `Bearer ${token}`,

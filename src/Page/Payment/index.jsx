@@ -63,6 +63,9 @@ function Payment() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
     setTotal(newsTypePrice * day);
   }, [day, newsTypePrice]);
 

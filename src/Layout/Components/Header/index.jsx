@@ -134,6 +134,7 @@ function Header() {
 
               <Popover content={contentMenu} trigger="click">
                 <Tooltip
+                  placement="right"
                   title={currentUser ? currentUser.full_Name : "Tài khoản"}
                 >
                   <span>

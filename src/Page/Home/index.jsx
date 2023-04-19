@@ -32,6 +32,7 @@ function Home() {
 
   useEffect(() => {
     getHotNews();
+    window.scrollTo(0, 0);
   }, []);
 
   const settingsSliderNewsBox = {
