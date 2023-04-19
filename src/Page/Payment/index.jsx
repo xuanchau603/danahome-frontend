@@ -6,9 +6,10 @@ import { DatePicker, Radio, Select, Space, message } from "antd";
 import Mybuton from "../../components/MyButton";
 import Format from "./../../components/Format/index";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NewsAPI from "../../API/newsAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 
 const cx = classNames.bind(style);
 
@@ -16,6 +17,7 @@ function Payment() {
   const [newsTypePrice, setNewsTypePrice] = useState(2000);
   const [day, setDay] = useState(0);
   const [total, setTotal] = useState(0);
+  const [paymentType, setPaymentType] = useState(null);
   const [newsType, setNewsType] = useState(
     "e835fdf4-dc42-11ed-8c1c-2cf05ddd2632",
   );
@@ -23,6 +25,9 @@ function Payment() {
 
   const location = useLocation();
   const data = location.state;
+  const navigate = useNavigate();
+
+  const dispath = useDispatch();
 
   const currentUser = useSelector((state) => {
     return state.auth.login.currentUser;
@@ -53,8 +58,8 @@ function Payment() {
   };
 
   const onChangeDate = (date) => {
-    setDay(Math.ceil((date.$d - new Date()) / 86400000));
-    setExpire_At(expire_At);
+    setDay(Math.ceil((date?.$d - new Date()) / 86400000));
+    setExpire_At(date?.$d);
   };
 
   useEffect(() => {
@@ -62,39 +67,46 @@ function Payment() {
   }, [day, newsTypePrice]);
 
   function onChangeRadio(e) {
-    console.log("radio checked", e.target.value);
+    setPaymentType(e.target.value);
   }
 
   const handlePayment = async () => {
-    // console.log(dataToServer);
-
+    if (!expire_At) return message.error("Vui lòng chọn ngày hết hạn!", 2);
+    if (!paymentType)
+      return message.error("Vui lòng chọn phương thức thanh toán", 2);
     const formData = new FormData();
     formData.append("roomType", data.roomType);
     formData.append("newsType", newsType);
-    formData.append("province", data.province);
-    formData.append("district", data.district);
-    formData.append("ward", data.ward);
+    formData.append("province", data.province.label);
+    formData.append("district", data.district.label);
+    formData.append("ward", data.ward.label);
     formData.append("house_Number", data.house_Number);
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("price", data.price);
-    formData.append("status", data.status);
     formData.append("expire_At", expire_At);
     formData.append("acreage", data.acreage);
     for (var item of data.images) {
       formData.append("images", item);
     }
-    console.log(...formData);
-
-    const response = await NewsAPI.createNews(
-      formData,
-      currentUser.access_Token,
-    );
-    const jsonData = await response.json();
-    if (response.status) {
-      return message.success(jsonData.message, 2);
+    try {
+      dispath(loadingStart());
+      const response = await NewsAPI.createNews(
+        formData,
+        currentUser.access_Token,
+      );
+      const jsonData = await response.json();
+      if (response.status === 200) {
+        message.success(jsonData.message, 2);
+        dispath(loadingEnd());
+        return navigate("/");
+      }
+      message.error("Đăng tin thất bại!", 2);
+      dispath(loadingEnd());
+    } catch (error) {
+      message.error("Không thể kết nối đến Server!", 2);
+      dispath(loadingEnd());
     }
-    message.error("Đăng tin thất bại!", 2);
   };
 
   return (
@@ -108,9 +120,7 @@ function Payment() {
         duyệt.
       </p>
       <div className={cx("payment-info")}>
-        <h1 className={cx("title-news")}>
-          Cho thuê nhà trọ nguyễn tất thành, đà nẵng
-        </h1>
+        <h1 className={cx("title-news")}>{data.title}</h1>
       </div>
       <div className={cx("news-options")}>
         <div className={cx("option-item")}>
@@ -146,7 +156,8 @@ function Payment() {
       </div>
       <div className={cx("total-price")}>
         <h1>
-          Số tiền cần thanh toán: <b>{Format.formatPrice(total)}</b>
+          Số tiền cần thanh toán:{" "}
+          <b>{expire_At ? Format.formatPrice(total) : "0đ"}</b>
         </h1>
       </div>
       <div className={cx("main")}>
@@ -176,7 +187,7 @@ function Payment() {
                   ></img>
                 </li>
               </Radio>
-              <Radio value={4}>
+              <Radio value={3}>
                 <li className={cx("payment-options-item")}>
                   <p>Thanh toán qua ví điện tử ZALOPAY</p>
                   <img
@@ -185,7 +196,7 @@ function Payment() {
                   ></img>
                 </li>
               </Radio>
-              <Radio value={3}>
+              <Radio value={4}>
                 <li className={cx("payment-options-item")}>
                   <p>Thanh toán qua ví điện tử VNPAY</p>
                   <img
@@ -207,10 +218,15 @@ function Payment() {
             </Space>
           </Radio.Group>
           <div className={cx("action")}>
-            <Mybuton classes={cx("btn")} dark>
+            <Mybuton to={"/new-post"} state={data} classes={cx("btn")} dark>
               Quay lại
             </Mybuton>
-            <Mybuton onClick={handlePayment} classes={cx("btn")} primary>
+            <Mybuton
+              onClick={handlePayment}
+              classes={cx("btn")}
+              primary={expire_At && paymentType}
+              disible={!expire_At || !paymentType}
+            >
               Thanh toán
             </Mybuton>
           </div>

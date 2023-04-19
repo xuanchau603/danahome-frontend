@@ -25,6 +25,9 @@ const publicRoute = [
     path: "/news-detail",
     component: NewsDetail,
   },
+];
+
+const UserRouter = [
   {
     path: "/new-post",
     component: NewPost,
@@ -38,3 +41,4 @@ const publicRoute = [
 // const privateRouter = [];
 
 export default publicRoute;
+export { UserRouter };

@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import publicRoute from "./Routes";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import publicRoute, { UserRouter } from "./Routes";
 import DefaultLayout from "./Layout/DefautLayout";
 import Loading from "./components/Loading";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,8 +23,6 @@ function App() {
               access_Token: token,
             }),
           );
-        } else {
-          message.error(respone.message, 2);
         }
       } catch (error) {
         message.error("Không thể kết nối đến Server", 2);
@@ -32,6 +30,10 @@ function App() {
     };
     Init();
   }
+
+  const currentUser = useSelector((state) => {
+    return state.auth.login.currentUser;
+  });
 
   const loading = useSelector((state) => {
     return state.load.load.loadding;
@@ -52,6 +54,24 @@ function App() {
                   <Layout>
                     <element.component></element.component>
                   </Layout>
+                }
+              ></Route>
+            );
+          })}
+          {UserRouter.map((element, index) => {
+            const Layout = element.layout || DefaultLayout;
+            return (
+              <Route
+                key={index}
+                path={element.path}
+                element={
+                  currentUser ? (
+                    <Layout>
+                      <element.component></element.component>
+                    </Layout>
+                  ) : (
+                    <Navigate to="/"></Navigate>
+                  )
                 }
               ></Route>
             );

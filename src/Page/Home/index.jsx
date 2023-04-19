@@ -171,7 +171,7 @@ function Home() {
                   </div>
                   <div className={cx("news-actor")}>
                     <div className={cx("actor-avatar")}>
-                      <img src={banner} alt=""></img>
+                      <img src={item.poster_Image_URL} alt=""></img>
                     </div>
                     <div className={cx("actor-info")}>
                       <p className={cx("actor-name")}>{item.poster}</p>

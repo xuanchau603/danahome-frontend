@@ -22,7 +22,7 @@ function MyButton(
   },
   ref,
 ) {
-  let Comp = "div";
+  let Comp = "button";
   const props = {
     onClick,
   };
@@ -49,6 +49,8 @@ function MyButton(
       state={state}
       ref={ref}
       {...props}
+      disibleb={disible}
+      type={"submit"}
     >
       {children}
     </Comp>

@@ -125,7 +125,7 @@ function Header() {
               <Tooltip title="Đăng tin mới">
                 <span>
                   {" "}
-                  <MyButton classes={cx("btn-news")} primary>
+                  <MyButton to={"/new-post"} classes={cx("btn-news")} primary>
                     {" "}
                     <AddCircleOutlineIcon></AddCircleOutlineIcon>
                   </MyButton>

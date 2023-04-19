@@ -13,7 +13,7 @@ const NewsAPI = {
     return fetch("http://localhost:802/news/create", {
       method: "post",
       headers: {
-        token,
+        token: `Bearer ${token}`,
       },
       body: newsData,
     });
