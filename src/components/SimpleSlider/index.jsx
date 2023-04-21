@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 export default function SimpleSlider(props) {
   var settings = props.settings;
   return (
-    <div className="container" style={{ marginTop: "6rem" }}>
+    <div className="container">
       <Slider {...settings}>{props.children}</Slider>
     </div>
   );

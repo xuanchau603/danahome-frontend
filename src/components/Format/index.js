@@ -1,3 +1,24 @@
+import moment from "moment";
+
+moment.updateLocale("en", {
+  relativeTime: {
+    future: "trong %s",
+    past: "%s trước",
+    s: "vài giây trước",
+    ss: "%d giây",
+    m: "một giây",
+    mm: "%d phút",
+    h: "một giờ",
+    hh: "%d giờ",
+    d: "một ngày",
+    dd: "%d ngày",
+    M: "một tháng",
+    MM: "%d tháng",
+    y: "một năm",
+    yy: "%d năm",
+  },
+});
+
 const Format = {
   formatDate: (data) => {
     const date = new Date(data);

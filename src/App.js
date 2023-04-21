@@ -6,30 +6,34 @@ import { useDispatch, useSelector } from "react-redux";
 import authAPI from "./API/authAPI";
 import { message } from "antd";
 import { InitUser } from "./Redux/authSlice";
+import { useEffect } from "react";
 
 function App() {
   const dispath = useDispatch();
 
   const userId = localStorage.getItem("user_Id");
-  if (userId) {
-    const token = localStorage.getItem("token");
-    const Init = async () => {
-      try {
-        const respone = await authAPI.getUserById(userId, token);
-        if (respone.status === 200) {
-          dispath(
-            InitUser({
-              ...respone.data.user_Info,
-              access_Token: token,
-            }),
-          );
+  useEffect(() => {
+    if (userId) {
+      const token = localStorage.getItem("token");
+      const Init = async () => {
+        try {
+          const respone = await authAPI.getUserById(userId, token);
+          if (respone.status === 200) {
+            dispath(
+              InitUser({
+                ...respone.data.user_Info,
+                access_Token: token,
+              }),
+            );
+          }
+        } catch (error) {
+          message.error("Không thể kết nối đến Server", 2);
         }
-      } catch (error) {
-        message.error("Không thể kết nối đến Server", 2);
-      }
-    };
-    Init();
-  }
+      };
+      Init();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const currentUser = useSelector((state) => {
     return state.auth.login.currentUser;
@@ -38,6 +42,7 @@ function App() {
   const loading = useSelector((state) => {
     return state.load.load.loadding;
   });
+
   return (
     <BrowserRouter>
       <div className="App">

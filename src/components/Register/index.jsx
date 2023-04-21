@@ -87,7 +87,11 @@ function Register(props) {
   });
 
   useEffect(() => {
-    if (countDown === 0) return setDisibleCode(true);
+    if (countDown === 0) {
+      setDisibleCode(true);
+      formik.setFieldValue("code", "");
+      return;
+    }
     const timer = setInterval(() => {
       setCountDown((prev) => {
         return prev - 1;
@@ -97,6 +101,7 @@ function Register(props) {
     return () => {
       clearInterval(timer);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countDown]);
 
   return (
@@ -181,6 +186,7 @@ function Register(props) {
           name="code"
           type="text"
           label="MÃ XÁC NHẬN"
+          value={formik.values.code}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           icon={<VpnKeyIcon></VpnKeyIcon>}

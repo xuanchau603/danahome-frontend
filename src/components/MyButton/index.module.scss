@@ -34,17 +34,15 @@
     top: 0;
     left: 0;
     content: "";
-    width: 0%;
+    width: 0;
     height: 100%;
     z-index: -1;
     transition: 0.6s;
   }
-  &:hover {
-    color: #05a300;
-  }
+
   &:hover::before {
     width: 100%;
-    background: #e6ffe1;
+    background: #ebffe1;
   }
 }
 

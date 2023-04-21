@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import style from "./Home.module.scss";
 import classNames from "classnames/bind";
 import { banner } from "../../Image";
@@ -150,112 +150,127 @@ function Home() {
           </div>
         </div>
 
-        <SimpleSlider settings={settingsSliderNewsBox}>
-          {listHotNews.map((item) => {
-            return (
-              <div key={item.ID}>
-                <div className={cx("new-items")}>
-                  <div className={cx("news-image")}>
-                    <img src={item.featured_Image} alt=""></img>
-                    <span className={cx("news-tag")}>
-                      <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
-                    </span>
-                    <MyButton classes={cx("btn-detail")} primary>
-                      Xem ngay
-                    </MyButton>
-                  </div>
-                  <div className={cx("news-name")}>
-                    <span>{item.title}</span>
-                  </div>
-                  <div className={cx("news-price")}>
-                    <span>{Format.formatPrice(item.price)}</span>
-                  </div>
-                  <div className={cx("news-actor")}>
-                    <div className={cx("actor-avatar")}>
-                      <img src={item.poster_Image_URL} alt=""></img>
+        {listHotNews.length > 0 ? (
+          <SimpleSlider settings={settingsSliderNewsBox}>
+            {listHotNews.map((item) => {
+              return (
+                <div key={item.ID}>
+                  <div className={cx("new-items")}>
+                    <div className={cx("news-image")}>
+                      <img src={item.featured_Image} alt=""></img>
+                      <span className={cx("news-tag")}>
+                        <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
+                      </span>
+                      <MyButton
+                        to={`/news-detail?newsId=${item.ID}`}
+                        classes={cx("btn-detail")}
+                        primary
+                      >
+                        Xem ngay
+                      </MyButton>
                     </div>
-                    <div className={cx("actor-info")}>
-                      <p className={cx("actor-name")}>{item.poster}</p>
+                    <div className={cx("news-name")}>
+                      <span title={item.title}>{item.title}</span>
+                    </div>
+                    <div className={cx("news-price")}>
+                      <span>{Format.formatPrice(item.price)}</span>
+                    </div>
+                    <div className={cx("news-actor")}>
+                      <div className={cx("actor-avatar")}>
+                        <img src={item.poster_Image_URL} alt=""></img>
+                      </div>
+                      <div className={cx("actor-info")}>
+                        <p className={cx("actor-name")}>{item.poster}</p>
+                        <p className={cx("actor-address")}>
+                          {`${item.province} - ${item.district} - ${item.ward} - ${item.house_Number}`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </SimpleSlider>
+        ) : (
+          <Skeleton active></Skeleton>
+        )}
+      </div>
+
+      {listHotNews.length > 0 ? (
+        <div className={cx("sale-ready")}>
+          <Row gutter={30}>
+            <Col span={12}>
+              <div className={cx("sale-info")}>
+                <div className={cx("sub-title")}>
+                  <p></p>
+                  <span>Sẵn sàng để lên sàng</span>
+                </div>
+                <h1 className={cx("title")}>
+                  CÙNG THAM QUAN NHÀ CỦA<br></br> CHÚNG TÔI NÀO!
+                </h1>
+                <p className={cx("description")}>
+                  Căn nhà được đề xuất bởi đồng nghiệp của chúng tôi đã sẵn sàng
+                  trở thành căn nhà mơ ước cho giấc mơ của bạn
+                </p>
+                <div className={cx("house-detail")}>
+                  <h2>Mô tả chi tiết</h2>
+                  <div className={cx("info")}>
+                    <span>
+                      <KingBedIcon fontSize="large"></KingBedIcon> 4 phòng ngủ
+                    </span>
+                    <span>
+                      <BathtubIcon fontSize="large"></BathtubIcon> 2 phòng tắm
+                    </span>
+                  </div>
+                  <div className={cx("info")}>
+                    <span>
+                      <CarRepairIcon fontSize="large"></CarRepairIcon> 1 bãi đỗ
+                      xe
+                    </span>
+                    <span>
+                      <StairsIcon fontSize="large"></StairsIcon> 2 tầng lầu
+                    </span>
+                  </div>
+                </div>
+                <div className={cx("contact")}>
+                  <div className={cx("actor-info")}>
+                    <div className={cx("actor-image")}>
+                      <img src={listHotNews[0].poster_Image_URL} alt=""></img>
+                    </div>
+                    <div className={cx("detail")}>
+                      <p className={cx("actor-name")}>
+                        {listHotNews[0].poster}
+                      </p>
                       <p className={cx("actor-address")}>
-                        {`${item.province} - ${item.district} - ${item.ward} - ${item.house_Number}`}
+                        {`${listHotNews[0].house_Number}, ${listHotNews[0].province}`}
                       </p>
                     </div>
                   </div>
+                  <MyButton classes={cx("btn-contact")} primary>
+                    <CallIcon></CallIcon> Liên hệ ngay
+                  </MyButton>
                 </div>
               </div>
-            );
-          })}
-        </SimpleSlider>
-      </div>
-
-      <div className={cx("sale-ready")}>
-        <Row gutter={30}>
-          <Col span={12}>
-            <div className={cx("sale-info")}>
-              <div className={cx("sub-title")}>
-                <p></p>
-                <span>Sẵn sàng để lên sàng</span>
-              </div>
-              <h1 className={cx("title")}>
-                CÙNG THAM QUAN NHÀ CỦA<br></br> CHÚNG TÔI NÀO!
-              </h1>
-              <p className={cx("description")}>
-                Căn nhà được đề xuất bởi đồng nghiệp của chúng tôi đã sẵn sàng
-                trở thành căn nhà mơ ước cho giấc mơ của bạn
-              </p>
-              <div className={cx("house-detail")}>
-                <h2>Mô tả chi tiết</h2>
-                <div className={cx("info")}>
-                  <span>
-                    <KingBedIcon fontSize="large"></KingBedIcon> 4 phòng ngủ
-                  </span>
-                  <span>
-                    <BathtubIcon fontSize="large"></BathtubIcon> 2 phòng tắm
-                  </span>
+            </Col>
+            <Col span={12}>
+              <div className={cx("sale-image")}>
+                <div className={cx("main-image")}>
+                  <img src={listHotNews[0].featured_Image} alt=""></img>
                 </div>
-                <div className={cx("info")}>
-                  <span>
-                    <CarRepairIcon fontSize="large"></CarRepairIcon> 1 bãi đỗ xe
-                  </span>
-                  <span>
-                    <StairsIcon fontSize="large"></StairsIcon> 2 tầng lầu
-                  </span>
+                <div className={cx("sub-image1")}>
+                  <img src={listHotNews[0].featured_Image} alt=""></img>
+                </div>
+                <div className={cx("sub-image2")}>
+                  <img src={banner} alt=""></img>
+                  <img src={banner} alt=""></img>
                 </div>
               </div>
-              <div className={cx("contact")}>
-                <div className={cx("actor-info")}>
-                  <div className={cx("actor-image")}>
-                    <img src={banner} alt=""></img>
-                  </div>
-                  <div className={cx("detail")}>
-                    <p className={cx("actor-name")}>Lê Xuân Châu</p>
-                    <p className={cx("actor-address")}>
-                      123 Nguyễn Tất Thành , Đà Nẵng
-                    </p>
-                  </div>
-                </div>
-                <MyButton classes={cx("btn-contact")} primary>
-                  <CallIcon></CallIcon> Liên hệ ngay
-                </MyButton>
-              </div>
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className={cx("sale-image")}>
-              <div className={cx("main-image")}>
-                <img src={banner} alt=""></img>
-              </div>
-              <div className={cx("sub-image1")}>
-                <img src={banner} alt=""></img>
-              </div>
-              <div className={cx("sub-image2")}>
-                <img src={banner} alt=""></img>
-                <img src={banner} alt=""></img>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
+            </Col>
+          </Row>
+        </div>
+      ) : (
+        <Skeleton active></Skeleton>
+      )}
 
       <div className={cx("review")}>
         <div className={cx("sub-title")}>

@@ -1,15 +1,33 @@
 .house-details {
-  max-width: var(--l-witdh);
+  max-width: var(--l-width);
   margin: 0 auto;
   .left-content {
     border: 1px solid #ccc;
     margin-top: 3rem;
     .post-image {
       background-color: black;
-      > img {
+      img {
         width: 100%;
         height: 30rem;
         object-fit: contain;
+      }
+      .btn-slide {
+        position: absolute;
+        background: #f3f3f3;
+        transform: translateY(-50%);
+        opacity: 0.2;
+        padding: 2rem 0.6rem;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+      .btn-prev {
+        left: 0;
+        top: 50%;
+      }
+      .btn-next {
+        right: 0;
+        top: 50%;
       }
     }
     .post-header {

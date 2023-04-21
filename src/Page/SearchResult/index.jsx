@@ -1,17 +1,19 @@
 import style from "./SearchResult.module.scss";
 import classNames from "classnames/bind";
-import { Col, Pagination, Row } from "antd";
-import { useState } from "react";
+import { Col, Pagination, Row, Skeleton, message } from "antd";
+import { useEffect, useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewsItem from "../../components/NewsItem";
 import QuickSee from "../../components/QuickSee";
 import MyBreadCrum from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
+import NewsAPI from "../../API/newsAPI";
 
 const cx = classNames.bind(style);
 
 function SearchResult(props) {
   const [active, setActive] = useState("default");
+  const [searchResults, setSreachResult] = useState([]);
 
   const onChange = (page) => {
     // console.log(page);
@@ -128,6 +130,20 @@ function SearchResult(props) {
       text: "Kết quả tìm kiếm",
     },
   ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const getSearchResult = async () => {
+      try {
+        const responese = await NewsAPI.getHotNews();
+        if (responese.status === 200) {
+          setSreachResult(responese.data.data);
+        }
+      } catch (error) {
+        message.error("Không thể kết nối đến server", 2);
+      }
+    };
+    getSearchResult();
+  }, []);
 
   return (
     <div className={cx("wrapper")}>
@@ -221,9 +237,13 @@ function SearchResult(props) {
                 Giá thấp đến cao
               </span>
             </div>
-            <NewsItem></NewsItem>
-            <NewsItem></NewsItem>
-            <NewsItem></NewsItem>
+            {searchResults.length > 0 ? (
+              searchResults.map((item) => {
+                return <NewsItem key={item.ID} data={item}></NewsItem>;
+              })
+            ) : (
+              <Skeleton active></Skeleton>
+            )}
           </div>
         </Col>
         <Col span={8}>
