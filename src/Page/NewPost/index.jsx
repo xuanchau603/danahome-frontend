@@ -36,12 +36,22 @@ function NewPost() {
   const [district, setDistrict] = useState("");
   const [ward, setWard] = useState("");
   const [roomTypeId, setRoomTypeId] = useState("");
-  const [object, setObject] = useState("all");
+  const [object, setObject] = useState("Tất cả");
 
   const navigate = useNavigate();
 
   const location = useLocation();
   const data = location.state;
+  const categoryRooms = useSelector((state) => {
+    return state.category.categoryRooms;
+  });
+
+  const optionsCateRooms = categoryRooms.map((item) => {
+    return {
+      label: item.name,
+      value: item.ID,
+    };
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -61,8 +71,12 @@ function NewPost() {
       description: Yup.string()
         .min(30, "Mô tả tối thiểu 30 ký tự")
         .required("Vui lòng nhập thông tin này!"),
-      price: Yup.string().required("Vui lòng nhập thông tin này!"),
-      acreage: Yup.string().required("Vui lòng nhập thông tin này!"),
+      price: Yup.string()
+        .required("Vui lòng nhập thông tin này!")
+        .max(12, "Số tiền quá lớn hoặc không hợp lệ"),
+      acreage: Yup.string()
+        .required("Vui lòng nhập thông tin này!")
+        .max(4, "Diện tích quá lớn hoặc không hợp lệ"),
     }),
     onSubmit: async (values) => {
       if (!province) {
@@ -151,6 +165,7 @@ function NewPost() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getProvince();
     if (data) {
       formik.values.house_Number = data.house_Number;
@@ -169,6 +184,7 @@ function NewPost() {
         setProvince(data.province);
         setDistrict(data.district);
         setWard(data.ward);
+        setObject(data.object);
       };
       Init();
     }
@@ -277,25 +293,7 @@ function NewPost() {
                 width: 250,
               }}
               onChange={handleChangeRoomType}
-              options={[
-                {
-                  label: "Nhà trọ, Phòng trọ",
-                  value: "a9a7fcc3-dc42-11ed-8c1c-2cf05ddd2632",
-                },
-                {
-                  label: "Nhà thuê nguyên căn",
-                  value: "be8b1ba8-dc42-11ed-8c1c-2cf05ddd2632",
-                },
-                {
-                  label: "Căn hộ",
-                  options: [
-                    {
-                      label: "Cho thuê căn hộ",
-                      value: "cf22ddec-dc42-11ed-8c1c-2cf05ddd2632",
-                    },
-                  ],
-                },
-              ]}
+              options={optionsCateRooms}
             />
             <div className={cx("post-title")}>
               <h2>Tiêu đề</h2>
@@ -379,21 +377,21 @@ function NewPost() {
               <Space wrap>
                 <Select
                   onChange={(value) => setObject(value)}
-                  defaultValue={data ? data.object : "all"}
+                  defaultValue={data ? data.object : "Tất cả"}
                   style={{
                     width: 415,
                   }}
                   options={[
                     {
-                      value: "all",
+                      value: "Tất cả",
                       label: "Tất cả",
                     },
                     {
-                      value: "male",
+                      value: "Nam",
                       label: "Nam",
                     },
                     {
-                      value: "femail",
+                      value: "Nữ",
                       label: "Nữ",
                     },
                   ]}

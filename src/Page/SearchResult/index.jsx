@@ -1,6 +1,6 @@
 import style from "./SearchResult.module.scss";
 import classNames from "classnames/bind";
-import { Col, Pagination, Row, Skeleton, message } from "antd";
+import { Col, Pagination, Row, message } from "antd";
 import { useEffect, useState } from "react";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewsItem from "../../components/NewsItem";
@@ -8,15 +8,48 @@ import QuickSee from "../../components/QuickSee";
 import MyBreadCrum from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import NewsAPI from "../../API/newsAPI";
+import { useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import { notFound } from "../../Image";
+import moment from "moment";
 
 const cx = classNames.bind(style);
 
 function SearchResult(props) {
   const [active, setActive] = useState("default");
+  const [totalPagination, setTotalPagination] = useState(0);
   const [searchResults, setSreachResult] = useState([]);
+  const [orderBy, setOrderBy] = useState("createdAt");
+  const [orderType, setOderType] = useState("DESC");
+
+  const dispatch = useDispatch();
 
   const onChange = (page) => {
     // console.log(page);
+  };
+
+  const [searchParam] = useSearchParams();
+  const roomsTypeName = searchParam.get("typeName");
+  const roomsType = searchParam.get("type");
+  const province = searchParam.get("province");
+  const district = searchParam.get("district");
+  const ward = searchParam.get("ward");
+  const priceFrom = searchParam.get("priceFrom");
+  const priceTo = searchParam.get("priceTo");
+  const acreageFrom = searchParam.get("acreageFrom");
+  const acreageTo = searchParam.get("acreageTo");
+  const filer = {
+    roomsType: roomsType || undefined,
+    province: province || undefined,
+    district: district || undefined,
+    ward: ward || undefined,
+    priceFrom: priceFrom || undefined,
+    priceTo: priceTo || undefined,
+    acreageFrom: acreageFrom || undefined,
+    acreageTo: acreageTo || undefined,
+    orderBy: orderBy,
+    orderType: orderType,
   };
 
   const itemsQuickSeePrice = [
@@ -130,32 +163,68 @@ function SearchResult(props) {
       text: "Kết quả tìm kiếm",
     },
   ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
+
     const getSearchResult = async () => {
       try {
-        const responese = await NewsAPI.getHotNews();
+        dispatch(loadingStart());
+        const responese = await NewsAPI.searchNews(filer);
         if (responese.status === 200) {
           setSreachResult(responese.data.data);
+          setTotalPagination(responese.totalNews);
+          dispatch(loadingEnd());
+        } else {
+          message.error(responese.message);
+          dispatch(loadingEnd());
         }
       } catch (error) {
         message.error("Không thể kết nối đến server", 2);
+        dispatch(loadingEnd());
       }
     };
     getSearchResult();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    acreageFrom,
+    acreageTo,
+    district,
+    priceFrom,
+    priceTo,
+    province,
+    roomsType,
+    searchParam,
+    ward,
+    orderBy,
+    orderType,
+  ]);
 
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrum items={itemsBread}></MyBreadCrum>
       <h1 className={cx("title")}>
-        Cho thuê Phòng trọ Đà Nẵng Giá từ 2 - 3 triệu đồng
+        {`Cho thuê ${roomsTypeName || "bất động sản"} ${province || ""} ${
+          district || ""
+        } ${ward || ""}${
+          priceFrom || priceTo
+            ? ", Giá từ " +
+              priceFrom / 1000000 +
+              " triệu đến " +
+              priceTo / 1000000 +
+              " triệu"
+            : ""
+        } ${
+          acreageFrom || acreageTo
+            ? ", Diện tích từ " + acreageFrom + " m2 đến " + acreageTo + " m2"
+            : ""
+        }`}
       </h1>
-      <p className={cx("sub-title")}>
+      {/* <p className={cx("sub-title")}>
         Cho thuê Phòng trọ Đà Nẵng Giá từ 2 - 3 triệu đồng , phòng mới xây,
         chính chủ gần chợ, trường học, siêu thị, cửa hàng tiện lợi, khu an ninh.
-      </p>
-      <div className={cx("suggets-address")}>
+      </p> */}
+      {/* <div className={cx("suggets-address")}>
         <span className={cx("suggest-item")}>
           Liên Chiểu<small> (123)</small>
         </span>
@@ -180,69 +249,87 @@ function SearchResult(props) {
         <span className={cx("suggest-item")}>
           Hòa Minh<small> (123)</small>
         </span>
-      </div>
+      </div> */}
       <Row gutter={24}>
         <Col span={16}>
           <div className={cx("list-news")}>
             <div className={cx("list-news-top")}>
               <h1>Danh sách tin đăng</h1>
               <span className={cx("update-at")}>
-                Cập nhật: 18:20 10/04/2023
+                Cập nhật lúc:{" "}
+                {moment(new Date()).format("DD/MM/YYYY, hh:mm:ss A")}
               </span>
             </div>
-            <div className={cx("sort")}>
-              Sắp xếp:
-              <span
-                className={
-                  active === "default"
-                    ? cx("sort-item", "active")
-                    : cx("sort-item")
-                }
-                onClick={() => {
-                  setActive("default");
-                }}
-              >
-                Mặc định
-              </span>
-              <span
-                className={
-                  active === "new" ? cx("sort-item", "active") : cx("sort-item")
-                }
-                onClick={() => {
-                  setActive("new");
-                }}
-              >
-                Mới nhất
-              </span>
-              <span
-                className={
-                  active === "desc"
-                    ? cx("sort-item", "active")
-                    : cx("sort-item")
-                }
-                onClick={() => {
-                  setActive("desc");
-                }}
-              >
-                Giá cao đến thấp
-              </span>
-              <span
-                className={
-                  active === "acs" ? cx("sort-item", "active") : cx("sort-item")
-                }
-                onClick={() => {
-                  setActive("acs");
-                }}
-              >
-                Giá thấp đến cao
-              </span>
-            </div>
+            {searchResults.length > 0 && (
+              <div className={cx("sort")}>
+                Sắp xếp:
+                <span
+                  className={
+                    active === "default"
+                      ? cx("sort-item", "active")
+                      : cx("sort-item")
+                  }
+                  onClick={() => {
+                    setActive("default");
+                    setOderType("DESC");
+                    setOrderBy("createdAt");
+                  }}
+                >
+                  Mặc định
+                </span>
+                <span
+                  className={
+                    active === "new"
+                      ? cx("sort-item", "active")
+                      : cx("sort-item")
+                  }
+                  onClick={() => {
+                    setActive("new");
+                    setOderType("DESC");
+                    setOrderBy("createdAt");
+                  }}
+                >
+                  Mới nhất
+                </span>
+                <span
+                  className={
+                    active === "desc"
+                      ? cx("sort-item", "active")
+                      : cx("sort-item")
+                  }
+                  onClick={() => {
+                    setActive("desc");
+                    setOrderBy("price");
+                    setOderType("DESC");
+                  }}
+                >
+                  Giá cao đến thấp
+                </span>
+                <span
+                  className={
+                    active === "acs"
+                      ? cx("sort-item", "active")
+                      : cx("sort-item")
+                  }
+                  onClick={() => {
+                    setActive("acs");
+                    setOrderBy("price");
+                    setOderType("ASC");
+                  }}
+                >
+                  Giá thấp đến cao
+                </span>
+              </div>
+            )}
             {searchResults.length > 0 ? (
               searchResults.map((item) => {
                 return <NewsItem key={item.ID} data={item}></NewsItem>;
               })
             ) : (
-              <Skeleton active></Skeleton>
+              <div className={cx("not-found")}>
+                <img src={notFound} alt=""></img>
+                <h1>Không tìm thấy kết quả phù hợp</h1>
+              </div>
             )}
           </div>
         </Col>
@@ -267,7 +354,7 @@ function SearchResult(props) {
       <div className={cx("pagination")}>
         <Pagination
           onChange={onChange}
-          total={100}
+          total={totalPagination}
           pageSize={10}
           showSizeChanger
           showQuickJumper

@@ -49,8 +49,8 @@ function MyButton(
       state={state}
       ref={ref}
       {...props}
-      disibleb={disible}
       type={"submit"}
+      disabled={disible}
     >
       {children}
     </Comp>

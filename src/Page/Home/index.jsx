@@ -159,7 +159,8 @@ function Home() {
                     <div className={cx("news-image")}>
                       <img src={item.featured_Image} alt=""></img>
                       <span className={cx("news-tag")}>
-                        <WhatshotIcon fontSize="large"></WhatshotIcon> Phổ biến
+                        <WhatshotIcon fontSize="large"></WhatshotIcon> Tin VIP
+                        nổi bật
                       </span>
                       <MyButton
                         to={`/news-detail?newsId=${item.ID}`}

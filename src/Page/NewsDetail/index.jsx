@@ -119,14 +119,14 @@ function NewsDetail() {
     <div className={cx("house-details")}>
       <MyBreadCrum items={items}></MyBreadCrum>
       <Row gutter={16}>
-        {newsInfo ? (
-          <Col span={16}>
+        <Col span={16}>
+          {newsInfo ? (
             <div className={cx("left-content")}>
               <div className={cx("post-image")}>
                 <SimpleSlider settings={settingsSliderNewsBox}>
                   {newsInfo.images.map((item) => {
                     return (
-                      <div key={item.ID}>
+                      <div key={newsInfo.ID}>
                         <img src={item.image_URL} alt=""></img>
                       </div>
                     );
@@ -155,11 +155,7 @@ function NewsDetail() {
                   </div>
                   <div className={cx("post-published")}>
                     <AccessTimeIcon></AccessTimeIcon>
-                    <p>
-                      {moment(
-                        new Date(newsInfo.createdAt).toLocaleString(),
-                      ).fromNow()}
-                    </p>
+                    <p>{moment(new Date(newsInfo.createdAt)).fromNow()}</p>
                   </div>
                   <div className={cx("post-code")}>
                     <TagIcon></TagIcon>
@@ -191,7 +187,7 @@ function NewsDetail() {
                     </tr>
                     <tr>
                       <td>Đối tượng thuê:</td>
-                      <td>Tất cả</td>
+                      <td>{newsInfo.object}</td>
                     </tr>
                     <tr>
                       <td>Gói tin:</td>
@@ -200,17 +196,17 @@ function NewsDetail() {
                     <tr>
                       <td>Ngày đăng:</td>
                       <td>
-                        {moment(
-                          new Date(newsInfo.createdAt).toLocaleString(),
-                        ).format("DD/MM/YYYY, hh:mm:ss A")}
+                        {moment(new Date(newsInfo.createdAt)).format(
+                          "DD/MM/YYYY, hh:mm:ss A",
+                        )}
                       </td>
                     </tr>
                     <tr>
                       <td>Ngày hết hạn:</td>
                       <td>
-                        {moment(
-                          new Date(newsInfo.expire_At).toLocaleString(),
-                        ).format("DD/MM/YYYY, hh:mm:ss A")}
+                        {moment(new Date(newsInfo.expire_At)).format(
+                          "DD/MM/YYYY, hh:mm:ss A",
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -242,10 +238,11 @@ function NewsDetail() {
                 </p>
               </div>
             </div>
-          </Col>
-        ) : (
-          <Skeleton active></Skeleton>
-        )}
+          ) : (
+            <Skeleton active></Skeleton>
+          )}
+        </Col>
+
         <Col span={8}>
           <NewsRent></NewsRent>
           <QuickSee

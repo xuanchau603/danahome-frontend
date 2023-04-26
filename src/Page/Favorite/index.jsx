@@ -1,16 +1,48 @@
 import style from "./Favorite.module.scss";
 import classNames from "classnames/bind";
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewsItem from "./../../components/NewsItem/index";
 import QuickSee from "./../../components/QuickSee/index";
 import MyBreadCrum from "../../components/MyBreadcrumb";
+import { empty } from "../../Image/index";
 
 import HomeIcon from "@mui/icons-material/Home";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import NewsAPI from "./../../API/newsAPI";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 
 const cx = classNames.bind(style);
 
 function Favorite() {
+  const [listFavoriteInfo, setListFavoriteInfo] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const listNewsFavorite = useSelector((state) => {
+    return state.listNewsFavorite.listNewsFavorite;
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if (listNewsFavorite.length > 0) {
+      setListFavoriteInfo([]);
+      const getListNewsFavorite = async () => {
+        for (const item of listNewsFavorite) {
+          dispatch(loadingStart());
+          const response = await NewsAPI.getDetailNewsById(item.newsId);
+          setListFavoriteInfo((prev) => [...prev, response.data.data]);
+          dispatch(loadingEnd());
+        }
+      };
+      getListNewsFavorite();
+    } else {
+      setListFavoriteInfo([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listNewsFavorite.length]);
+
   const itemsQuickSeeNews = [
     <span>
       <ChevronRightIcon></ChevronRightIcon> Nỗi khổ của người thuê phòng trọ gần
@@ -70,11 +102,18 @@ function Favorite() {
       <h1 className={cx("title")}>Tin đã lưu</h1>
       <Row gutter={16}>
         <Col span={16}>
-          <ul className={cx("list-favorite")}>
-            <NewsItem></NewsItem>
-            <NewsItem></NewsItem>
-            <NewsItem></NewsItem>
-          </ul>
+          {listFavoriteInfo.length > 0 ? (
+            <ul className={cx("list-favorite")}>
+              {listFavoriteInfo.map((item) => {
+                return <NewsItem key={item.ID} data={item}></NewsItem>;
+              })}
+            </ul>
+          ) : (
+            <div className={cx("empty")}>
+              <img src={empty} alt=""></img>
+              <h1>Danh sách rỗng</h1>
+            </div>
+          )}
         </Col>
         <Col span={8}>
           <div className={cx("sidebar")}>

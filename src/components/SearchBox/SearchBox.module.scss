@@ -1,5 +1,5 @@
 .search-box {
-  margin: 6rem auto 10rem auto;
+  margin: 16rem auto 10rem auto;
   border: 2px solid #ccc;
   padding: 0 2rem;
   max-width: var(--l-width);
@@ -98,7 +98,8 @@
       }
     }
   }
-  .btn {
-    width: 100%;
-  }
+}
+.btn {
+  margin-top: 6rem;
+  width: 100%;
 }

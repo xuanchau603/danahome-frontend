@@ -1,106 +1,132 @@
-.wrapper {
-  height: 10rem;
-  max-width: var(--l-width);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-  position: relative;
-  z-index: 99;
-  .logo {
-    width: 16rem;
-    height: 100%;
-
-    > img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-  .action {
+.header {
+  background: transparent;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 999;
+  transition: 0.2s linear;
+  .wrapper {
+    height: 10rem;
+    max-width: var(--l-width);
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .action-item {
-      display: flex;
-      align-items: center;
-      padding: 0.8rem 1.6rem;
-      margin: 0 1rem;
-      border: 0.4px solid #6b6b6b;
-      border-radius: 30px;
-      color: #6b6b6b;
-      font-weight: 500;
-      transition: 0.4s;
-      > svg {
-        padding-left: 0.6rem;
-        font-size: 2rem;
-      }
+    overflow: hidden;
+    position: relative;
 
-      &:hover {
-        background: #d0ffdb;
-        cursor: pointer;
-        color: #313131;
-      }
-      &:first-child:hover > svg {
-        color: red;
+    .logo {
+      width: 16rem;
+      height: 100%;
+
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
       }
     }
-    .user {
-      margin-left: 2rem;
-      .login {
-        padding: 1rem 2rem;
-        border: 1px solid #00b42a;
-        border-radius: 30px;
-        font-weight: 500;
-        color: #00b42a;
-        font-weight: 600;
-        background: #d0ffdb;
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .action-item {
+        position: relative;
         display: flex;
         align-items: center;
+        padding: 0.4rem 1.6rem;
+        margin: 0 1rem;
+        border: 0.4px solid #6b6b6b;
+        border-radius: 30px;
+        color: #6b6b6b;
+        font-weight: 500;
+        transition: 0.4s;
+        .count-newsFavorite {
+          position: absolute;
+          right: 0;
+          top: -0.6rem;
+          background: rgb(248, 70, 70);
+          color: #fff;
+          padding: 0.4rem 0.8rem;
+          border-radius: 50%;
+          font-size: 1.4rem;
+          font-weight: 700;
+        }
         > svg {
-          padding-left: 0.8rem;
+          padding-left: 0.6rem;
           font-size: 3rem;
         }
+
         &:hover {
+          background: #d0ffdb;
           cursor: pointer;
-          background: #c4ffd2;
+          color: #313131;
+        }
+        &:first-child:hover > svg {
+          color: red;
         }
       }
-      .avatar {
-        display: flex;
-        align-items: center;
-        .image {
-          margin-left: 2rem;
-          width: 6rem;
-          height: 6rem;
-          cursor: pointer;
-          > img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            filter: drop-shadow(var(--shadow));
+      .btn-news {
+        height: 4rem;
+        margin: 0 1rem;
+        > svg {
+          font-size: 3rem;
+        }
+      }
+      .user {
+        .login {
+          font-weight: 700;
+        }
+        .avatar {
+          display: flex;
+          align-items: center;
+          .image {
+            width: 6rem;
+            height: 6rem;
+            cursor: pointer;
+            > img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 50%;
+            }
           }
         }
-        .btn-news {
-          width: 4rem;
-          height: 4rem;
-          > svg {
-            padding: 0;
-            font-size: 2rem;
-          }
+      }
+      .more {
+        cursor: pointer;
+        > svg {
+          padding: 0;
+          font-size: 4rem;
           margin: 0;
-          padding: 0rem;
+          transform: translateY(0.2rem);
         }
       }
     }
   }
 }
 .popover-item {
-  cursor: pointer;
-  font-weight: 500;
-  width: 10rem;
+  > li {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    cursor: pointer;
+    border-radius: 4px;
+    &:last-child {
+      &:hover {
+        background: none;
+      }
+    }
+    &:hover {
+      background: #ededed;
+    }
+    > svg {
+      font-size: 2.6rem;
+      margin-right: 1rem;
+    }
+    > button {
+      margin-left: 1rem;
+    }
+  }
 }
 
 .menu {

@@ -14,13 +14,11 @@ import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 const cx = classNames.bind(style);
 
 function Payment() {
-  const [newsTypePrice, setNewsTypePrice] = useState(2000);
+  const [newsTypePrice, setNewsTypePrice] = useState(0);
   const [day, setDay] = useState(0);
   const [total, setTotal] = useState(0);
   const [paymentType, setPaymentType] = useState(null);
-  const [newsType, setNewsType] = useState(
-    "e835fdf4-dc42-11ed-8c1c-2cf05ddd2632",
-  );
+  const [newsType, setNewsType] = useState("");
   const [expire_At, setExpire_At] = useState();
 
   const location = useLocation();
@@ -29,8 +27,15 @@ function Payment() {
 
   const dispath = useDispatch();
 
-  const currentUser = useSelector((state) => {
-    return state.auth.login.currentUser;
+  const { auth, category } = useSelector((state) => {
+    return state;
+  });
+
+  const optionNews = category.categoryNews.map((item) => {
+    return {
+      value: `${item.ID},${item.price}`,
+      label: `${item.name} (${item.price}/ngày)`,
+    };
   });
 
   const itemsBread = [
@@ -53,8 +58,8 @@ function Payment() {
   }
 
   const onChange = (value) => {
-    value === 0 ? setNewsTypePrice(2000) : setNewsTypePrice(10000);
-    setNewsType(value);
+    setNewsTypePrice(value.split(",")[1]);
+    setNewsType(value.split(",")[0]);
   };
 
   const onChangeDate = (date) => {
@@ -75,6 +80,7 @@ function Payment() {
 
   const handlePayment = async () => {
     if (!expire_At) return message.error("Vui lòng chọn ngày hết hạn!", 2);
+    if (!newsType) return message.error("Vui lòng chọn loại tin!", 2);
     if (!paymentType)
       return message.error("Vui lòng chọn phương thức thanh toán", 2);
     const formData = new FormData();
@@ -89,6 +95,7 @@ function Payment() {
     formData.append("price", data.price);
     formData.append("expire_At", expire_At);
     formData.append("acreage", data.acreage);
+    formData.append("object", data.object);
     for (var item of data.images) {
       formData.append("images", item);
     }
@@ -96,7 +103,7 @@ function Payment() {
       dispath(loadingStart());
       const response = await NewsAPI.createNews(
         formData,
-        currentUser.access_Token,
+        auth.login.currentUser.access_Token,
       );
       const jsonData = await response.json();
       if (response.status === 200) {
@@ -129,21 +136,12 @@ function Payment() {
         <div className={cx("option-item")}>
           <p>Chọn loại tin</p>
           <Select
-            defaultValue={"e835fdf4-dc42-11ed-8c1c-2cf05ddd2632"}
+            defaultValue={"--Chọn loại tin--"}
             style={{
               width: 320,
             }}
             onChange={onChange}
-            options={[
-              {
-                value: "e835fdf4-dc42-11ed-8c1c-2cf05ddd2632",
-                label: "Tin thường (2.000đ/ngày)",
-              },
-              {
-                value: "f3a4bbd9-dc42-11ed-8c1c-2cf05ddd2632",
-                label: "Tin VIP nổi bật (10.000đ/ngày)",
-              },
-            ]}
+            options={optionNews}
           />
         </div>
         <div className={cx("option-item")}>
@@ -227,8 +225,8 @@ function Payment() {
             <Mybuton
               onClick={handlePayment}
               classes={cx("btn")}
-              primary={expire_At && paymentType}
-              disible={!expire_At || !paymentType}
+              primary={expire_At && paymentType && newsType}
+              disible={!expire_At || !paymentType || !newsType}
             >
               Thanh toán
             </Mybuton>

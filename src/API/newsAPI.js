@@ -22,6 +22,9 @@ const NewsAPI = {
       body: newsData,
     });
   },
+  searchNews: (params) => {
+    return axiosClient.get("/news/", { params });
+  },
 };
 
 export default NewsAPI;

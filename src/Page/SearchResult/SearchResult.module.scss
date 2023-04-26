@@ -44,8 +44,12 @@
     .list-news-top {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       > h1 {
         font-size: 2rem;
+      }
+      .update-at {
+        font-size: 1.5rem;
       }
     }
     .sort {
@@ -66,6 +70,19 @@
       .active {
         text-decoration: underline;
         font-weight: 600;
+      }
+    }
+    .not-found {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      > img {
+        height: 30rem;
+      }
+      > h1 {
+        font-size: 3rem;
+        margin-top: 1rem;
       }
     }
 

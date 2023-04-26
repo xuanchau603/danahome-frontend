@@ -7,6 +7,9 @@ import authAPI from "./API/authAPI";
 import { message } from "antd";
 import { InitUser } from "./Redux/authSlice";
 import { useEffect } from "react";
+import categoryAPI from "./API/categoryAPI";
+import { loadingEnd, loadingStart } from "./Redux/loadingSlice";
+import { InitCategoryNews, InitCategoryRooms } from "./Redux/categorySlice";
 
 function App() {
   const dispath = useDispatch();
@@ -32,6 +35,40 @@ function App() {
       };
       Init();
     }
+    const getAllCateryRooms = async () => {
+      try {
+        dispath(loadingStart());
+        const response = await categoryAPI.getAllCategoryRooms();
+        if (response.status === 200) {
+          dispath(InitCategoryRooms(response.data.data));
+          dispath(loadingEnd());
+        } else {
+          message.error(response.message);
+          dispath(loadingEnd());
+        }
+      } catch (error) {
+        message.error("Không thể kết nối đến server", 2);
+        dispath(loadingEnd());
+      }
+    };
+    getAllCateryRooms();
+    const getAllCateryNews = async () => {
+      try {
+        dispath(loadingStart());
+        const response = await categoryAPI.getAllCategoryNews();
+        if (response.status === 200) {
+          dispath(InitCategoryNews(response.data.data));
+          dispath(loadingEnd());
+        } else {
+          message.error(response.message);
+          dispath(loadingEnd());
+        }
+      } catch (error) {
+        message.error("Không thể kết nối đến server", 2);
+        dispath(loadingEnd());
+      }
+    };
+    getAllCateryNews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

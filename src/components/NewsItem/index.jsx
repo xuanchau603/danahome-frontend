@@ -1,25 +1,73 @@
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import style from "./NewsItem.module.scss";
 import classNames from "classnames/bind";
 import Format from "../Format";
 import moment from "moment";
+import "moment/locale/vi";
 import MyButton from "../MyButton";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToListNewsFavorite,
+  removeFromListNewsFavorite,
+} from "../../Redux/newsFavoriteSlice";
 
 const cx = classNames.bind(style);
 
 function NewsItem(props) {
+  const dispatch = useDispatch();
+
+  const listNewsFavorite = useSelector((state) => {
+    return state.listNewsFavorite.listNewsFavorite;
+  });
+
   return (
     <div className={cx("news")}>
       <Link
         to={`/news-detail?newsId=${props.data.ID}`}
         className={cx("main-image")}
       >
-        <img src={props.data.featured_Image} alt=""></img>
-        <span className={cx("image-count")}>{props.data.total_Image} ảnh</span>
-        <span title="Lưu tin này" className={cx("love-icon")}>
-          <FavoriteBorderIcon></FavoriteBorderIcon>
+        <img
+          src={props.data.featured_Image || props.data.images[0].image_URL}
+          alt=""
+        ></img>
+        <span className={cx("image-count")}>
+          {props.data.total_Image || props.data.images.length} ảnh
         </span>
+        {listNewsFavorite.find((item) => {
+          return item.newsId === props.data.ID;
+        }) ? (
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              const index = listNewsFavorite.findIndex((item) => {
+                return item.newsId === props.data.ID;
+              });
+              dispatch(removeFromListNewsFavorite(index));
+            }}
+            title="Xóa khỏi danh sách yêu thích"
+            className={cx("unlove-icon", "icon")}
+          >
+            <FavoriteIcon></FavoriteIcon>
+          </span>
+        ) : (
+          <span
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(
+                addToListNewsFavorite({
+                  newsId: props.data.ID,
+                  createAt: new Date().toLocaleString(),
+                }),
+              );
+            }}
+            title="Lưu tin này"
+            className={cx("love-icon", "icon")}
+          >
+            <FavoriteBorderIcon></FavoriteBorderIcon>
+          </span>
+        )}
       </Link>
       <div className={cx("news-info")}>
         <Link
@@ -39,7 +87,7 @@ function NewsItem(props) {
             {`${props.data.district}, ${props.data.province}`}
           </span>
           <span className={cx("updated", "info-item")}>
-            {moment(new Date(props.data.createdAt).toLocaleString()).fromNow()}
+            {moment(new Date(props.data.createdAt)).fromNow()}
           </span>
         </div>
         <p className={cx("info-description")}>{props.data.description}</p>

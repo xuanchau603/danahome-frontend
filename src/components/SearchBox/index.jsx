@@ -11,6 +11,8 @@ import AspectRatioIcon from "@mui/icons-material/AspectRatio";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import addressAPI from "../../API/addressAPI";
 import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -31,6 +33,10 @@ function SearchBox() {
 
   const navigate = useNavigate();
 
+  const categoryRooms = useSelector((state) => {
+    return state.category.categoryRooms;
+  });
+
   const getProvince = async () => {
     const response = await addressAPI.getProvince();
     setListProvince(response.data);
@@ -50,8 +56,7 @@ function SearchBox() {
   };
 
   const onChangeMenuType = (e) => {
-    const data = e.target.value.split(",");
-    setType(data[1]);
+    setType(e.target.value);
   };
 
   const onchangeProvince = async (e) => {
@@ -96,21 +101,6 @@ function SearchBox() {
     setShowMenuWards(false);
   };
 
-  const listType = [
-    {
-      code: 1,
-      name: "Nhà",
-    },
-    {
-      code: 2,
-      name: "Phòng trọ",
-    },
-    {
-      code: 3,
-      name: "Chung cư",
-    },
-  ];
-
   const onChangePrice = (value) => {
     setPrice(value[0] + " - " + value[1]);
   };
@@ -127,6 +117,21 @@ function SearchBox() {
     setShowMenuSize(false);
   };
 
+  const handleSearch = () => {
+    const filter = {
+      typeName: type.split(",")[1] || undefined,
+      type: type.split(",")[0] || undefined,
+      province: address.split(",")[0] || undefined,
+      district: address.split(",")[1] || undefined,
+      ward: address.split(",")[2] || undefined,
+      priceFrom: price.split(" -")[0] * 1000000 || undefined,
+      priceTo: price.split("-")[1] * 1000000 || undefined,
+      acreageFrom: size.split(" -")[0] || undefined,
+      acreageTo: size.split("- ")[1] || undefined,
+    };
+    navigate(`/search-result?${queryString.stringify(filter)}`);
+  };
+
   return (
     <div className={cx("search-box")}>
       <h2 className={cx("title")}>Tìm kiếm nơi ở phù hợp với bản thân</h2>
@@ -139,9 +144,9 @@ function SearchBox() {
             <label htmlFor="type">
               <MapsHomeWorkIcon fontSize="large"></MapsHomeWorkIcon>
             </label>
-            <Tooltip title={type || "Loại"}>
+            <Tooltip title={type ? type.split(",")[1] : "Loại"}>
               <div id="type" className={cx("data")}>
-                <p>{type || "Loại"}</p>
+                <p>{type ? type.split(",")[1] : "Loại"}</p>
               </div>
             </Tooltip>
             {!type && (
@@ -178,9 +183,23 @@ function SearchBox() {
             <label htmlFor="type">
               <MoneyIcon fontSize="large"></MoneyIcon>{" "}
             </label>
-            <Tooltip title={price ? price + " triệu đồng" : "Giá cả"}>
+            <Tooltip
+              title={
+                price
+                  ? price.split(" -")[0] === price.split("- ")[1]
+                    ? "Từ " + price.split("-")[1] + " triệu đồng"
+                    : "Từ " + price + " triệu đồng"
+                  : "Giá cả"
+              }
+            >
               <div id="type" className={cx("data")}>
-                <p>{price ? price + " triệu đồng" : "Giá cả"}</p>
+                <p>
+                  {price
+                    ? price.split(" -")[0] === price.split("- ")[1]
+                      ? "Từ " + price.split("-")[1] + " triệu đồng"
+                      : "Từ " + price + " triệu đồng"
+                    : "Giá cả"}
+                </p>
               </div>
             </Tooltip>
             {!price && (
@@ -196,9 +215,23 @@ function SearchBox() {
             <label htmlFor="type">
               <AspectRatioIcon fontSize="large"></AspectRatioIcon>
             </label>
-            <Tooltip title={size ? size + "m2" : "Diện tích"}>
+            <Tooltip
+              title={
+                size
+                  ? size.split(" -")[0] === size.split("- ")[1]
+                    ? "Từ " + size.split("-")[1] + " m2"
+                    : "Từ " + size + " m2"
+                  : "Diện tích"
+              }
+            >
               <div id="type" className={cx("data")}>
-                <p>{size ? size + "m2" : "Diện tích"}</p>
+                <p>
+                  {size
+                    ? size.split(" -")[0] === size.split("- ")[1]
+                      ? "Từ " + size.split("-")[1] + " m2"
+                      : "Từ " + size + " m2"
+                    : "Diện tích"}
+                </p>
               </div>
             </Tooltip>
             {!size && (
@@ -209,11 +242,7 @@ function SearchBox() {
           </div>
         </div>
 
-        <MyButton
-          onClick={() => navigate("/search-result")}
-          classes={cx("btn-search")}
-          primary
-        >
+        <MyButton onClick={handleSearch} classes={cx("btn-search")} primary>
           Tìm kiếm
         </MyButton>
         {showMenuType && (
@@ -225,15 +254,22 @@ function SearchBox() {
           >
             <Radio.Group onChange={onChangeMenuType}>
               <Space direction="vertical">
-                {listType.map((item, index) => {
+                {categoryRooms.map((item) => {
                   return (
-                    <Radio key={index} value={item.code + "," + item.name}>
+                    <Radio key={item.ID} value={item.ID + "," + item.name}>
                       {item.name}
                     </Radio>
                   );
                 })}
               </Space>
             </Radio.Group>
+            <MyButton
+              onClick={() => setShowMenuType(false)}
+              classes={cx("btn")}
+              primary
+            >
+              Áp dụng
+            </MyButton>
           </Menu>
         )}
         {showMenuProvince && (
@@ -256,6 +292,13 @@ function SearchBox() {
                 </Space>
               </Radio.Group>
             </div>
+            <MyButton
+              onClick={() => setShowMenuProvince(false)}
+              classes={cx("btn")}
+              primary
+            >
+              Áp dụng
+            </MyButton>
           </Menu>
         )}
         {showMenuDistrict && (
@@ -270,11 +313,7 @@ function SearchBox() {
                 <Space direction="vertical">
                   {listDistrict.map((item, index) => {
                     return (
-                      <Radio
-                        key={index}
-                        name="fds"
-                        value={item.code + "," + item.name}
-                      >
+                      <Radio key={index} value={item.code + "," + item.name}>
                         {item.name}
                       </Radio>
                     );
@@ -282,6 +321,13 @@ function SearchBox() {
                 </Space>
               </Radio.Group>
             </div>
+            <MyButton
+              onClick={() => setShowMenuDistrict(false)}
+              classes={cx("btn")}
+              primary
+            >
+              Áp dụng
+            </MyButton>
           </Menu>
         )}
         {showMenuWards && (
@@ -308,6 +354,13 @@ function SearchBox() {
                 </Space>
               </Radio.Group>
             </div>
+            <MyButton
+              onClick={() => setShowMenuWards(false)}
+              classes={cx("btn")}
+              primary
+            >
+              Áp dụng
+            </MyButton>
           </Menu>
         )}
 
@@ -319,7 +372,11 @@ function SearchBox() {
             title={"Chọn mức giá"}
           >
             <div className={cx("range-price")}>
-              <h1>{`Từ  ${price || 0} triệu đồng`}</h1>
+              <h1>{`Từ  ${
+                price.split(" -")[0] === price.split("- ")[1]
+                  ? price.split("-")[1]
+                  : price || 0
+              } triệu đồng`}</h1>
               <Slider
                 range
                 step={0.5}
@@ -367,6 +424,12 @@ function SearchBox() {
                   >
                     Từ 7 đến 10 triệu đồng
                   </div>
+                  <div
+                    className={cx("quick-item")}
+                    onClick={() => setPrice("15 - 15")}
+                  >
+                    Từ 15 triệu đồng
+                  </div>
                   {/* <div className={cx("quick-item")}>
                     Từ 10 đến 15 triệu đồng
                   </div> */}
@@ -391,7 +454,11 @@ function SearchBox() {
             title={"Chọn diện tích"}
           >
             <div className={cx("range-price")}>
-              <h1>{`Từ  ${size || 0} m2`}</h1>
+              <h1>{`Từ  ${
+                size.split(" -")[0] === size.split("- ")[1]
+                  ? size.split("-")[1]
+                  : size || 0
+              } m2`}</h1>
               <Slider
                 range
                 step={5}
@@ -435,7 +502,7 @@ function SearchBox() {
                   </div>
                   <div
                     className={cx("quick-item")}
-                    onClick={() => setSize("90 - 100")}
+                    onClick={() => setSize("100 - 100")}
                   >
                     Từ 100 m2
                   </div>
