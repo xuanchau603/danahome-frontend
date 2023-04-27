@@ -1,4 +1,4 @@
-import { Col, Row, Skeleton } from "antd";
+import { Col, Row, Skeleton, message } from "antd";
 import style from "./Home.module.scss";
 import classNames from "classnames/bind";
 import { banner } from "../../Image";
@@ -20,20 +20,45 @@ import SimpleSlider from "../../components/SimpleSlider";
 import SearchBox from "../../components/SearchBox";
 import { useEffect, useState } from "react";
 import NewsAPI from "../../API/newsAPI";
+import { NavLink, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+
 const cx = classNames.bind(style);
 
 function Home() {
   const [listHotNews, setListHotNews] = useState([]);
+  const [roomTypeId, setRoomTypeId] = useState(
+    "9789b48f-e417-11ed-99e0-ecf4bbc11824",
+  );
+  const dispath = useDispatch();
 
-  const getHotNews = async () => {
-    const listHotNews = await NewsAPI.getHotNews();
-    setListHotNews(listHotNews.data.data);
-  };
+  const [searchParams] = useSearchParams();
+  const url = searchParams.get("roomType");
 
   useEffect(() => {
-    getHotNews();
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const getHotNews = async (params) => {
+      try {
+        dispath(loadingStart());
+        const listHotNews = await NewsAPI.getHotNews(params);
+        if (listHotNews.status === 200) {
+          dispath(loadingEnd());
+          return setListHotNews(listHotNews.data.data);
+        } else {
+          dispath(loadingEnd());
+          message.error(listHotNews.message);
+        }
+      } catch (error) {
+        dispath(loadingEnd());
+        message.error("Không thể kết nối tới server", 2);
+      }
+    };
+    getHotNews({ roomType: roomTypeId });
+  }, [dispath, roomTypeId]);
 
   const settingsSliderNewsBox = {
     speed: 500,
@@ -130,15 +155,41 @@ function Home() {
         <div className={cx("news-action")}>
           <span className={cx("title")}>DANH SÁCH NỔI BẬT</span>
           <div className={cx("news-button")}>
-            <button className={cx("button-item", "active")}>
+            <NavLink
+              onClick={() => {
+                setRoomTypeId("9789b48f-e417-11ed-99e0-ecf4bbc11824");
+              }}
+              to={"/"}
+              className={!url ? cx("button-item", "active") : cx("button-item")}
+            >
               <HouseIcon fontSize="large"></HouseIcon> Nhà
-            </button>
-            <button className={cx("button-item")}>
+            </NavLink>
+            <NavLink
+              onClick={() => {
+                setRoomTypeId("8870c827-e417-11ed-99e0-ecf4bbc11824");
+              }}
+              to={"?roomType=motel"}
+              className={
+                url === "motel"
+                  ? cx("button-item", "active")
+                  : cx("button-item")
+              }
+            >
               <CabinIcon fontSize="large"></CabinIcon> Phòng trọ
-            </button>
-            <button className={cx("button-item")}>
+            </NavLink>
+            <NavLink
+              onClick={() => {
+                setRoomTypeId("97899ed0-e417-11ed-99e0-ecf4bbc11824");
+              }}
+              to={"?roomType=apartment"}
+              className={
+                url === "apartment"
+                  ? cx("button-item", "active")
+                  : cx("button-item")
+              }
+            >
               <ApartmentIcon fontSize="large"></ApartmentIcon> Chung cư
-            </button>
+            </NavLink>
           </div>
           <div className={cx("new-slide")}>
             <MyButton primary classes={cx("btn")}>

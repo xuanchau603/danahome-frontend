@@ -19,7 +19,7 @@ import { Dropdown, Popover, Switch, Tooltip } from "antd";
 import { useEffect, useRef, useState } from "react";
 import Login from "../../../components/Login";
 import Register from "../../../components/Register";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import MyButton from "../../../components/MyButton";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../../Redux/authSlice";
@@ -173,17 +173,31 @@ function Header() {
           <img src={logo} alt="logo"></img>
         </Link>
         <div className={cx("action")}>
-          <Link to={"/favorite"} className={cx("action-item")}>
+          <NavLink
+            to={"/favorite"}
+            className={(classes) => {
+              return classes.isActive
+                ? cx("action-item", "select")
+                : cx("action-item");
+            }}
+          >
             Yêu thích <FavoriteBorderIcon></FavoriteBorderIcon>
             {listNewsFavorite.listNewsFavorite.length > 0 && (
               <span className={cx("count-newsFavorite")}>
                 {listNewsFavorite.listNewsFavorite.length}
               </span>
             )}
-          </Link>
-          <Link className={cx("action-item")}>
+          </NavLink>
+          <NavLink
+            to={"/search-result"}
+            className={(classes) => {
+              return classes.isActive
+                ? cx("action-item", "select")
+                : cx("action-item");
+            }}
+          >
             Dịch vụ <SupportAgentIcon></SupportAgentIcon>
-          </Link>
+          </NavLink>
 
           <MyButton
             onClick={() => {

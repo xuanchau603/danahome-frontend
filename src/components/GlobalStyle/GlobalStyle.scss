@@ -105,3 +105,9 @@ button {
     rgb(48, 245, 31) 100%
   ) !important;
 }
+
+@media only screen and (max-width: 1024px) {
+  #root {
+    display: none;
+  }
+}

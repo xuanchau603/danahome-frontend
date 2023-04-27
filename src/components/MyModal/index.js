@@ -10,6 +10,7 @@ function MyModal(props) {
         onCancel={props.onCancel}
         onOk={props.onOk}
         footer={null}
+        maskClosable={false}
       >
         {props.children}
       </Modal>

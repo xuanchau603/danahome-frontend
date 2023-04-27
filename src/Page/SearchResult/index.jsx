@@ -22,11 +22,12 @@ function SearchResult(props) {
   const [searchResults, setSreachResult] = useState([]);
   const [orderBy, setOrderBy] = useState("createdAt");
   const [orderType, setOderType] = useState("DESC");
+  const [page, setPage] = useState(1);
 
   const dispatch = useDispatch();
 
   const onChange = (page) => {
-    // console.log(page);
+    setPage(page);
   };
 
   const [searchParam] = useSearchParams();
@@ -39,18 +40,6 @@ function SearchResult(props) {
   const priceTo = searchParam.get("priceTo");
   const acreageFrom = searchParam.get("acreageFrom");
   const acreageTo = searchParam.get("acreageTo");
-  const filer = {
-    roomsType: roomsType || undefined,
-    province: province || undefined,
-    district: district || undefined,
-    ward: ward || undefined,
-    priceFrom: priceFrom || undefined,
-    priceTo: priceTo || undefined,
-    acreageFrom: acreageFrom || undefined,
-    acreageTo: acreageTo || undefined,
-    orderBy: orderBy,
-    orderType: orderType,
-  };
 
   const itemsQuickSeePrice = [
     <span>
@@ -166,6 +155,19 @@ function SearchResult(props) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    const filer = {
+      roomsType: roomsType || undefined,
+      province: province || undefined,
+      district: district || undefined,
+      ward: ward || undefined,
+      priceFrom: priceFrom || undefined,
+      priceTo: priceTo || undefined,
+      acreageFrom: acreageFrom || undefined,
+      acreageTo: acreageTo || undefined,
+      orderBy: orderBy,
+      orderType: orderType,
+      page: page,
+    };
 
     const getSearchResult = async () => {
       try {
@@ -173,7 +175,7 @@ function SearchResult(props) {
         const responese = await NewsAPI.searchNews(filer);
         if (responese.status === 200) {
           setSreachResult(responese.data.data);
-          setTotalPagination(responese.totalNews);
+          setTotalPagination(responese.data.totalNews);
           dispatch(loadingEnd());
         } else {
           message.error(responese.message);
@@ -198,6 +200,7 @@ function SearchResult(props) {
     ward,
     orderBy,
     orderType,
+    page,
   ]);
 
   return (
@@ -208,15 +211,15 @@ function SearchResult(props) {
           district || ""
         } ${ward || ""}${
           priceFrom || priceTo
-            ? ", Giá từ " +
-              priceFrom / 1000000 +
-              " triệu đến " +
-              priceTo / 1000000 +
-              " triệu"
+            ? `, Giá từ ${priceFrom} triệu ${
+                priceFrom === priceTo ? `` : `đến ${priceTo} triệu`
+              }`
             : ""
         } ${
           acreageFrom || acreageTo
-            ? ", Diện tích từ " + acreageFrom + " m2 đến " + acreageTo + " m2"
+            ? `, Diện tích ${acreageFrom} m2 ${
+                acreageFrom === acreageTo ? `` : `đến ${acreageTo} m2`
+              }`
             : ""
         }`}
       </h1>

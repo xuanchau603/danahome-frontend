@@ -124,8 +124,8 @@ function SearchBox() {
       province: address.split(",")[0] || undefined,
       district: address.split(",")[1] || undefined,
       ward: address.split(",")[2] || undefined,
-      priceFrom: price.split(" -")[0] * 1000000 || undefined,
-      priceTo: price.split("-")[1] * 1000000 || undefined,
+      priceFrom: price.split(" -")[0] || undefined,
+      priceTo: price.split("- ")[1] || undefined,
       acreageFrom: size.split(" -")[0] || undefined,
       acreageTo: size.split("- ")[1] || undefined,
     };

@@ -5,9 +5,9 @@ const NewsAPI = {
     const url = "/news";
     return axiosClient.get(url, { params });
   },
-  getHotNews: () => {
+  getHotNews: (params) => {
     const url = "/news/hot";
-    return axiosClient.get(url);
+    return axiosClient.get(url, { params });
   },
   getDetailNewsById: (id) => {
     const url = `/news/${id}`;

@@ -106,12 +106,17 @@
           padding: 1.4rem 2.4rem;
           border-radius: 3rem;
           align-items: center;
+          color: #000;
+          transition: 0.2s;
           cursor: pointer;
+          &:hover {
+            background: #a2ffc3;
+          }
         }
         .active {
           color: #00a439;
           background: #a2ffc3;
-          border: none;
+          border-color: #00a439;
         }
       }
       .new-slide {
