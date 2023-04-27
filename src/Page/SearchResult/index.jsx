@@ -356,6 +356,7 @@ function SearchResult(props) {
       </Row>
       <div className={cx("pagination")}>
         <Pagination
+          current={page}
           onChange={onChange}
           total={totalPagination}
           pageSize={10}
