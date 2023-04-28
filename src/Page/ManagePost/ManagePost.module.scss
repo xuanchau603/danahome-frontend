@@ -1,0 +1,187 @@
+.wrapper {
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0 3rem 0;
+    > h1 {
+      font-size: 3rem;
+    }
+    .filter {
+      display: flex;
+      .filter-item {
+        margin-right: 1rem;
+        width: 18rem;
+        height: 3rem;
+        > div > span {
+          font-size: 1.4rem;
+        }
+        &:last-child {
+          background: #dc3545;
+          color: #fff;
+          width: fit-content;
+          font-size: 1.4rem;
+          border-radius: 4px;
+          line-height: 3rem;
+          padding: 0 1rem;
+          margin: 0;
+          &:hover {
+            background: #464b0f;
+            background: #b82e3b;
+          }
+        }
+      }
+    }
+  }
+
+  > table,
+  th,
+  td {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+  }
+  > table {
+    width: 100%;
+    > tbody > tr > th {
+      padding: 1rem;
+    }
+    .post-id {
+      padding: 1rem;
+    }
+    .post-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20rem;
+      width: 100%;
+      height: 20rem;
+      padding: 1rem;
+      > img {
+        width: 80%;
+        height: 80%;
+        border-radius: 0.6rem;
+      }
+    }
+    .post-info {
+      padding: 1rem;
+      .title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        > p {
+          font-size: 1rem;
+          font-weight: 600;
+          padding: 0.4rem;
+          background-color: orange;
+          border-radius: 1rem;
+          margin-right: 0.4rem;
+          color: #000;
+        }
+        .post-title {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #2c72b0;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+      .address {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-right: 2rem;
+        > p {
+          font-weight: 600;
+          margin-right: 1rem;
+          font-size: 1.4rem;
+        }
+        .post-address {
+          font-size: 1.4rem;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
+        }
+      }
+      .btn-wrapper {
+        margin-bottom: 1rem;
+        display: flex;
+        .btn {
+          display: flex;
+          border-radius: 0.4rem;
+          align-items: center;
+          background-color: #ccc;
+          padding: 0.4rem;
+          margin-right: 0.8rem;
+          font-size: 1.4rem;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        .btn-pay {
+          background: #d5fdca;
+          color: rgb(12, 105, 15);
+        }
+        .btn-edit {
+          background: #f1fdca;
+          color: rgb(59, 73, 12);
+        }
+        .btn-delete {
+          background: #ffddd9;
+          color: red;
+        }
+      }
+      .update {
+        display: flex;
+        > p {
+          font-size: 1.4rem;
+          color: #a8a7a7;
+          &:first-child {
+            margin-right: 0.6rem;
+          }
+        }
+      }
+    }
+    .price {
+      padding: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 40rem;
+      > p {
+        color: #a0c297;
+      }
+    }
+    .post-date {
+      padding: 1rem;
+      > p {
+        color: #000;
+      }
+    }
+    .expire-date {
+      padding: 1rem;
+      > p {
+        color: #000;
+      }
+    }
+
+    .status {
+      padding: 1rem;
+    }
+  }
+  .null {
+    padding: 1rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    > a {
+      color: #2a7117;
+      cursor: pointer;
+      font-weight: 700;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

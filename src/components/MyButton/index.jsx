@@ -19,6 +19,7 @@ function MyButton(
     onClick,
     classes,
     state,
+    target,
   },
   ref,
 ) {
@@ -51,6 +52,7 @@ function MyButton(
       {...props}
       type={"submit"}
       disabled={disible}
+      target={target}
     >
       {children}
     </Comp>

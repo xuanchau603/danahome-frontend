@@ -3,7 +3,6 @@
   margin: 10rem auto 0 auto;
   .left-content {
     border: 1px solid #ccc;
-    margin-top: 3rem;
     .post-image {
       background-color: black;
       img {
@@ -186,6 +185,77 @@
       }
       > p {
         margin: 1rem 0;
+      }
+    }
+  }
+  .action-detail {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background: #d5fdca;
+    padding: 2rem;
+    border-radius: 0.8rem;
+    .avatar {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 1.6rem;
+      > img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .name {
+      font-size: 2.2rem;
+      padding-bottom: 1rem;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      > svg {
+        color: green;
+        transform: translateY(0.1rem);
+        margin-right: 0.4rem;
+      }
+    }
+    .action {
+      display: flex;
+      margin-top: 2rem;
+      justify-content: space-between;
+      width: 100%;
+      .action-left {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        .btn {
+          display: flex;
+          justify-content: flex-start;
+          width: 100%;
+          border-radius: 1rem;
+          > svg {
+            margin-right: 0.4rem;
+          }
+          &:first-child {
+            margin-bottom: 1rem;
+          }
+        }
+      }
+      .action-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        .btn {
+          width: 100%;
+          border-radius: 1rem;
+          > svg {
+            margin-right: 0.4rem;
+          }
+          &:first-child {
+            margin-bottom: 1rem;
+          }
+        }
       }
     }
   }

@@ -130,9 +130,9 @@ function Header() {
         <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
         <span>Đăng tin cho thuê</span>
       </Link>
-      <li className={cx("menu-item")}>
+      <Link to={"/manage-post"} className={cx("menu-item")}>
         <ReceiptLongIcon></ReceiptLongIcon> <span>Quản lý tin đăng</span>
-      </li>
+      </Link>
       <li className={cx("menu-item")}>
         <AddTaskIcon></AddTaskIcon>
         <span>Đăng ký VIP</span>

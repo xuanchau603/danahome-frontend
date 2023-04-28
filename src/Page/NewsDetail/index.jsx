@@ -20,7 +20,17 @@ import SimpleSlider from "../../components/SimpleSlider";
 import MyButton from "../../components/MyButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import PaidIcon from "@mui/icons-material/Paid";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import CallIcon from "@mui/icons-material/Call";
 import moment from "moment";
+import {
+  addToListNewsFavorite,
+  removeFromListNewsFavorite,
+} from "../../Redux/newsFavoriteSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -29,6 +39,12 @@ function NewsDetail() {
 
   const [params] = useSearchParams();
   const id = params.get("newsId");
+
+  const dispatch = useDispatch();
+
+  const listNewsFavorite = useSelector((state) => {
+    return state.listNewsFavorite.listNewsFavorite;
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -244,6 +260,74 @@ function NewsDetail() {
         </Col>
 
         <Col span={8}>
+          {newsInfo ? (
+            <div className={cx("action-detail")}>
+              <div className={cx("avatar")}>
+                <img src={newsInfo.poster_Image_URL} alt=""></img>
+              </div>
+              <h1 className={cx("name")}>{newsInfo.poster}</h1>
+              <div className={cx("status")}>
+                <FiberManualRecordIcon></FiberManualRecordIcon> Đang hoạt động
+              </div>
+              <div className={cx("action")}>
+                <div className={cx("action-left")}>
+                  <MyButton onClick={(e) => {}} classes={cx("btn")} primary>
+                    <PaidIcon></PaidIcon> Đặt cọc ngay
+                  </MyButton>
+                  <MyButton
+                    classes={cx("btn")}
+                    outline
+                    onClick={() => {
+                      const isFavorite = listNewsFavorite.find(
+                        (item) => item.newsId === newsInfo.ID,
+                      );
+                      if (isFavorite) {
+                        const index = listNewsFavorite.findIndex((item) => {
+                          return item.newsId === newsInfo.ID;
+                        });
+                        dispatch(removeFromListNewsFavorite(index));
+                      } else {
+                        dispatch(
+                          addToListNewsFavorite({
+                            newsId: newsInfo.ID,
+                            createAt: new Date().toLocaleString(),
+                          }),
+                        );
+                      }
+                    }}
+                  >
+                    {listNewsFavorite.find(
+                      (item) => item.newsId === newsInfo.ID,
+                    ) ? (
+                      <FavoriteIcon style={{ color: "red" }}></FavoriteIcon>
+                    ) : (
+                      <FavoriteBorderIcon></FavoriteBorderIcon>
+                    )}{" "}
+                    Yêu thích
+                  </MyButton>
+                </div>
+                <div className={cx("action-right")}>
+                  <MyButton
+                    href={`tel:${newsInfo.poster_Phone}`}
+                    classes={cx("btn")}
+                    outline
+                  >
+                    <CallIcon></CallIcon> {newsInfo.poster_Phone}
+                  </MyButton>
+                  <MyButton
+                    href={`https://zalo.me/${newsInfo.poster_Phone}`}
+                    target={"_blank"}
+                    classes={cx("btn")}
+                    primary
+                  >
+                    Nhắn Zalo
+                  </MyButton>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Skeleton active></Skeleton>
+          )}
           <NewsRent></NewsRent>
           <QuickSee
             classes={cx("care")}

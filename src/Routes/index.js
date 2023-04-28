@@ -1,6 +1,8 @@
 import LayoutWithSearchBox from "../Layout/LayoutWithSearchBox";
+import ManageLayout from "../Layout/ManageLayout";
 import Favorite from "../Page/Favorite";
 import Home from "../Page/Home";
+import ManagePost from "../Page/ManagePost";
 import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
 import Payment from "../Page/Payment";
@@ -31,10 +33,16 @@ const UserRouter = [
   {
     path: "/new-post",
     component: NewPost,
+    layout: ManageLayout,
   },
   {
     path: "/payment",
     component: Payment,
+  },
+  {
+    path: "/manage-post",
+    component: ManagePost,
+    layout: ManageLayout,
   },
 ];
 

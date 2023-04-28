@@ -137,6 +137,7 @@ function NewPost() {
       text: "Trang chủ",
     },
     {
+      href: "/manage-post",
       text: "Quản lý",
     },
     {
@@ -453,6 +454,14 @@ function NewPost() {
           <MyButton
             onClick={formik.handleSubmit}
             classes={cx("btn-submit")}
+            // disible={
+            //   Object.keys(formik.errors).length !== 0 ||
+            //   images.length === 0 ||
+            //   !province ||
+            //   !district ||
+            //   !ward ||
+            //   !roomTypeId
+            // }
             primarydisible={
               Object.keys(formik.errors).length !== 0 ||
               images.length === 0 ||
