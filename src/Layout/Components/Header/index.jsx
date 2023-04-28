@@ -5,7 +5,6 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LanguageIcon from "@mui/icons-material/Language";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
@@ -120,12 +119,6 @@ function Header() {
 
   const contentMenu = auth.login.currentUser ? (
     <div className={cx("menu")}>
-      {auth.login.currentUser.isAdmin && (
-        <li className={cx("menu-item")}>
-          <AdminPanelSettingsIcon></AdminPanelSettingsIcon>{" "}
-          <span>Quản lý hệ thống</span>
-        </li>
-      )}
       <Link to={"/new-post"} className={cx("menu-item")}>
         <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
         <span>Đăng tin cho thuê</span>
@@ -133,13 +126,17 @@ function Header() {
       <Link to={"/manage-post"} className={cx("menu-item")}>
         <ReceiptLongIcon></ReceiptLongIcon> <span>Quản lý tin đăng</span>
       </Link>
+
+      <Link
+        to={`/user-information?userId=${auth.login.currentUser.ID}`}
+        className={cx("menu-item")}
+      >
+        <InfoIcon></InfoIcon>
+        <span>Thông tin cá nhân</span>
+      </Link>
       <li className={cx("menu-item")}>
         <AddTaskIcon></AddTaskIcon>
         <span>Đăng ký VIP</span>
-      </li>
-      <li className={cx("menu-item")}>
-        <InfoIcon></InfoIcon>
-        <span>Thông tin cá nhân</span>
       </li>
       <Link to={"/favorite"} className={cx("menu-item")}>
         <FavoriteBorderIcon></FavoriteBorderIcon>

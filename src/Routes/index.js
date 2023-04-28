@@ -7,6 +7,7 @@ import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
 import Payment from "../Page/Payment";
 import SearchResult from "../Page/SearchResult";
+import UserInfo from "../Page/UserInfo";
 
 const publicRoute = [
   {
@@ -42,6 +43,11 @@ const UserRouter = [
   {
     path: "/manage-post",
     component: ManagePost,
+    layout: ManageLayout,
+  },
+  {
+    path: "/user-information",
+    component: UserInfo,
     layout: ManageLayout,
   },
 ];

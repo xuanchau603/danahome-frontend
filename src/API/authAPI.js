@@ -17,6 +17,15 @@ const authAPI = {
       },
     });
   },
+  editUser: (userData, token) => {
+    return fetch("https://backend-danahome.onrender.com/users/edit", {
+      method: "put",
+      headers: {
+        token: `Bearer ${token}`,
+      },
+      body: userData,
+    });
+  },
 };
 
 export default authAPI;

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import style from "./ManageSidebar.module.scss";
 import classNames from "classnames/bind";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -34,7 +34,7 @@ function ManageSidebar() {
         </div>
         <div className={cx("user-id")}>
           <p>Mã thành viên: </p>
-          <p>#{currentUser.ID.split("-")[1]}</p>
+          <p>{currentUser.ID.split("-")[0]}</p>
         </div>
         <div className={cx("user-balance")}>
           <p>TK chính: </p>
@@ -47,51 +47,65 @@ function ManageSidebar() {
       </div>
       <p>Chung</p>
       <ul className={cx("nav-sidebar")}>
-        <li className={cx("nav-item", "active")}>
+        <NavLink
+          to={"/manage-post"}
+          className={(active) => {
+            return active.isActive ? cx("nav-item", "active") : cx("nav-item");
+          }}
+        >
           <DescriptionOutlinedIcon></DescriptionOutlinedIcon>
-          <Link to={"#"}>Quản lý tin đăng</Link>
-        </li>
-        <li className={cx("nav-item")}>
+          <span>Quản lý tin đăng</span>
+        </NavLink>
+        <NavLink
+          to={`/user-information?userId=${currentUser.ID}`}
+          className={(active) => {
+            return active.isActive ? cx("nav-item", "active") : cx("nav-item");
+          }}
+        >
           <EditNoteOutlinedIcon></EditNoteOutlinedIcon>
-          <Link to={"#"}>Sửa thông tin cá nhân</Link>
-        </li>
-        <li className={cx("nav-item")}>
+          <span to={"/user-information"}>Sửa thông tin cá nhân</span>
+        </NavLink>
+        <NavLink className={cx("nav-item")}>
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>
-          <Link to={"#"}>Bảng giá dịch vụ</Link>
-        </li>
-        <li className={cx("nav-item")}>
+          <span to={"#"}>Bảng giá dịch vụ</span>
+        </NavLink>
+        <NavLink className={cx("nav-item")}>
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
-          <Link to={"#"}>Liên hệ</Link>
-        </li>
-        <li
+          <span to={"#"}>Liên hệ</span>
+        </NavLink>
+        <NavLink
           onClick={() => {
             dispatch(logoutSuccess());
           }}
           className={cx("nav-item", "logout")}
         >
           <LogoutOutlinedIcon></LogoutOutlinedIcon>
-          <Link to={"#"}>Thoát</Link>
-        </li>
+          <Link>Thoát</Link>
+        </NavLink>
       </ul>
-      <p>Quản lý</p>
-      <ul className={cx("nav-sidebar")}>
-        <li className={cx("nav-item")}>
-          <AssignmentOutlinedIcon></AssignmentOutlinedIcon>
-          <Link to={"#"}>Quản lý bài đăng</Link>
-        </li>
-        <li className={cx("nav-item")}>
-          <AssignmentIndOutlinedIcon></AssignmentIndOutlinedIcon>
-          <Link to={"#"}>Quản lý tài khoản</Link>
-        </li>
-        <li className={cx("nav-item")}>
-          <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
-          <Link to={"#"}>Quản lý đánh giá</Link>
-        </li>
-        <li className={cx("nav-item")}>
-          <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
-          <Link to={"#"}>Thống kê</Link>
-        </li>
-      </ul>
+      {currentUser.isAdmin && (
+        <>
+          <p>Quản lý</p>
+          <ul className={cx("nav-sidebar")}>
+            <NavLink className={cx("nav-item")}>
+              <AssignmentOutlinedIcon></AssignmentOutlinedIcon>
+              <span>Quản lý bài đăng</span>
+            </NavLink>
+            <NavLink className={cx("nav-item")}>
+              <AssignmentIndOutlinedIcon></AssignmentIndOutlinedIcon>
+              <span>Quản lý tài khoản</span>
+            </NavLink>
+            <NavLink className={cx("nav-item")}>
+              <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
+              <span>Quản lý đánh giá</span>
+            </NavLink>
+            <NavLink className={cx("nav-item")}>
+              <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
+              <span>Thống kê</span>
+            </NavLink>
+          </ul>
+        </>
+      )}
     </div>
   );
 }

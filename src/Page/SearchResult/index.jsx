@@ -217,7 +217,7 @@ function SearchResult(props) {
             : ""
         } ${
           acreageFrom || acreageTo
-            ? `, Diện tích ${acreageFrom} m2 ${
+            ? `, Diện tích từ ${acreageFrom} m2 ${
                 acreageFrom === acreageTo ? `` : `đến ${acreageTo} m2`
               }`
             : ""

@@ -1,0 +1,58 @@
+.wrapper {
+  .title {
+    font-size: 3rem;
+    padding: 2rem 0 3rem 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .container {
+    max-width: 70%;
+    margin: 4rem auto;
+    .form-group {
+      display: flex;
+      height: 4rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      justify-content: flex-start;
+      > span {
+        width: 16%;
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+      .input {
+        height: 100%;
+        font-size: 1.8rem;
+      }
+      .btn-changePass {
+        margin: 0;
+      }
+      &:last-child {
+        height: auto;
+      }
+    }
+    .form-group-avatar {
+      display: flex;
+      margin: 2rem 0 8rem 0;
+      > span {
+        width: 16%;
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+      .avatar {
+        height: 100%;
+        > img {
+          width: 12rem;
+          height: 12rem;
+          border-radius: 50%;
+        }
+        .btn-upload {
+          margin-top: 2rem;
+        }
+      }
+    }
+    .btn-submit {
+      width: 100%;
+      font-size: 2rem;
+      padding: 2.4rem 0;
+    }
+  }
+}

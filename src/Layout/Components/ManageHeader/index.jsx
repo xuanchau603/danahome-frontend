@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import style from "./ManageHeader.module.scss";
 import classNames from "classnames/bind";
+import logo from "../../../Image";
 
 const cx = classNames.bind(style);
 
 function ManageHeader() {
   return (
     <div className={cx("header")}>
+      <Link to={"/"} className={cx("logo")}>
+        <img src={logo} alt=""></img>
+      </Link>
       <div className={cx("wrapper")}>
         <div className={cx("action")}>
           <ul className={cx("navbar")}>

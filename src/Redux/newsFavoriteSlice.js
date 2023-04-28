@@ -8,7 +8,7 @@ const newsFavoriteSlice = createSlice({
   },
   reducers: {
     addToListNewsFavorite: (state, action) => {
-      if (state.listNewsFavorite.length > 10) {
+      if (state.listNewsFavorite.length >= 10) {
         message.error("Chỉ được phép lưu tối đa 10 tin!", 2);
       } else {
         state.listNewsFavorite.push(action.payload);
