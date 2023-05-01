@@ -11,6 +11,7 @@ import authAPI from "../../API/authAPI";
 import { useSearchParams } from "react-router-dom";
 import { loadingStart, loadingEnd } from "../../Redux/loadingSlice";
 import { editUser } from "../../Redux/authSlice";
+import Menu from "../../components/Menu";
 
 const cx = classNames.bind(style);
 const getBase64 = (img, callback) => {
@@ -23,6 +24,7 @@ function UserInfo() {
   const currentUser = useSelector((state) => {
     return state.auth.login.currentUser;
   });
+  const [openMenu, setOpenMenu] = useState(false);
   const [imagePreview, setImagePreview] = useState([]);
   const [image, setImage] = useState();
   const [phone, setPhone] = useState();
@@ -30,6 +32,10 @@ function UserInfo() {
   const [email, setEmail] = useState();
   const [zaloPhone, setZaloPhone] = useState();
   const [facebookUrl] = useState();
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const onCancel = () => setOpenMenu(false);
 
   const items = [
     {
@@ -54,17 +60,7 @@ function UserInfo() {
       userId,
       currentUser.access_Token,
     );
-    const url = response.data.user_Info.image_URL;
-    const fileName = "myFile.jpg";
-    fetch(url).then(async (response) => {
-      const contentType = response.headers.get("content-type");
-      const blob = await response.blob();
-      const file = new File([blob], fileName, { contentType });
-      getBase64(file, (url) => {
-        setImagePreview([url]);
-      });
-      setImage(file);
-    });
+    setImagePreview([response.data.user_Info.image_URL]);
     setPhone(response.data.user_Info.phone);
     setFullName(response.data.user_Info.full_Name);
     setEmail(response.data.user_Info.email);
@@ -155,7 +151,15 @@ function UserInfo() {
         </div>
         <div style={{ margin: "4rem 0" }} className={cx("form-group")}>
           <span>Mật khẩu:</span>
-          <MyButton classes={cx("btn-changePass")} outline>
+          <MyButton
+            onClick={() => {
+              setPassword("");
+              setNewPassword("");
+              setOpenMenu(true);
+            }}
+            classes={cx("btn-changePass")}
+            outline
+          >
             Đổi mật khẩu
           </MyButton>
         </div>
@@ -201,6 +205,64 @@ function UserInfo() {
           Lưu & Cập nhật
         </MyButton>
       </div>
+      {openMenu && (
+        <Menu title="Đổi mật khẩu" open={openMenu} onCancel={onCancel}>
+          <div className={cx("group")}>
+            <span>Mật khẩu cũ:</span>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mật khẩu cũ"
+            ></Input>
+          </div>
+          <div className={cx("group")}>
+            <span>Mật khẩu mới:</span>
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Mật khẩu mới"
+            ></Input>
+          </div>
+          <MyButton
+            disible={
+              !password ||
+              !newPassword ||
+              password.length < 6 ||
+              newPassword.length < 6 ||
+              password === newPassword
+            }
+            onClick={async () => {
+              try {
+                dispatch(loadingStart());
+                const response = await authAPI.resetPassword(
+                  userId,
+                  password,
+                  newPassword,
+                  currentUser.access_Token,
+                );
+                if (response.status === 200) {
+                  setPassword("");
+                  setNewPassword("");
+                  message.success(response.data.message, 2);
+                  dispatch(loadingEnd());
+                } else {
+                  message.error(response.message, 2);
+                  dispatch(loadingEnd());
+                }
+              } catch (error) {
+                message.error("Không thể kết nối đến server!");
+                dispatch(loadingEnd());
+              }
+            }}
+            classes={cx("btn-submitChangePass")}
+            primary
+          >
+            Cập nhật mật khẩu
+          </MyButton>
+        </Menu>
+      )}
     </div>
   );
 }

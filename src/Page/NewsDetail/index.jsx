@@ -157,7 +157,7 @@ function NewsDetail() {
                 <div className={cx("post-address")}>
                   <LocationOnIcon></LocationOnIcon>
                   <p>
-                    {`Địa chỉ: ${newsInfo.house_Number}, ${newsInfo.ward}, ${newsInfo.district}, ${newsInfo.province}`}
+                    {`Địa chỉ: ${newsInfo.house_Number}, ${newsInfo.ward.name}, ${newsInfo.district.name}, ${newsInfo.province.name}`}
                   </p>
                 </div>
                 <div className={cx("post-attributes")}>
@@ -194,7 +194,7 @@ function NewsDetail() {
                     <tr>
                       <td>Khu vực:</td>
                       <td>
-                        {newsInfo.district} {newsInfo.province}
+                        {newsInfo.district.name} {newsInfo.province.name}
                       </td>
                     </tr>
                     <tr>
@@ -250,7 +250,7 @@ function NewsDetail() {
               <div className={cx("post-map")}>
                 <h2>Bản đồ</h2>
                 <p>
-                  {`Địa chỉ: ${newsInfo.house_Number}, ${newsInfo.ward}, ${newsInfo.district}, ${newsInfo.province}`}
+                  {`Địa chỉ: ${newsInfo.house_Number}, ${newsInfo.ward.name}, ${newsInfo.district.name}, ${newsInfo.province.name}`}
                 </p>
               </div>
             </div>

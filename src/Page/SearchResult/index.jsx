@@ -16,7 +16,7 @@ import moment from "moment";
 
 const cx = classNames.bind(style);
 
-function SearchResult(props) {
+function SearchResult() {
   const [active, setActive] = useState("default");
   const [totalPagination, setTotalPagination] = useState(0);
   const [searchResults, setSreachResult] = useState([]);

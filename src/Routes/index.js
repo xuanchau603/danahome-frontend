@@ -1,5 +1,6 @@
 import LayoutWithSearchBox from "../Layout/LayoutWithSearchBox";
 import ManageLayout from "../Layout/ManageLayout";
+import EditPost from "../Page/EditPost";
 import Favorite from "../Page/Favorite";
 import Home from "../Page/Home";
 import ManagePost from "../Page/ManagePost";
@@ -48,6 +49,11 @@ const UserRouter = [
   {
     path: "/user-information",
     component: UserInfo,
+    layout: ManageLayout,
+  },
+  {
+    path: "/edit-post",
+    component: EditPost,
     layout: ManageLayout,
   },
 ];

@@ -55,7 +55,7 @@
     margin-top: 2rem;
     margin-bottom: 3rem;
     > a {
-      border-radius: 0.2rem;
+      border-radius: 0.4rem;
       margin-right: 1rem;
       padding: 0.6rem;
       font-size: 1.4rem;
@@ -93,8 +93,10 @@
       align-items: center;
       padding: 1rem 1rem;
       margin-bottom: 0.6rem;
+      transition: 0.2s;
       cursor: pointer;
       &:hover {
+        transform: translateX(8px);
         background-color: #ecf9f0;
         border-radius: 1rem;
         > span {
@@ -111,6 +113,7 @@
       }
     }
     .active {
+      margin-left: 0.8rem;
       background-color: #ecf9f0;
       border-radius: 1rem;
       > span {
@@ -120,19 +123,18 @@
       > svg {
         color: #68cc97;
       }
+      &:hover {
+        transform: none;
+      }
     }
     .logout {
-      > a {
-        color: red;
-      }
+      color: red;
       > svg {
         color: red;
       }
       &:hover {
         background: rgb(255, 217, 217);
-        > a {
-          color: red;
-        }
+        color: red;
       }
     }
   }

@@ -79,16 +79,14 @@ function Payment() {
   }
 
   const handlePayment = async () => {
-    if (!expire_At) return message.error("Vui lòng chọn ngày hết hạn!", 2);
-    if (!newsType) return message.error("Vui lòng chọn loại tin!", 2);
     if (!paymentType)
       return message.error("Vui lòng chọn phương thức thanh toán", 2);
     const formData = new FormData();
     formData.append("roomType", data.roomType);
     formData.append("newsType", newsType);
-    formData.append("province", data.province.label);
-    formData.append("district", data.district.label);
-    formData.append("ward", data.ward.label);
+    formData.append("province", data.province);
+    formData.append("district", data.district);
+    formData.append("ward", data.ward);
     formData.append("house_Number", data.house_Number);
     formData.append("title", data.title);
     formData.append("description", data.description);
@@ -97,7 +95,7 @@ function Payment() {
     formData.append("acreage", data.acreage);
     formData.append("object", data.object);
     for (var item of data.images) {
-      formData.append("images", item);
+      formData.append("images", item.originFileObj);
     }
     try {
       dispath(loadingStart());

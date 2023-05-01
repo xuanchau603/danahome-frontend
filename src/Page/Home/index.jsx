@@ -21,8 +21,14 @@ import SearchBox from "../../components/SearchBox";
 import { useEffect, useState } from "react";
 import NewsAPI from "../../API/newsAPI";
 import { NavLink, useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import {
+  addToListNewsFavorite,
+  removeFromListNewsFavorite,
+} from "../../Redux/newsFavoriteSlice";
 
 const cx = classNames.bind(style);
 
@@ -86,6 +92,11 @@ function Home() {
     prevArrow: <></>,
     nextArrow: <></>,
   };
+
+  const dispatch = useDispatch();
+  const listNewsFavorite = useSelector((state) => {
+    return state.listNewsFavorite.listNewsFavorite;
+  });
 
   return (
     <div className={cx("wrapper")}>
@@ -220,6 +231,41 @@ function Home() {
                       >
                         Xem ngay
                       </MyButton>
+                      {listNewsFavorite.find((item1) => {
+                        return item1.newsId === item.ID;
+                      }) ? (
+                        <span
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const index = listNewsFavorite.findIndex(
+                              (item1) => {
+                                return item1.newsId === item.ID;
+                              },
+                            );
+                            dispatch(removeFromListNewsFavorite(index));
+                          }}
+                          title="Xóa khỏi danh sách yêu thích"
+                          className={cx("btn-unlove", "btns")}
+                        >
+                          <FavoriteIcon></FavoriteIcon>
+                        </span>
+                      ) : (
+                        <span
+                          title="Thêm vào danh sách yêu thích"
+                          className={cx("btn-love", "btns")}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            dispatch(
+                              addToListNewsFavorite({
+                                newsId: item.ID,
+                                createAt: new Date().toLocaleString(),
+                              }),
+                            );
+                          }}
+                        >
+                          <FavoriteBorderIcon></FavoriteBorderIcon>
+                        </span>
+                      )}
                     </div>
                     <div className={cx("news-name")}>
                       <span title={item.title}>{item.title}</span>
@@ -234,7 +280,7 @@ function Home() {
                       <div className={cx("actor-info")}>
                         <p className={cx("actor-name")}>{item.poster}</p>
                         <p className={cx("actor-address")}>
-                          {`${item.province} - ${item.district} - ${item.ward} - ${item.house_Number}`}
+                          {`${item.province.name} - ${item.district.name} - ${item.ward.name} - ${item.house_Number}`}
                         </p>
                       </div>
                     </div>
@@ -294,7 +340,7 @@ function Home() {
                         {listHotNews[0].poster}
                       </p>
                       <p className={cx("actor-address")}>
-                        {`${listHotNews[0].house_Number}, ${listHotNews[0].province}`}
+                        {`${listHotNews[0].house_Number}, ${listHotNews[0].province.name}`}
                       </p>
                     </div>
                   </div>

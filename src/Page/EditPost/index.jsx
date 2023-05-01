@@ -1,36 +1,36 @@
 import { Col, Popconfirm, Row, Upload, message } from "antd";
-import style from "./NewPost.module.scss";
+import style from "./EditPost.module.scss";
 import classNames from "classnames/bind";
 import { Select, Space } from "antd";
 import HomeIcon from "@mui/icons-material/Home";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
-import { PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import addressAPI from "../../API/addressAPI";
 import MyButton from "../../components/MyButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import NewsAPI from "../../API/newsAPI";
+import { PlusOutlined } from "@ant-design/icons";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 
 const cx = classNames.bind(style);
 
-function NewPost() {
+function EditPost() {
   const [listProvince, setListProvince] = useState([]);
   const [listDictrict, setListDictrict] = useState([]);
   const [listWard, setListWard] = useState([]);
   const [images, setImages] = useState([]);
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
+  const [oldImages, setOldImages] = useState([]);
+  const [province, setProvince] = useState();
+  const [district, setDistrict] = useState();
+  const [ward, setWard] = useState();
   const [roomTypeId, setRoomTypeId] = useState("");
   const [object, setObject] = useState("Tất cả");
 
-  const navigate = useNavigate();
-
-  const location = useLocation();
-  const data = location.state;
   const categoryRooms = useSelector((state) => {
     return state.category.categoryRooms;
   });
@@ -41,6 +41,89 @@ function NewPost() {
       value: item.ID,
     };
   });
+
+  const currentUser = useSelector((state) => {
+    return state.auth.login.currentUser;
+  });
+
+  const itemsBread = [
+    {
+      href: "/",
+      icon: <HomeIcon></HomeIcon>,
+      text: "Trang chủ",
+    },
+    {
+      href: "/manage-post",
+      text: "Quản lý",
+    },
+    {
+      text: "Chỉnh sửa tin",
+    },
+  ];
+  const getProvince = async () => {
+    const response = await addressAPI.getProvince();
+    setListProvince(response.data);
+  };
+
+  const handleChangeProvince = async (value, item) => {
+    const response = await addressAPI.getDistrictByCode(item.value);
+    setListDictrict(response.data.districts);
+    setProvince({
+      code: item.value,
+      name: item.children,
+    });
+  };
+
+  const handleChangeDistricts = async (value, item) => {
+    const response = await addressAPI.getWardsByCode(item.value);
+    setListWard(response.data.wards);
+    setDistrict({
+      code: item.value,
+      name: item.children,
+    });
+  };
+
+  const handleChangeWard = (value, item) => {
+    setWard({
+      code: item.value,
+      name: item.children,
+    });
+  };
+  const getNews = async () => {
+    const response = await NewsAPI.getDetailNewsById(newsId);
+    formik.values.house_Number = response.data.data.house_Number;
+    formik.values.title = response.data.data.title;
+    formik.values.description = response.data.data.description;
+    formik.values.price = response.data.data.price;
+    formik.values.acreage = response.data.data.acreage;
+    setObject(response.data.data.object);
+    setRoomTypeId(response.data.data.category_Rooms_Id);
+    setProvince(response.data.data.province);
+    setDistrict(response.data.data.district);
+    setWard(response.data.data.ward);
+    setOldImages(response.data.data.images);
+    const response0 = await addressAPI.getDistrictByCode(
+      response.data.data.province.code,
+    );
+    const response1 = await addressAPI.getWardsByCode(
+      response.data.data.district.code,
+    );
+    setListDictrict(response0.data.districts);
+    setListWard(response1.data.wards);
+  };
+
+  const [searrchParams] = useSearchParams();
+  const newsId = searrchParams.get("newsId");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch(loadingStart());
+    getProvince();
+    getNews();
+    dispatch(loadingEnd());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -68,108 +151,47 @@ function NewPost() {
         .max(4, "Diện tích quá lớn hoặc không hợp lệ"),
     }),
     onSubmit: async (values) => {
-      if (!province) {
-        return message.error("Vui lòng chọn Tỉnh/Thành phố");
-      } else if (!district) {
-        return message.error("Vui lòng chọn Quận/Huyện");
-      } else if (!ward) {
-        return message.error("Vui lòng chọn Phường/Xã");
-      } else if (!roomTypeId) {
-        return message.error("Vui lòng chọn loại bất động sản");
-      } else if (images.length === 0) {
-        return message.error("Vui lòng chọn ít nhất 1 ảnh");
+      const formData = new FormData();
+      formData.append("province", `${province.code},${province.name}`);
+      formData.append("district", `${district.code},${district.name}`);
+      formData.append("ward", `${ward.code},${ward.name}`);
+      formData.append("house_Number", values.house_Number);
+      for (let item of images) {
+        formData.append("images", item.originFileObj);
       }
+      formData.append("roomType", roomTypeId);
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("acreage", values.acreage);
+      formData.append("object", object);
+      formData.append("newsId", newsId);
 
-      navigate("/payment", {
-        state: {
-          province,
-          district,
-          ward,
-          house_Number: values.house_Number,
-          title: values.title,
-          description: values.description,
-          price: values.price,
-          acreage: values.acreage,
-          roomType: roomTypeId,
-          images,
-          object,
-        },
-      });
+      try {
+        const updateNews = async () => {
+          dispatch(loadingStart());
+          const response = await NewsAPI.editNews(
+            formData,
+            currentUser.access_Token,
+          );
+          const jsonData = await response.json();
+          if (response.status === 200) {
+            getNews();
+            setImages([]);
+            dispatch(loadingEnd());
+            message.success(jsonData.message);
+          } else {
+            dispatch(loadingEnd());
+            message.error(jsonData.message);
+          }
+        };
+        updateNews();
+      } catch (error) {
+        dispatch(loadingEnd());
+        message.error("Không thể kết nối đến Server!", 2);
+      }
     },
   });
-
-  const currentUser = useSelector((state) => {
-    return state.auth.login.currentUser;
-  });
-
-  const itemsBread = [
-    {
-      href: "/",
-      icon: <HomeIcon></HomeIcon>,
-      text: "Trang chủ",
-    },
-    {
-      href: "/manage-post",
-      text: "Quản lý",
-    },
-    {
-      text: "Thêm tin mới",
-    },
-  ];
-  const getProvince = async () => {
-    const response = await addressAPI.getProvince();
-    setListProvince(response.data);
-  };
-
-  const handleChangeProvince = async (value, item) => {
-    const response = await addressAPI.getDistrictByCode(value);
-    setListDictrict(response.data.districts);
-    setProvince(`${value},${item.label}`);
-  };
-
-  const handleChangeDistricts = async (value, item) => {
-    const response = await addressAPI.getWardsByCode(value);
-    setListWard(response.data.wards);
-    setDistrict(`${value},${item.label}`);
-  };
-
-  const handleChangeWard = (value, item) => {
-    setWard(`${value},${item.label}`);
-  };
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    getProvince();
-    if (data) {
-      formik.values.house_Number = data.house_Number;
-      formik.values.title = data.title;
-      formik.values.description = data.description;
-      formik.values.price = data.price;
-      formik.values.acreage = data.acreage;
-      setRoomTypeId(data.roomType);
-      const Init = async () => {
-        const response = await addressAPI.getDistrictByCode(
-          data.province.split(",")[0],
-        );
-        const response1 = await addressAPI.getWardsByCode(
-          data.district.split(",")[0],
-        );
-        setListDictrict(response.data.districts);
-        setListWard(response1.data.wards);
-        setProvince(data.province);
-        setDistrict(data.district);
-        setWard(data.ward);
-        setObject(data.object);
-        setImages(data.images);
-      };
-      Init();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleChangeRoomType = (value) => {
-    setRoomTypeId(value);
-  };
 
   const uploadButton = (
     <div>
@@ -183,69 +205,75 @@ function NewPost() {
       </div>
     </div>
   );
+  const dispatch = useDispatch();
 
   return (
     <div className={cx("new-post")}>
       <MyBreadCrumb items={itemsBread}></MyBreadCrumb>
-      <Row gutter={16}>
-        <Col span={16}>
-          <h1 className={cx("title")}>Đăng tin cho thuê</h1>
+      <Row>
+        <Col span={18}>
+          <h1 className={cx("title")}>
+            Chỉnh sửa bài đăng (Mã tin: {newsId.split("-")[0]})
+          </h1>
           <div className={cx("post-input")}>
             <div className={cx("form-group")}>
               <h2>Tỉnh/thành phố</h2>
               <Space wrap>
                 <Select
-                  defaultValue={"--Tỉnh/Thành phố"}
-                  value={province.split(",")[1]}
                   style={{
-                    width: 200,
+                    width: 240,
                   }}
                   onChange={handleChangeProvince}
-                  options={listProvince.map((item) => {
-                    return {
-                      value: item.code,
-                      label: item.name,
-                    };
+                  value={province?.name}
+                >
+                  {listProvince.map((item) => {
+                    return (
+                      <Select.Option key={item.code} value={item.code}>
+                        {item.name}
+                      </Select.Option>
+                    );
                   })}
-                />
+                </Select>
               </Space>
             </div>
             <div className={cx("form-group")}>
               <h2>Quận/Huyện </h2>
               <Space wrap>
                 <Select
-                  defaultValue={"--Quận/Huyện--"}
-                  value={district.split(",")[1]}
                   style={{
-                    width: 200,
+                    width: 240,
                   }}
                   onChange={handleChangeDistricts}
-                  options={listDictrict.map((item) => {
-                    return {
-                      value: item.code,
-                      label: item.name,
-                    };
+                  value={district?.name}
+                >
+                  {listDictrict.map((item) => {
+                    return (
+                      <Select.Option key={item.code} value={item.code}>
+                        {item.name}
+                      </Select.Option>
+                    );
                   })}
-                />
+                </Select>
               </Space>
             </div>
             <div className={cx("form-group")}>
               <h2>Phường/Xã</h2>
               <Space wrap>
                 <Select
-                  defaultValue={"--Phường/Xã--"}
-                  value={ward.split(",")[1]}
                   style={{
-                    width: 280,
+                    width: 240,
                   }}
                   onChange={handleChangeWard}
-                  options={listWard.map((item) => {
-                    return {
-                      value: item.code,
-                      label: item.name,
-                    };
+                  value={ward?.name}
+                >
+                  {listWard.map((item) => {
+                    return (
+                      <Select.Option key={item.code} value={item.code}>
+                        {item.name}
+                      </Select.Option>
+                    );
                   })}
-                />
+                </Select>
               </Space>
             </div>
           </div>
@@ -269,9 +297,9 @@ function NewPost() {
           <div className={cx("full-address")}>
             <h2>Địa chỉ chính xác</h2>
             <input
-              value={`${province.split(",")[1] || ""} ${
-                district.split(",")[1] || ""
-              } ${ward.split(",")[1] || ""} ${formik.values.house_Number}`}
+              value={`${province?.name || ""} ${district?.name || ""} ${
+                ward?.name || ""
+              } ${formik.values.house_Number}`}
               type="text"
               disabled
             ></input>
@@ -280,11 +308,11 @@ function NewPost() {
             <h1>Thông tin mô tả</h1>
             <h2>Loại chuyên mục</h2>
             <Select
-              defaultValue={data ? data.roomType : "--Chọn loại chuyên mục--"}
+              value={roomTypeId}
               style={{
                 width: 250,
               }}
-              onChange={handleChangeRoomType}
+              disabled
               options={optionsCateRooms}
             />
             <div className={cx("post-title")}>
@@ -369,7 +397,7 @@ function NewPost() {
               <Space wrap>
                 <Select
                   onChange={(value) => setObject(value)}
-                  defaultValue={data ? data.object : "Tất cả"}
+                  value={object}
                   style={{
                     width: 415,
                   }}
@@ -393,9 +421,57 @@ function NewPost() {
           </div>
           <div className={cx("upload-img")}>
             <h1>Hình ảnh</h1>
-            <p>Cập nhật hình ảnh rõ ràng sẽ cho thuê nhanh hơn</p>
+            <p>Chọn hình ảnh mới</p>
             <div className={cx("list-image")}>
               <div className={cx("list-preview")}>
+                {oldImages.length > 0
+                  ? oldImages.map((item, index) => {
+                      return (
+                        <div key={index} className={cx("preview-image")}>
+                          <img src={item.image_URL} alt=""></img>
+                          <Popconfirm
+                            title="Bạn có chắc muốn xóa ảnh này?"
+                            onConfirm={() => {
+                              const deleteImage = async () => {
+                                try {
+                                  dispatch(loadingStart());
+                                  const response = await NewsAPI.deleteImage(
+                                    {
+                                      imageId: item.ID,
+                                      image_URL: item.image_URL,
+                                    },
+                                    currentUser.access_Token,
+                                  );
+                                  if (response.status === 200) {
+                                    oldImages.splice(index, 1);
+                                    const newsOldImages = [...oldImages];
+                                    setOldImages(newsOldImages);
+                                    dispatch(loadingEnd());
+                                    message.success(response.data.message, 2);
+                                  } else {
+                                    dispatch(loadingEnd());
+                                    message.error(response.message, 2);
+                                  }
+                                } catch (error) {
+                                  dispatch(loadingEnd());
+                                  message.error(
+                                    "Không thể kết nối đến server!",
+                                  );
+                                }
+                              };
+                              deleteImage();
+                            }}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <div>
+                              <DeleteForeverIcon></DeleteForeverIcon> Xóa
+                            </div>
+                          </Popconfirm>
+                        </div>
+                      );
+                    })
+                  : null}
                 {images.length > 0
                   ? images.map((item, index) => {
                       return (
@@ -445,31 +521,22 @@ function NewPost() {
                   return isPNG || Upload.LIST_IGNORE;
                 }}
                 onChange={(files) => {
-                  if (files.fileList.length > 10) {
+                  if (files.fileList.length + oldImages.length > 10) {
                     return message.error("Chỉ được chọn tối đa 10 ảnh!");
                   }
                   setImages(files.fileList);
                 }}
                 customRequest={(e) => e.onSuccess()}
               >
-                {images.length >= 10 ? null : uploadButton}
+                {images.length + oldImages.length >= 10 ? null : uploadButton}
               </Upload>
             </div>
           </div>
           <MyButton
             onClick={formik.handleSubmit}
             classes={cx("btn-submit")}
-            // disible={
-            //   Object.keys(formik.errors).length !== 0 ||
-            //   images.length === 0 ||
-            //   !province ||
-            //   !district ||
-            //   !ward ||
-            //   !roomTypeId
-            // }
-            primarydisible={
+            disible={
               Object.keys(formik.errors).length !== 0 ||
-              images.length === 0 ||
               !province ||
               !district ||
               !ward ||
@@ -477,42 +544,18 @@ function NewPost() {
             }
             primary={
               Object.keys(formik.errors).length === 0 &&
-              images.length > 0 &&
               province &&
               district &&
               ward &&
               roomTypeId
             }
           >
-            Tiếp theo
+            Lưu & Cập nhật <SaveAltIcon></SaveAltIcon>
           </MyButton>
-        </Col>
-        <Col span={8}>
-          <div className={cx("post-note")}>
-            <h3>Lưu ý đăng tin</h3>
-            <ul>
-              <li>Nội dung phải viết bằng tiếng Việt có dấu</li>
-              <li>Tiêu đề tin không dài quá 100 kí tự</li>
-              <li>
-                Các bạn nên điền đầy đủ thông tin vào các mục để tin đăng có
-                hiệu quả hơn.
-              </li>
-              <li>
-                Để tăng độ tin cậy và tin rao được nhiều người quan tâm hơn, hãy
-                sửa vị trí tin rao của bạn trên bản đồ bằng cách kéo icon tới
-                đúng vị trí của tin rao.
-              </li>
-              <li>
-                Tin đăng có hình ảnh rõ ràng sẽ được xem và gọi gấp nhiều lần so
-                với tin rao không có ảnh. Hãy đăng ảnh để được giao dịch nhanh
-                chóng!
-              </li>
-            </ul>
-          </div>
         </Col>
       </Row>
     </div>
   );
 }
 
-export default NewPost;
+export default EditPost;

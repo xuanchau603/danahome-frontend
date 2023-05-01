@@ -191,6 +191,15 @@
           background: #fff;
           z-index: 99;
         }
+        .btns {
+          position: absolute;
+          top: 2rem;
+          right: 2rem;
+          color: rgb(255, 112, 112);
+          > svg {
+            font-size: 4rem;
+          }
+        }
       }
       .news-name {
         min-height: 6.2rem;

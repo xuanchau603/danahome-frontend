@@ -56,3 +56,18 @@
     }
   }
 }
+
+.group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  height: 4rem;
+  > span {
+    width: 40%;
+    font-weight: 600;
+  }
+}
+.btn-submitChangePass {
+  width: 100%;
+  margin-top: 10rem;
+}

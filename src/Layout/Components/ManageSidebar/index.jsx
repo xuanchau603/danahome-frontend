@@ -67,11 +67,11 @@ function ManageSidebar() {
         </NavLink>
         <NavLink className={cx("nav-item")}>
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>
-          <span to={"#"}>Bảng giá dịch vụ</span>
+          <span>Bảng giá dịch vụ</span>
         </NavLink>
         <NavLink className={cx("nav-item")}>
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
-          <span to={"#"}>Liên hệ</span>
+          <span>Liên hệ</span>
         </NavLink>
         <NavLink
           onClick={() => {
@@ -80,7 +80,7 @@ function ManageSidebar() {
           className={cx("nav-item", "logout")}
         >
           <LogoutOutlinedIcon></LogoutOutlinedIcon>
-          <Link>Thoát</Link>
+          Thoát
         </NavLink>
       </ul>
       {currentUser.isAdmin && (

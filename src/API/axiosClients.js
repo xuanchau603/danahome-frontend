@@ -2,10 +2,10 @@ import axios from "axios";
 import queryString from "query-string";
 
 const axiosClient = axios.create({
-  baseURL: "https://backend-danahome.onrender.com/",
+  baseURL: "http://localhost:8002/",
   data: null,
   headers: {
-    "Content-Type": "application/json ",
+    "Content-Type": "application/json",
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });

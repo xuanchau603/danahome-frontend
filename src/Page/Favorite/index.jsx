@@ -1,6 +1,6 @@
 import style from "./Favorite.module.scss";
 import classNames from "classnames/bind";
-import { Col, Row, Skeleton } from "antd";
+import { Col, Row } from "antd";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NewsItem from "./../../components/NewsItem/index";
 import QuickSee from "./../../components/QuickSee/index";

@@ -11,11 +11,20 @@ const NewsAPI = {
   },
   getDetailNewsById: (id) => {
     const url = `/news/${id}`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, {});
   },
   createNews: (newsData, token) => {
-    return fetch("https://backend-danahome.onrender.com/news/create", {
+    return fetch("http://localhost:8002/news/create", {
       method: "post",
+      headers: {
+        token: `Bearer ${token}`,
+      },
+      body: newsData,
+    });
+  },
+  editNews: (newsData, token) => {
+    return fetch("http://localhost:8002/news/update", {
+      method: "put",
       headers: {
         token: `Bearer ${token}`,
       },
@@ -24,6 +33,14 @@ const NewsAPI = {
   },
   searchNews: (params) => {
     return axiosClient.get("/news/", { params });
+  },
+  deleteImage: (body, token) => {
+    return axiosClient.delete("/news/image/delete", {
+      data: body,
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
   },
 };
 

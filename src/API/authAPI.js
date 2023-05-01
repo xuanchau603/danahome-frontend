@@ -18,13 +18,29 @@ const authAPI = {
     });
   },
   editUser: (userData, token) => {
-    return fetch("https://backend-danahome.onrender.com/users/edit", {
+    return fetch("http://localhost:8002/users/edit", {
       method: "put",
       headers: {
         token: `Bearer ${token}`,
       },
       body: userData,
     });
+  },
+  resetPassword: (userId, password, newPassword, token) => {
+    const url = `/users/resetPassword`;
+    return axiosClient.post(
+      url,
+      {
+        userId,
+        password,
+        newPassword,
+      },
+      {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      },
+    );
   },
 };
 

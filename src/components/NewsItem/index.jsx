@@ -84,7 +84,7 @@ function NewsItem(props) {
             {props.data.acreage}m²
           </span>
           <span className={cx("address", "info-item")}>
-            {`${props.data.district}, ${props.data.province}`}
+            {`${props.data.district.name}, ${props.data.province.name}`}
           </span>
           <span className={cx("updated", "info-item")}>
             {moment(new Date(props.data.createdAt)).fromNow()}
