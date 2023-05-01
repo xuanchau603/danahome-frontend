@@ -18,7 +18,7 @@ const authAPI = {
     });
   },
   editUser: (userData, token) => {
-    return fetch("http://localhost:8002/users/edit", {
+    return fetch("https://backend-danahome.onrender.com/users/edit", {
       method: "put",
       headers: {
         token: `Bearer ${token}`,

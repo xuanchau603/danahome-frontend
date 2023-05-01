@@ -14,7 +14,7 @@ const NewsAPI = {
     return axiosClient.get(url, {});
   },
   createNews: (newsData, token) => {
-    return fetch("http://localhost:8002/news/create", {
+    return fetch("https://backend-danahome.onrender.com/news/create", {
       method: "post",
       headers: {
         token: `Bearer ${token}`,
@@ -23,7 +23,7 @@ const NewsAPI = {
     });
   },
   editNews: (newsData, token) => {
-    return fetch("http://localhost:8002/news/update", {
+    return fetch("https://backend-danahome.onrender.com/news/update", {
       method: "put",
       headers: {
         token: `Bearer ${token}`,
