@@ -40,7 +40,8 @@ function Header() {
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
-      refHeader.current.style.boxShadow = "0 0.4rem 1rem #333";
+      refHeader.current.style.boxShadow =
+        "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px";
       refHeader.current.style.background =
         "linear-gradient(to right bottom, #c8fbd9, #c9fdec, #d3fdf9, #e3fdff, #f3fcff, #f4fdff, #f4fdff, #f5feff, #e8fffe, #defff7, #d8ffec, #d8ffdd)";
     } else {
@@ -223,14 +224,9 @@ function Header() {
                         : "Tài khoản"
                     }
                   >
-                    <span>
-                      <div className={cx("image")}>
-                        <img
-                          alt=""
-                          src={auth.login.currentUser.image_URL}
-                        ></img>
-                      </div>
-                    </span>
+                    <div className={cx("image")}>
+                      <img alt="" src={auth.login.currentUser.image_URL}></img>
+                    </div>
                   </Tooltip>
                 </Popover>
               </div>

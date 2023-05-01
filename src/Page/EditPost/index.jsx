@@ -90,6 +90,7 @@ function EditPost() {
     });
   };
   const getNews = async () => {
+    dispatch(loadingStart());
     const response = await NewsAPI.getDetailNewsById(newsId);
     formik.values.house_Number = response.data.data.house_Number;
     formik.values.title = response.data.data.title;
@@ -110,6 +111,7 @@ function EditPost() {
     );
     setListDictrict(response0.data.districts);
     setListWard(response1.data.wards);
+    dispatch(loadingEnd());
   };
 
   const [searrchParams] = useSearchParams();
@@ -117,10 +119,8 @@ function EditPost() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(loadingStart());
     getProvince();
     getNews();
-    dispatch(loadingEnd());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

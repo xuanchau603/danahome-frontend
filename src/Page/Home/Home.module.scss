@@ -194,10 +194,15 @@
         .btns {
           position: absolute;
           top: 2rem;
-          right: 2rem;
-          color: rgb(255, 112, 112);
+          right: 2.4rem;
+          color: rgb(255, 157, 157);
+          transition: 0.2s;
           > svg {
-            font-size: 4rem;
+            font-size: 3.6rem;
+          }
+          &:hover {
+            transform: scale(1.2);
+            color: rgb(255, 67, 67);
           }
         }
       }
@@ -239,9 +244,15 @@
         .actor-info {
           margin-left: 2rem;
           .actor-name {
+            display: flex;
+            align-items: center;
             padding-bottom: 1rem;
             font-weight: 600;
             font-size: 1.8rem;
+            > svg {
+              margin-left: 0.4rem;
+              color: #009c05;
+            }
           }
           .actor-address {
             color: #575757;
@@ -350,6 +361,9 @@
               font-weight: 600;
               padding-bottom: 1rem;
               font-size: 2rem;
+              > svg {
+                color: #009c05;
+              }
             }
             .actor-address {
               font-weight: 600;

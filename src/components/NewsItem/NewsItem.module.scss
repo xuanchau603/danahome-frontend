@@ -118,8 +118,14 @@
         }
       }
       .actor-name {
+        display: flex;
+        align-items: center;
         padding: 0 0 0.4rem 1rem;
         font-weight: 500;
+        > svg {
+          margin-left: 0.4rem;
+          color: #009c05;
+        }
       }
     }
     .btn {

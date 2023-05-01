@@ -227,23 +227,23 @@ function ManagePost() {
                                 );
                                 const jsonData = await response.json();
                                 if (response.status === 200) {
+                                  getAllNewsByUserId();
                                   notification.success({
                                     placement: "topRight",
-                                    duration: 5,
+                                    duration: 2,
                                     message: "Tin này đã được ẩn",
                                     className: cx("notify"),
                                   });
-                                  getAllNewsByUserId();
                                 } else {
-                                  message.error(jsonData.message, 2);
                                   dispatch(loadingEnd());
+                                  message.error(jsonData.message, 2);
                                 }
                               } catch (error) {
+                                dispatch(loadingEnd());
                                 message.error(
                                   "Không thể kết nối đến server!",
                                   2,
                                 );
-                                dispatch(loadingEnd());
                               }
                             }}
                             okText="Có"
@@ -272,22 +272,22 @@ function ManagePost() {
                                 );
                                 const jsonData = await response.json();
                                 if (response.status === 200) {
+                                  getAllNewsByUserId();
                                   notification.success({
                                     placement: "topRight",
                                     duration: 2,
                                     message: "Bài đăng đã được hiện thị lại",
                                   });
-                                  getAllNewsByUserId();
                                 } else {
-                                  message.error(jsonData.message, 2);
                                   dispatch(loadingEnd());
+                                  message.error(jsonData.message, 2);
                                 }
                               } catch (error) {
+                                dispatch(loadingEnd());
                                 message.error(
                                   "Không thể kết nối đến server!",
                                   2,
                                 );
-                                dispatch(loadingEnd());
                               }
                             }}
                             okText="Có"

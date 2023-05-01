@@ -56,6 +56,7 @@ function UserInfo() {
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const getUser = async () => {
+    dispatch(loadingStart());
     const response = await authAPI.getUserById(
       userId,
       currentUser.access_Token,
@@ -66,9 +67,11 @@ function UserInfo() {
     setEmail(response.data.user_Info.email);
     setZaloPhone(response.data.user_Info.phone);
     dispatch(editUser(response.data.user_Info));
+    dispatch(loadingEnd());
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     getUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser.access_Token, userId]);

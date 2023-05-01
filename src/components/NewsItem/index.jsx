@@ -8,6 +8,7 @@ import "moment/locale/vi";
 import MyButton from "../MyButton";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   addToListNewsFavorite,
   removeFromListNewsFavorite,
@@ -96,7 +97,10 @@ function NewsItem(props) {
             <div className={cx("actor-image")}>
               <img src={props.data.poster_Image_URL} alt=""></img>
             </div>
-            <span className={cx("actor-name")}>{props.data.poster}</span>
+            <span className={cx("actor-name")}>
+              {props.data.poster}{" "}
+              {props.data.posterVIP && <CheckCircleIcon></CheckCircleIcon>}
+            </span>
           </div>
           <div className={cx("btn")}>
             <MyButton primary>Đặt cọc ngay</MyButton>

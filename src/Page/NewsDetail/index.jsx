@@ -31,6 +31,7 @@ import {
   removeFromListNewsFavorite,
 } from "../../Redux/newsFavoriteSlice";
 import { useDispatch, useSelector } from "react-redux";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const cx = classNames.bind(style);
 
@@ -42,8 +43,8 @@ function NewsDetail() {
 
   const dispatch = useDispatch();
 
-  const listNewsFavorite = useSelector((state) => {
-    return state.listNewsFavorite.listNewsFavorite;
+  const { listNewsFavorite } = useSelector((state) => {
+    return state;
   });
 
   useEffect(() => {
@@ -265,7 +266,10 @@ function NewsDetail() {
               <div className={cx("avatar")}>
                 <img src={newsInfo.poster_Image_URL} alt=""></img>
               </div>
-              <h1 className={cx("name")}>{newsInfo.poster}</h1>
+              <h1 className={cx("name")}>
+                {newsInfo.poster}{" "}
+                {newsInfo.posterVIP && <CheckCircleIcon></CheckCircleIcon>}
+              </h1>
               <div className={cx("status")}>
                 <FiberManualRecordIcon></FiberManualRecordIcon> Đang hoạt động
               </div>
@@ -278,13 +282,16 @@ function NewsDetail() {
                     classes={cx("btn")}
                     outline
                     onClick={() => {
-                      const isFavorite = listNewsFavorite.find(
+                      const isFavorite = listNewsFavorite.listNewsFavorite.find(
                         (item) => item.newsId === newsInfo.ID,
                       );
                       if (isFavorite) {
-                        const index = listNewsFavorite.findIndex((item) => {
-                          return item.newsId === newsInfo.ID;
-                        });
+                        const index =
+                          listNewsFavorite.listNewsFavorite.findIndex(
+                            (item) => {
+                              return item.newsId === newsInfo.ID;
+                            },
+                          );
                         dispatch(removeFromListNewsFavorite(index));
                       } else {
                         dispatch(
@@ -296,7 +303,7 @@ function NewsDetail() {
                       }
                     }}
                   >
-                    {listNewsFavorite.find(
+                    {listNewsFavorite.listNewsFavorite.find(
                       (item) => item.newsId === newsInfo.ID,
                     ) ? (
                       <FavoriteIcon style={{ color: "red" }}></FavoriteIcon>

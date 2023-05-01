@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
   addToListNewsFavorite,
   removeFromListNewsFavorite,
@@ -53,10 +54,10 @@ function Home() {
         const listHotNews = await NewsAPI.getHotNews(params);
         if (listHotNews.status === 200) {
           dispath(loadingEnd());
-          return setListHotNews(listHotNews.data.data);
+          setListHotNews(listHotNews.data.data);
         } else {
           dispath(loadingEnd());
-          message.error(listHotNews.message);
+          message.error(listHotNews.message, 2);
         }
       } catch (error) {
         dispath(loadingEnd());
@@ -278,7 +279,12 @@ function Home() {
                         <img src={item.poster_Image_URL} alt=""></img>
                       </div>
                       <div className={cx("actor-info")}>
-                        <p className={cx("actor-name")}>{item.poster}</p>
+                        <p className={cx("actor-name")}>
+                          {item.poster}{" "}
+                          {item.posterVIP && (
+                            <CheckCircleIcon></CheckCircleIcon>
+                          )}
+                        </p>
                         <p className={cx("actor-address")}>
                           {`${item.province.name} - ${item.district.name} - ${item.ward.name} - ${item.house_Number}`}
                         </p>
@@ -337,7 +343,10 @@ function Home() {
                     </div>
                     <div className={cx("detail")}>
                       <p className={cx("actor-name")}>
-                        {listHotNews[0].poster}
+                        {listHotNews[0].poster}{" "}
+                        {listHotNews[0].posterVIP && (
+                          <CheckCircleIcon></CheckCircleIcon>
+                        )}
                       </p>
                       <p className={cx("actor-address")}>
                         {`${listHotNews[0].house_Number}, ${listHotNews[0].province.name}`}
@@ -351,18 +360,41 @@ function Home() {
               </div>
             </Col>
             <Col span={12}>
-              <div className={cx("sale-image")}>
-                <div className={cx("main-image")}>
-                  <img src={listHotNews[0].featured_Image} alt=""></img>
+              {listHotNews.length > 0 && (
+                <div className={cx("sale-image")}>
+                  <div className={cx("main-image")}>
+                    <img src={listHotNews[0].featured_Image} alt=""></img>
+                  </div>
+                  <div className={cx("sub-image1")}>
+                    <img
+                      src={
+                        listHotNews[0]?.subImages[0]?.image_URL
+                          ? listHotNews[0]?.subImages[0]?.image_URL
+                          : listHotNews[0].featured_Image
+                      }
+                      alt=""
+                    ></img>
+                  </div>
+                  <div className={cx("sub-image2")}>
+                    <img
+                      src={
+                        listHotNews[0]?.subImages[1]?.image_URL
+                          ? listHotNews[0]?.subImages[1]?.image_URL
+                          : listHotNews[0].featured_Image
+                      }
+                      alt=""
+                    ></img>
+                    <img
+                      src={
+                        listHotNews[0]?.subImages[2]?.image_URL
+                          ? listHotNews[0]?.subImages[2]?.image_URL
+                          : listHotNews[0].featured_Image
+                      }
+                      alt=""
+                    ></img>
+                  </div>
                 </div>
-                <div className={cx("sub-image1")}>
-                  <img src={listHotNews[0].featured_Image} alt=""></img>
-                </div>
-                <div className={cx("sub-image2")}>
-                  <img src={banner} alt=""></img>
-                  <img src={banner} alt=""></img>
-                </div>
-              </div>
+              )}
             </Col>
           </Row>
         </div>

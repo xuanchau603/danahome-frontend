@@ -9,6 +9,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +29,10 @@ function ManageSidebar() {
         <div className={cx("user-info")}>
           <img src={currentUser.image_URL} alt="" />
           <div className={cx("user-details")}>
-            <h3>{currentUser.full_Name}</h3>
+            <h3>
+              {currentUser.full_Name}{" "}
+              {currentUser.type === 1 && <CheckCircleIcon></CheckCircleIcon>}
+            </h3>
             <p>{currentUser.phone}</p>
           </div>
         </div>
