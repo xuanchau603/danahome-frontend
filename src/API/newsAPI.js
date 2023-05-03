@@ -23,7 +23,7 @@ const NewsAPI = {
     });
   },
   editNews: (newsData, token) => {
-    return fetch("https://backend-danahome.onrender.com/update", {
+    return fetch("https://backend-danahome.onrender.com/news/update", {
       method: "put",
       headers: {
         token: `Bearer ${token}`,
