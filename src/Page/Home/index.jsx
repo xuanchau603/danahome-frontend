@@ -1,4 +1,4 @@
-import { Col, Row, Skeleton, message } from "antd";
+import { Col, Row, Skeleton, Tooltip, message } from "antd";
 import style from "./Home.module.scss";
 import classNames from "classnames/bind";
 import { banner } from "../../Image";
@@ -24,6 +24,7 @@ import { NavLink, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import {
@@ -64,7 +65,7 @@ function Home() {
         message.error("Không thể kết nối tới server", 2);
       }
     };
-    getHotNews({ roomType: roomTypeId });
+    getHotNews({ roomType: roomTypeId, status: 2 });
   }, [dispath, roomTypeId]);
 
   const settingsSliderNewsBox = {
@@ -272,7 +273,15 @@ function Home() {
                       <span title={item.title}>{item.title}</span>
                     </div>
                     <div className={cx("news-price")}>
-                      <span>{Format.formatPrice(item.price)}</span>
+                      <p>
+                        <b>{Format.formatPrice(item.price)}</b>{" "}
+                        <small>
+                          <Tooltip title="Số lượt xem">
+                            <RemoveRedEyeIcon></RemoveRedEyeIcon>
+                          </Tooltip>
+                          {item.news_Views} đã xem
+                        </small>
+                      </p>
                     </div>
                     <div className={cx("news-actor")}>
                       <div className={cx("actor-avatar")}>

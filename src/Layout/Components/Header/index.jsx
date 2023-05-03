@@ -124,7 +124,11 @@ function Header() {
         <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
         <span>Đăng tin cho thuê</span>
       </Link>
-      <Link to={"/manage-post"} className={cx("menu-item")}>
+      <Link
+        to={"/manage-post"}
+        state={{ userId: auth.login.currentUser.ID }}
+        className={cx("menu-item")}
+      >
         <ReceiptLongIcon></ReceiptLongIcon> <span>Quản lý tin đăng</span>
       </Link>
 

@@ -6,7 +6,6 @@ import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import AssignmentOutlinedIcon from "@mui/icons-material/AssignmentOutlined";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -52,7 +51,8 @@ function ManageSidebar() {
       <p>Chung</p>
       <ul className={cx("nav-sidebar")}>
         <NavLink
-          to={"/manage-post"}
+          to={`/manage-post`}
+          state={{ userId: currentUser.ID }}
           className={(active) => {
             return active.isActive ? cx("nav-item", "active") : cx("nav-item");
           }}
@@ -69,14 +69,14 @@ function ManageSidebar() {
           <EditNoteOutlinedIcon></EditNoteOutlinedIcon>
           <span to={"/user-information"}>Sửa thông tin cá nhân</span>
         </NavLink>
-        <NavLink className={cx("nav-item")}>
+        <span className={cx("nav-item")}>
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>
           <span>Bảng giá dịch vụ</span>
-        </NavLink>
-        <NavLink className={cx("nav-item")}>
+        </span>
+        <span className={cx("nav-item")}>
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
           <span>Liên hệ</span>
-        </NavLink>
+        </span>
         <NavLink
           onClick={() => {
             dispatch(logoutSuccess());
@@ -91,22 +91,25 @@ function ManageSidebar() {
         <>
           <p>Quản lý</p>
           <ul className={cx("nav-sidebar")}>
-            <NavLink className={cx("nav-item")}>
-              <AssignmentOutlinedIcon></AssignmentOutlinedIcon>
-              <span>Quản lý bài đăng</span>
-            </NavLink>
-            <NavLink className={cx("nav-item")}>
+            <NavLink
+              to={`/manage-user`}
+              className={(active) => {
+                return active.isActive
+                  ? cx("nav-item", "active")
+                  : cx("nav-item");
+              }}
+            >
               <AssignmentIndOutlinedIcon></AssignmentIndOutlinedIcon>
               <span>Quản lý tài khoản</span>
             </NavLink>
-            <NavLink className={cx("nav-item")}>
+            <span className={cx("nav-item")}>
               <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
               <span>Quản lý đánh giá</span>
-            </NavLink>
-            <NavLink className={cx("nav-item")}>
+            </span>
+            <span className={cx("nav-item")}>
               <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
               <span>Thống kê</span>
-            </NavLink>
+            </span>
           </ul>
         </>
       )}

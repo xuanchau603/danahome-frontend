@@ -42,6 +42,15 @@ const authAPI = {
       },
     );
   },
+  getAllUsers: (params, token) => {
+    const url = `/users/`;
+    return axiosClient.get(url, {
+      headers: {
+        token: `Bearer ${token}`,
+      },
+      params,
+    });
+  },
 };
 
 export default authAPI;

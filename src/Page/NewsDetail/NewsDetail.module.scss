@@ -31,12 +31,30 @@
     }
     .post-header {
       margin: 2rem 2rem;
-      > a {
-        font-size: 2rem;
-        color: #20710a;
-        font-weight: 700;
-        &:hover {
-          text-decoration: underline;
+      .title {
+        display: flex;
+        align-items: center;
+        > h1 {
+          font-size: 2rem;
+          color: #20710a;
+          font-weight: 700;
+          padding-right: 16rem;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        > small {
+          position: absolute;
+          right: 2rem;
+          font-size: 1.4rem;
+          display: flex;
+          align-items: center;
+          color: #767676;
+          > svg,
+          b {
+            margin-right: 0.4rem;
+          }
         }
       }
       > p {

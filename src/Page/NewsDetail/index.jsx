@@ -20,6 +20,7 @@ import SimpleSlider from "../../components/SimpleSlider";
 import MyButton from "../../components/MyButton";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import PaidIcon from "@mui/icons-material/Paid";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -61,6 +62,7 @@ function NewsDetail() {
         message.error("Không thể kết nối đến server", 2);
       }
     };
+
     getDetailNews();
   }, [id]);
 
@@ -151,7 +153,13 @@ function NewsDetail() {
                 </SimpleSlider>
               </div>
               <div className={cx("post-header")}>
-                <a href="#">{newsInfo.title}</a>
+                <div className={cx("title")}>
+                  <h1>{newsInfo.title}</h1>{" "}
+                  <small>
+                    <RemoveRedEyeIcon></RemoveRedEyeIcon> {newsInfo.news_Views}{" "}
+                    đã xem
+                  </small>
+                </div>
                 <p>
                   Chuyên mục: <a href="#">{newsInfo.roomType}</a>
                 </p>

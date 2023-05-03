@@ -9,6 +9,7 @@ import MyButton from "../MyButton";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {
   addToListNewsFavorite,
   removeFromListNewsFavorite,
@@ -75,7 +76,10 @@ function NewsItem(props) {
           to={`/news-detail?newsId=${props.data.ID}`}
           className={cx("title-news")}
         >
-          {props.data.title.toUpperCase()}
+          <b>{props.data.title.toUpperCase()}</b>
+          <small>
+            <RemoveRedEyeIcon></RemoveRedEyeIcon> {props.data.news_Views} đã xem
+          </small>
         </Link>
         <div className={cx("info")}>
           <span className={cx("price", "info-item")}>

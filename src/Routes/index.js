@@ -1,9 +1,11 @@
 import LayoutWithSearchBox from "../Layout/LayoutWithSearchBox";
 import ManageLayout from "../Layout/ManageLayout";
 import EditPost from "../Page/EditPost";
+import ExtendPost from "../Page/ExtendPost";
 import Favorite from "../Page/Favorite";
 import Home from "../Page/Home";
 import ManagePost from "../Page/ManagePost";
+import ManageUser from "../Page/ManageUser";
 import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
 import Payment from "../Page/Payment";
@@ -40,6 +42,7 @@ const UserRouter = [
   {
     path: "/payment",
     component: Payment,
+    layout: ManageLayout,
   },
   {
     path: "/manage-post",
@@ -54,6 +57,16 @@ const UserRouter = [
   {
     path: "/edit-post",
     component: EditPost,
+    layout: ManageLayout,
+  },
+  {
+    path: "/manage-user",
+    component: ManageUser,
+    layout: ManageLayout,
+  },
+  {
+    path: "/extend-post",
+    component: ExtendPost,
     layout: ManageLayout,
   },
 ];

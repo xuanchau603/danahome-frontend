@@ -2,6 +2,10 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import DangerousIcon from "@mui/icons-material/Dangerous";
 import BlockIcon from "@mui/icons-material/Block";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 
 const Format = {
   formatStatus: (status) => {
@@ -84,6 +88,103 @@ const Format = {
       style: "currency",
       currency: "VND",
     }).format(price);
+  },
+  formatAccountType: (status) => {
+    if (status === 1) {
+      return (
+        <b
+          style={{
+            color: "#8a8507",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#f7f272",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CheckCircleIcon style={{ marginRight: 4 }}></CheckCircleIcon> VIP
+        </b>
+      );
+    } else if (status === 2) {
+      return (
+        <b
+          style={{
+            color: "#0962ba",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#c7e3ff",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <SentimentSatisfiedAltIcon
+            style={{ marginRight: 4 }}
+          ></SentimentSatisfiedAltIcon>{" "}
+          Thường
+        </b>
+      );
+    } else if (status === 3) {
+      return (
+        <b
+          style={{
+            color: "#8c230d",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#fcdfd9",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <BlockIcon style={{ marginRight: 4 }}></BlockIcon> Bị khóa
+        </b>
+      );
+    }
+  },
+  formatRole: (roleName) => {
+    if (roleName === "ADMIN") {
+      return (
+        <b
+          style={{
+            color: "#33b533",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#d9fad9",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+            width: "fit-content",
+          }}
+        >
+          <VerifiedUserIcon style={{ marginRight: 4 }}></VerifiedUserIcon> ADMIN
+        </b>
+      );
+    } else if (roleName === "USER") {
+      return (
+        <b
+          style={{
+            color: "#595c59",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#eaf0e9",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+            width: "fit-content",
+          }}
+        >
+          <AccountCircleIcon style={{ marginRight: 4 }}></AccountCircleIcon>{" "}
+          Người dùng
+        </b>
+      );
+    }
   },
 };
 

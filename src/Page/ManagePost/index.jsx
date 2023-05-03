@@ -1,6 +1,6 @@
 import style from "./ManagePost.module.scss";
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -51,6 +51,8 @@ function ManagePost() {
     return state;
   });
   const dispatch = useDispatch();
+  const location = useLocation();
+  const userId = location.state.userId;
 
   const handleChangeCategory = async (value) => {
     setcategoryNewsId(value ? value : undefined);
@@ -59,7 +61,7 @@ function ManagePost() {
       const response = await NewsAPI.getAllNews({
         categoryNewsId: value ? value : undefined,
         status: statusFilter,
-        userId: auth.login.currentUser.ID,
+        userId: userId,
       });
       if (response.status === 200) {
         setListNews(response.data.data);
@@ -80,7 +82,7 @@ function ManagePost() {
       const response = await NewsAPI.getAllNews({
         status: value ? value : undefined,
         categoryNewsId: categoryNewsId,
-        userId: auth.login.currentUser.ID,
+        userId: userId,
       });
       if (response.status === 200) {
         setListNews(response.data.data);
@@ -98,7 +100,7 @@ function ManagePost() {
     try {
       dispatch(loadingStart());
       const response = await NewsAPI.getAllNews({
-        userId: auth.login.currentUser.ID,
+        userId: userId,
       });
       if (response.status === 200) {
         setListNews(response.data.data);
@@ -115,10 +117,9 @@ function ManagePost() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     getAllNewsByUserId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth.login.currentUser.ID, dispatch]);
+  }, []);
 
   const confirm = () => {
     message.error("Không có được xóa!");
@@ -172,7 +173,7 @@ function ManagePost() {
             <th>Ảnh đại diện</th>
             <th>Tiêu đề</th>
             <th>Giá</th>
-            <th>Ngày bắt đầu</th>
+            <th>Ngày đăng tin</th>
             <th>Ngày hết hạn</th>
             <th>Trạng thái</th>
           </tr>
@@ -203,6 +204,10 @@ function ManagePost() {
                         <b>Địa chỉ: </b>
                         {`${item.house_Number}, ${item.ward.name}, ${item.district.name}, ${item.province.name}`}
                       </div>
+                      <div className={cx("actor")}>
+                        <b>Người đăng tin: </b>
+                        {item.poster}
+                      </div>
                       <div className={cx("btn-wrapper")}>
                         <Link
                           to={`/edit-post?newsId=${item.ID}`}
@@ -211,7 +216,7 @@ function ManagePost() {
                           <ModeEditOutlineOutlinedIcon></ModeEditOutlineOutlinedIcon>
                           Sửa tin
                         </Link>
-                        {item.status === 2 && (
+                        {item.status === 2 && item.status !== 1 && (
                           <Popconfirm
                             placement="topLeft"
                             title={"Bạn có chắc muốn ẩn tin này?"}
@@ -300,10 +305,19 @@ function ManagePost() {
                           </Popconfirm>
                         )}
                         {item.status === 3 && (
-                          <div className={cx("btn-extend", "btn")}>
+                          <Link
+                            to={"/extend-post"}
+                            state={{
+                              newsId: item.ID,
+                              title: item.title,
+                              newTypeId: item.categorys_News_Id,
+                              newsTypePrice: item.newsTypePrice,
+                            }}
+                            className={cx("btn-extend", "btn")}
+                          >
                             <PublishedWithChangesIcon></PublishedWithChangesIcon>
                             Gia hạn tin
-                          </div>
+                          </Link>
                         )}
                         {auth.login.currentUser.isAdmin && (
                           <Popconfirm
@@ -320,6 +334,9 @@ function ManagePost() {
                           </Popconfirm>
                         )}
                       </div>
+                      <div className={cx("views")}>
+                        Lượt hiển thị: {item.news_Views}
+                      </div>
                       <div className={cx("update")}>
                         <p>Cập nhật gần nhất:</p>
                         <p>{moment(item.updatedAt).fromNow()}</p>
@@ -333,18 +350,22 @@ function ManagePost() {
                   </td>
                   <td>
                     <div className={cx("post-date")}>
-                      <p>{moment(item.createdAt).format("DD/MM/YYYY")}</p>
+                      <p>
+                        {moment(item.createdAt).format("DD/MM/YYYY-hh:mm:ss A")}
+                      </p>
                     </div>
                   </td>
                   <td>
                     <div className={cx("expire-date")}>
-                      <p>{moment(item.expire_At).format("DD/MM/YYYY")}</p>
+                      <p>
+                        {moment(item.expire_At).format("DD/MM/YYYY-hh:mm:ss A")}
+                      </p>
                     </div>
                   </td>
                   <td>
                     <div className={cx("status")}>
                       {Format.formatStatus(item.status)}
-                      {auth.login.currentUser.isAdmin && (
+                      {auth.login.currentUser.isAdmin && item.status !== 3 && (
                         <Tooltip title="Thay đổi trạng thái">
                           <span
                             onClick={() => {
@@ -357,78 +378,6 @@ function ManagePost() {
                             <EditIcon></EditIcon>
                           </span>
                         </Tooltip>
-                      )}
-                      {MenuStatus && (
-                        <Menu
-                          classes={cx("menu-status")}
-                          onCancel={() => {
-                            setMenuStatus(false);
-                          }}
-                          open={MenuStatus}
-                          title={`Cập nhật trạng thái tin(Mã tin: ${
-                            newsId.split("-")[0]
-                          })`}
-                        >
-                          <h1>Chọn trạng thái</h1>
-                          <ul className={cx("list-option")}>
-                            <Radio.Group
-                              defaultValue={status}
-                              onChange={onChangeRadio}
-                            >
-                              <Space direction="vertical">
-                                <Radio value={1}>
-                                  <span className={cx("warn")}>
-                                    Chờ xác nhận
-                                  </span>
-                                </Radio>
-                                <Radio value={2}>
-                                  <span className={cx("success")}>
-                                    Đang hiển thị
-                                  </span>
-                                </Radio>
-
-                                <Radio value={3}>
-                                  <span className={cx("error")}>Hết hạn</span>
-                                </Radio>
-                                <Radio value={4}>
-                                  <span className={cx("hide")}>Đã ẩn</span>
-                                </Radio>
-                              </Space>
-                            </Radio.Group>
-                          </ul>
-                          <MyButton
-                            onClick={async () => {
-                              dispatch(loadingStart());
-                              try {
-                                const formData = new FormData();
-                                formData.append("newsId", newsId);
-                                formData.append("status", status);
-                                const response = await NewsAPI.editNews(
-                                  formData,
-                                  auth.login.currentUser.access_Token,
-                                );
-                                const jsonData = await response.json();
-                                if (response.status === 200) {
-                                  message.success(jsonData.message, 2);
-                                  getAllNewsByUserId();
-                                } else {
-                                  message.error(jsonData.message, 2);
-                                  dispatch(loadingEnd());
-                                }
-                              } catch (error) {
-                                message.error(
-                                  "Không thể kết nối đến server!",
-                                  2,
-                                );
-                                dispatch(loadingEnd());
-                              }
-                            }}
-                            classes={cx("btn-submit")}
-                            primary
-                          >
-                            Lưu & Cập nhật
-                          </MyButton>
-                        </Menu>
                       )}
                     </div>
                   </td>
@@ -449,6 +398,66 @@ function ManagePost() {
           Bạn chưa có tin đăng nào. Bấm <Link to={"/new-post"}>vào đây</Link> để
           bắt đầu đăng tin.
         </div>
+      )}
+      {MenuStatus && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuStatus(false);
+          }}
+          open={MenuStatus}
+          title={`Cập nhật trạng thái tin(Mã tin: ${newsId.split("-")[0]})`}
+        >
+          <h1>Chọn trạng thái</h1>
+          <ul className={cx("list-option")}>
+            <Radio.Group defaultValue={status} onChange={onChangeRadio}>
+              <Space direction="vertical">
+                <Radio value={1}>
+                  <span className={cx("warn")}>Chờ xác nhận</span>
+                </Radio>
+                <Radio value={2}>
+                  <span className={cx("success")}>Đang hiển thị</span>
+                </Radio>
+
+                <Radio value={3}>
+                  <span className={cx("error")}>Hết hạn</span>
+                </Radio>
+                <Radio value={4}>
+                  <span className={cx("hide")}>Đã ẩn</span>
+                </Radio>
+              </Space>
+            </Radio.Group>
+          </ul>
+          <MyButton
+            onClick={async () => {
+              dispatch(loadingStart());
+              try {
+                const formData = new FormData();
+                formData.append("newsId", newsId);
+                formData.append("status", status);
+                const response = await NewsAPI.editNews(
+                  formData,
+                  auth.login.currentUser.access_Token,
+                );
+                const jsonData = await response.json();
+                if (response.status === 200) {
+                  message.success(jsonData.message, 2);
+                  getAllNewsByUserId();
+                } else {
+                  message.error(jsonData.message, 2);
+                  dispatch(loadingEnd());
+                }
+              } catch (error) {
+                message.error("Không thể kết nối đến server!", 2);
+                dispatch(loadingEnd());
+              }
+            }}
+            classes={cx("btn-submit")}
+            primary
+          >
+            Lưu & Cập nhật
+          </MyButton>
+        </Menu>
       )}
     </div>
   );

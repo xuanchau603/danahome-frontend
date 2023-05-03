@@ -167,6 +167,7 @@ function SearchResult() {
       orderBy: orderBy,
       orderType: orderType,
       page: page,
+      status: 2,
     };
 
     const getSearchResult = async () => {
