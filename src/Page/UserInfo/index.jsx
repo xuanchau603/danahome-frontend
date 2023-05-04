@@ -34,6 +34,7 @@ function UserInfo() {
   const [facebookUrl] = useState();
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const onCancel = () => setOpenMenu(false);
 
@@ -156,8 +157,9 @@ function UserInfo() {
           <span>Mật khẩu:</span>
           <MyButton
             onClick={() => {
-              setPassword("");
+              setPassword(currentUser.isAdmin ? "danahome" : "");
               setNewPassword("");
+              setConfirmNewPassword("");
               setOpenMenu(true);
             }}
             classes={cx("btn-changePass")}
@@ -210,15 +212,19 @@ function UserInfo() {
       </div>
       {openMenu && (
         <Menu title="Đổi mật khẩu" open={openMenu} onCancel={onCancel}>
-          <div className={cx("group")}>
-            <span>Mật khẩu cũ:</span>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mật khẩu cũ"
-            ></Input>
-          </div>
+          {!currentUser.isAdmin ? (
+            <div className={cx("group")}>
+              <span>Mật khẩu cũ:</span>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Mật khẩu cũ"
+              ></Input>
+            </div>
+          ) : (
+            <></>
+          )}
           <div className={cx("group")}>
             <span>Mật khẩu mới:</span>
             <Input
@@ -228,13 +234,25 @@ function UserInfo() {
               placeholder="Mật khẩu mới"
             ></Input>
           </div>
+          <div className={cx("group")}>
+            <span>Nhập lại khẩu mới:</span>
+            <Input
+              type="password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              placeholder="Nhập lại mật khẩu mới"
+            ></Input>
+          </div>
           <MyButton
             disible={
               !password ||
               !newPassword ||
               password.length < 6 ||
               newPassword.length < 6 ||
-              password === newPassword
+              password === newPassword ||
+              !confirmNewPassword ||
+              confirmNewPassword.length < 6 ||
+              confirmNewPassword !== newPassword
             }
             onClick={async () => {
               try {
@@ -246,8 +264,9 @@ function UserInfo() {
                   currentUser.access_Token,
                 );
                 if (response.status === 200) {
-                  setPassword("");
+                  setPassword(currentUser.isAdmin ? "danahome" : "");
                   setNewPassword("");
+                  setConfirmNewPassword("");
                   message.success(response.data.message, 2);
                   dispatch(loadingEnd());
                 } else {

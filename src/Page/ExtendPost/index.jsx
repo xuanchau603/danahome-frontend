@@ -88,7 +88,7 @@ function ExtendPost() {
       if (response.status === 200) {
         message.success("Gia hạn tin thành công", 2);
         dispath(loadingEnd());
-        return;
+        return navigate("/");
       }
       message.error("Gia hạn tin thất bại!", 2);
       dispath(loadingEnd());
@@ -193,7 +193,10 @@ function ExtendPost() {
                       Số tài khoản: <span>5743895934574</span> <br></br>
                       Nội dung chuyển khoản:{" "}
                       <span>
-                        DANAHOME THANHTOAN {data.newsId.split("-")[0]} THUONG{" "}
+                        DANAHOME THANHTOAN {data.newsId.split("-")[0]}{" "}
+                        {data.newsTypePrice === 10000
+                          ? "TIN VIP"
+                          : "TIN THUONG"}{" "}
                         {day} NGAY
                       </span>
                     </p>

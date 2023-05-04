@@ -61,7 +61,7 @@ function SearchBox() {
 
   const onchangeProvince = async (e) => {
     const data = e.target.value.split(",");
-    setAddress(data[1]);
+    setAddress(e.target.value);
     HandleDistricts(data[0]);
     setShowMenuProvince(false);
     setShowMenuDistrict(true);
@@ -70,7 +70,7 @@ function SearchBox() {
   const onchangeMenuDistrict = (e) => {
     const data = e.target.value.split(",");
     setAddress((prev) => {
-      return prev + "," + data[1];
+      return prev + "-" + e.target.value;
     });
     HandleWards(data[0]);
     setShowMenuDistrict(false);
@@ -78,9 +78,8 @@ function SearchBox() {
   };
 
   const onchangeMenuWards = (e) => {
-    const data = e.target.value.split(",");
     setAddress((prev) => {
-      return prev + "," + data[1];
+      return prev + "-" + e.target.value;
     });
     setShowMenuWards(false);
   };
@@ -117,18 +116,21 @@ function SearchBox() {
     setShowMenuSize(false);
   };
 
+  console.log(address);
+
   const handleSearch = () => {
     const filter = {
       typeName: type.split(",")[1] || undefined,
       type: type.split(",")[0] || undefined,
-      province: address.split(",")[0] || undefined,
-      district: address.split(",")[1] || undefined,
-      ward: address.split(",")[2] || undefined,
+      province: address.split("-")[0] || undefined,
+      district: address.split("-")[1] || undefined,
+      ward: address.split("-")[2] || undefined,
       priceFrom: price.split(" -")[0] || undefined,
       priceTo: price.split("- ")[1] || undefined,
       acreageFrom: size.split(" -")[0] || undefined,
       acreageTo: size.split("- ")[1] || undefined,
     };
+    console.log(filter);
     navigate(`/search-result?${queryString.stringify(filter)}`);
   };
 
@@ -164,9 +166,35 @@ function SearchBox() {
             <label htmlFor="type">
               <LocationOnIcon fontSize="large"></LocationOnIcon>
             </label>
-            <Tooltip title={address || "Địa chỉ"}>
+            <Tooltip
+              title={
+                (address.split("-")[2] &&
+                  `${address.split("-")[0].split(",")[1]},${
+                    address.split("-")[1].split(",")[1]
+                  },${address.split("-")[2].split(",")[1]}`) ||
+                (address.split("-")[1] &&
+                  `${address.split("-")[0].split(",")[1]},${
+                    address.split("-")[1].split(",")[1]
+                  }`) ||
+                (address.split("-")[0] &&
+                  `${address.split("-")[0].split(",")[1]}`) ||
+                "Địa chỉ"
+              }
+            >
               <div id="type" className={cx("data")}>
-                <p>{address || "Địa chỉ"}</p>
+                <p>
+                  {(address.split("-")[2] &&
+                    `${address.split("-")[0].split(",")[1]},${
+                      address.split("-")[1].split(",")[1]
+                    },${address.split("-")[2].split(",")[1]}`) ||
+                    (address.split("-")[1] &&
+                      `${address.split("-")[0].split(",")[1]},${
+                        address.split("-")[1].split(",")[1]
+                      }`) ||
+                    (address.split("-")[0] &&
+                      `${address.split("-")[0].split(",")[1]}`) ||
+                    "Địa chỉ"}
+                </p>
               </div>
             </Tooltip>
 

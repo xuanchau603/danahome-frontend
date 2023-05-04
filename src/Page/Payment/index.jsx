@@ -208,10 +208,19 @@ function Payment() {
               <Radio value={5}>
                 <li className={cx("payment-options-item")}>
                   <p>Chuyển khoản ngân hàng</p>
-                  <p>
-                    Nội dung chuyển khoản:{" "}
-                    <span>PT123 THANHTOAN 622561 THUONG 5 NGAY</span>
-                  </p>
+                  {paymentType === 5 && (
+                    <p>
+                      Ngân hàng: <span>VIETCOMBANK</span> <br></br>
+                      Số tài khoản: <span>5743895934574</span> <br></br>
+                      Nội dung chuyển khoản:{" "}
+                      <span>
+                        DANAHOME THANH TOAN{" "}
+                        {newsTypePrice === "2000" && "TIN THUONG"}{" "}
+                        {newsTypePrice === "10000" && "TIN VIP"}{" "}
+                        {day ? day + " NGAY" : ""}
+                      </span>
+                    </p>
+                  )}
                 </li>
               </Radio>
             </Space>

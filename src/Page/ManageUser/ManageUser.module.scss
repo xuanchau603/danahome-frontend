@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2rem 0 3rem 0;
+    padding: 2rem 0 0rem 0;
     > h1 {
       font-size: 3rem;
     }
@@ -16,6 +16,18 @@
         > div > span {
           font-size: 1.4rem;
         }
+      }
+    }
+  }
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin: 2rem 0;
+    li {
+      font-size: 1.5rem;
+      > a,
+      > div {
+        font-size: 1.5rem;
       }
     }
   }
@@ -38,13 +50,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 18rem;
-      width: 100%;
+      width: 22rem;
       height: 20rem;
       padding: 1rem;
       > img {
-        width: 60%;
-        height: 70%;
+        width: 90%;
+        height: 80%;
         border-radius: 0.6rem;
       }
     }
@@ -210,6 +221,26 @@
     }
     .hide {
       font-weight: 600;
+    }
+  }
+  .container {
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-action {
+      display: flex;
+      justify-content: space-between;
+      .avatar {
+        > div {
+          display: flex;
+          flex-direction: column;
+          > img {
+            width: 10rem;
+            height: 10rem;
+            border-radius: 50%;
+          }
+        }
+      }
     }
   }
   .btn-submit {

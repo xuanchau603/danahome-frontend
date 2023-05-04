@@ -8,12 +8,15 @@ import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import {
+  Button,
   Input,
+  Pagination,
   Popconfirm,
   Radio,
   Select,
   Space,
   Tooltip,
+  Upload,
   message,
 } from "antd";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
@@ -25,6 +28,7 @@ import Menu from "../../components/Menu";
 import MyButton from "../../components/MyButton";
 import Format from "../../components/Format";
 import authAPI from "../../API/authAPI";
+import { UploadOutlined } from "@ant-design/icons";
 
 const cx = classNames.bind(style);
 
@@ -39,8 +43,14 @@ function ManageUser() {
   const [phone, setPhone] = useState();
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [prevImage, setPrevImage] = useState();
+  const [image, setImage] = useState();
   const [MenuUser, setMenuUser] = useState();
   const [MenuChangePasswordUser, setMenuChangePasswordUser] = useState();
+  const [page, setPage] = useState(1);
+  const [totalPagination, setTotalPagination] = useState();
 
   const items = [
     {
@@ -59,17 +69,20 @@ function ManageUser() {
 
   const handleChangeRole = async (value) => {
     setRoleId(value ? value : undefined);
+    setPage(1);
     try {
       dispatch(loadingStart());
       const response = await authAPI.getAllUsers(
         {
           roleId: value ? value : undefined,
           type: statusFilter,
+          page,
         },
         auth.login.currentUser.access_Token,
       );
       if (response.status === 200) {
         setListUsers(response.data.data);
+        setTotalPagination(response.data.totalUser);
         dispatch(loadingEnd());
       } else {
         message.error(response.message, 2);
@@ -82,17 +95,21 @@ function ManageUser() {
   };
   const handleChangeStatus = async (value) => {
     setstatusFilter(value ? value : undefined);
+    setPage(1);
     try {
       dispatch(loadingStart());
       const response = await authAPI.getAllUsers(
         {
           type: value ? value : undefined,
           roleId: roleId,
+          page,
         },
         auth.login.currentUser.access_Token,
       );
       if (response.status === 200) {
         setListUsers(response.data.data);
+        setTotalPagination(response.data.totalUser);
+
         dispatch(loadingEnd());
       } else {
         message.error(response.message, 2);
@@ -106,12 +123,14 @@ function ManageUser() {
   const getAllUsers = async () => {
     try {
       dispatch(loadingStart());
+      setPage(1);
       const response = await authAPI.getAllUsers(
         null,
         auth.login.currentUser.access_Token,
       );
       if (response.status === 200) {
         setListUsers(response.data.data);
+        setTotalPagination(response.data.totalUser);
         dispatch(loadingEnd());
       } else {
         message.error(response.message, 2);
@@ -129,6 +148,33 @@ function ManageUser() {
     getAllUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.login.currentUser.ID, dispatch]);
+  const onChange = async (page) => {
+    setPage(page);
+    try {
+      dispatch(loadingStart());
+      const response = await authAPI.getAllUsers(
+        {
+          type: statusFilter ? statusFilter : undefined,
+          roleId: roleId ? roleId : undefined,
+          page,
+        },
+        auth.login.currentUser.access_Token,
+      );
+      if (response.status === 200) {
+        setListUsers(response.data.data);
+        setTotalPagination(response.data.totalUser);
+        dispatch(loadingEnd());
+      } else {
+        message.error(response.message, 2);
+        dispatch(loadingEnd());
+      }
+    } catch (error) {
+      message.error("Không thể kết nối đến Server", 2);
+      dispatch(loadingEnd());
+    }
+
+    window.scrollTo(0, 0);
+  };
 
   const confirm = () => {
     message.error("Không có được xóa!");
@@ -177,6 +223,17 @@ function ManageUser() {
           />
         </div>
       </div>
+      <div className={cx("pagination")}>
+        <Pagination
+          current={page}
+          onChange={onChange}
+          total={totalPagination}
+          pageSize={5}
+          showQuickJumper
+          locale={{ jump_to: "Đi đến trang:", page: null }}
+          showTotal={(total) => `Có tất cả ${total} tài khoản`}
+        />
+      </div>
       <table>
         <tbody>
           <tr>
@@ -222,6 +279,10 @@ function ManageUser() {
                         <span
                           onClick={() => {
                             setUserId(item.ID);
+                            setFullName(item.full_Name);
+                            setPhone(item.phone);
+                            setEmail(item.email);
+                            setPrevImage(item.image_URL);
                             setMenuUser(true);
                           }}
                           className={cx("btn-edit", "btn")}
@@ -270,6 +331,7 @@ function ManageUser() {
                       to={`/manage-post`}
                       state={{
                         userId: item.ID,
+                        poster: item.full_Name,
                       }}
                       className={cx("totalNews")}
                     >
@@ -379,6 +441,7 @@ function ManageUser() {
                 const jsonData = await response.json();
                 if (response.status === 200) {
                   getAllUsers();
+                  setMenuStatus(false);
                   message.success(jsonData.message, 2);
                 } else {
                   message.error(jsonData.message, 2);
@@ -433,7 +496,8 @@ function ManageUser() {
                 );
                 const jsonData = await response.json();
                 if (response.status === 200) {
-                  getAllUsers();
+                  await getAllUsers();
+                  setMenuRole(false);
                   message.success(jsonData.message, 2);
                 } else {
                   message.error(jsonData.message, 2);
@@ -455,6 +519,7 @@ function ManageUser() {
         <Menu
           classes={cx("menu-status")}
           onCancel={() => {
+            setImage(undefined);
             setMenuUser(false);
           }}
           open={MenuUser}
@@ -464,11 +529,11 @@ function ManageUser() {
         >
           <div className={cx("container")}>
             <div className={cx("form-group")}>
-              <span>Mã thành viên:</span>
+              <b>Mã thành viên:</b>
               <Input className={cx("input")} value={userId} disabled />
             </div>
             <div className={cx("form-group")}>
-              <span>Số điện thoại:</span>
+              <b>Số điện thoại:</b>
               <Input
                 onChange={(e) => {
                   setPhone(e.target.value);
@@ -478,7 +543,7 @@ function ManageUser() {
               />
             </div>
             <div className={cx("form-group")}>
-              <span>Tên hiển thị:</span>
+              <b>Tên hiển thị:</b>
               <Input
                 onChange={(e) => setFullName(e.target.value)}
                 value={fullName}
@@ -486,7 +551,7 @@ function ManageUser() {
               />
             </div>
             <div className={cx("form-group")}>
-              <span>Email:</span>
+              <b>Email:</b>
               <Input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -494,66 +559,98 @@ function ManageUser() {
               />
             </div>
             <div className={cx("form-group")}>
-              <span>Số Zalo:</span>
+              <b>Số Zalo:</b>
               <Input value={phone} className={cx("input")} />
             </div>
             <div className={cx("form-group")}>
-              <span>Facebook:</span>
+              <b>Facebook:</b>
               <Input
                 className={cx("input")}
                 placeholder="Liên kết trang cá nhân của bạn"
               />
             </div>
-            <div style={{ margin: "4rem 0" }} className={cx("form-group")}>
-              <span>Mật khẩu:</span>
-              <MyButton
-                onClick={() => {
-                  // setPassword("");
-                  setMenuChangePasswordUser(true);
-                }}
-                classes={cx("btn-changePass")}
-                outline
-              >
-                Đổi mật khẩu
-              </MyButton>
-            </div>
-            {/* <div className={cx("form-group-avatar")}>
-              <span>Ảnh đại diện:</span>
-              <div className={cx("avatar")}>
-                <img src={imagePreview[0]} alt=""></img> <br></br>
-                <Upload
-                  showUploadList={false}
-                  onChange={(file) => {
-                    setImage(file.file.originFileObj);
-                    getBase64(file.file.originFileObj, (url) => {
-                      setImagePreview([url]);
-                    });
+            <div style={{ margin: "4rem 0" }} className={cx("form-action")}>
+              <div className={cx("password")}>
+                <b>Mật khẩu:</b>
+                <MyButton
+                  onClick={() => {
+                    setPassword("");
+                    setConfirmPassword("");
+                    setMenuChangePasswordUser(true);
                   }}
-                  customRequest={(e) => {
-                    return e.onSuccess();
-                  }}
-                  fileList={imagePreview}
-                  beforeUpload={(file) => {
-                    const isPNG =
-                      file.type === "image/png" ||
-                      file.type === "image/jpeg" ||
-                      file.type === "image/jpg";
-                    if (!isPNG) {
-                      message.error(
-                        `Chỉ được phép chọn file có đuôi png/jpeg/jpg`,
-                      );
-                    }
-                    return isPNG || Upload.LIST_IGNORE;
-                  }}
-                  className={cx("btn-upload")}
+                  classes={cx("btn-changePass")}
+                  outline
                 >
-                  <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-                </Upload>
+                  Đổi mật khẩu
+                </MyButton>
               </div>
-            </div> */}
+              <div className={cx("avatar")}>
+                <b>Ảnh đại diện:</b>
+                <div>
+                  <img src={prevImage} alt="" />
+                  <Upload
+                    showUploadList={false}
+                    onChange={(file) => {
+                      setImage(file.file.originFileObj);
+                      setPrevImage(
+                        URL.createObjectURL(file.file.originFileObj),
+                      );
+                    }}
+                    customRequest={(e) => {
+                      return e.onSuccess();
+                    }}
+                    beforeUpload={(file) => {
+                      const isPNG =
+                        file.type === "image/png" ||
+                        file.type === "image/jpeg" ||
+                        file.type === "image/jpg";
+                      if (!isPNG) {
+                        message.error(
+                          `Chỉ được phép chọn file có đuôi png/jpeg/jpg`,
+                        );
+                      }
+                      return isPNG || Upload.LIST_IGNORE;
+                    }}
+                    className={cx("btn-upload")}
+                  >
+                    <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+                  </Upload>
+                </div>
+              </div>
+            </div>
 
             <MyButton
-              // onClick={handleSubmit}
+              onClick={async () => {
+                const formData = new FormData();
+                formData.append("userId", userId);
+                formData.append("phone", phone);
+                formData.append("email", email);
+                formData.append("fullName", fullName);
+                formData.append("image", image);
+                formData.append("zaloPhone", phone);
+                formData.append("facebookUrl", "");
+                console.log(...formData);
+                try {
+                  dispatch(loadingStart());
+                  const response = await authAPI.editUser(
+                    formData,
+                    auth.login.currentUser.access_Token,
+                  );
+                  const jsonData = await response.json();
+                  if (response.status === 200) {
+                    await getAllUsers();
+                    message.success(jsonData.message);
+                    setMenuUser(false);
+                    dispatch(loadingEnd());
+                  } else {
+                    message.error("Cập nhật không thành công");
+                    dispatch(loadingEnd());
+                  }
+                } catch (error) {
+                  message.error("Không thể kết nối đến Server");
+                  dispatch(loadingEnd());
+                }
+              }}
               disible={!phone || !fullName || !email}
               classes={cx("btn-submit")}
               primary
@@ -576,13 +673,55 @@ function ManageUser() {
         >
           <div className={cx("container")}>
             <div className={cx("form-group")}>
-              <span>Nhập mật khẩu mới:</span>
-              <Input className={cx("input")} />
+              <b>Nhập mật khẩu mới:</b>
+              <Input
+                placeholder="mật khẩu..."
+                className={cx("input")}
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Nhập lại khẩu mới:</b>
+              <Input
+                placeholder="nhập lại mật khẩu..."
+                className={cx("input")}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type="password"
+                value={confirmPassword}
+              />
             </div>
 
             <MyButton
-              // onClick={handleSubmit}
-              disible={!phone || !fullName || !email}
+              onClick={async () => {
+                try {
+                  dispatch(loadingStart());
+                  const response = await authAPI.resetPassword(
+                    userId,
+                    "",
+                    password,
+                    auth.login.currentUser.access_Token,
+                  );
+                  if (response.status === 200) {
+                    setPassword("");
+                    setConfirmPassword("");
+                    message.success(response.data.message, 2);
+                    dispatch(loadingEnd());
+                  } else {
+                    message.error(response.message, 2);
+                    dispatch(loadingEnd());
+                  }
+                } catch (error) {
+                  message.error("Không thể kết nối đến server!");
+                  dispatch(loadingEnd());
+                }
+              }}
+              disible={
+                password.length < 6 ||
+                confirmPassword.length < 6 ||
+                password !== confirmPassword
+              }
               classes={cx("btn-submit")}
               primary
             >

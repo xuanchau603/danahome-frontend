@@ -4,6 +4,7 @@ import EditPost from "../Page/EditPost";
 import ExtendPost from "../Page/ExtendPost";
 import Favorite from "../Page/Favorite";
 import Home from "../Page/Home";
+import ManageNews from "../Page/ManageNews";
 import ManagePost from "../Page/ManagePost";
 import ManageUser from "../Page/ManageUser";
 import NewPost from "../Page/NewPost";
@@ -47,6 +48,11 @@ const UserRouter = [
   {
     path: "/manage-post",
     component: ManagePost,
+    layout: ManageLayout,
+  },
+  {
+    path: "/manage-news",
+    component: ManageNews,
     layout: ManageLayout,
   },
   {

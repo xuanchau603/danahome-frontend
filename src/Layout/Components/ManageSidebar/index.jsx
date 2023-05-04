@@ -10,6 +10,7 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -91,6 +92,21 @@ function ManageSidebar() {
         <>
           <p>Quản lý</p>
           <ul className={cx("nav-sidebar")}>
+            <span className={cx("nav-item")}>
+              <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
+              <span>Thống kê</span>
+            </span>
+            <NavLink
+              to={`/manage-news`}
+              className={(active) => {
+                return active.isActive
+                  ? cx("nav-item", "active")
+                  : cx("nav-item");
+              }}
+            >
+              <ArticleOutlinedIcon></ArticleOutlinedIcon>
+              <span>Quản lý tin hệ thống</span>
+            </NavLink>
             <NavLink
               to={`/manage-user`}
               className={(active) => {
@@ -105,10 +121,6 @@ function ManageSidebar() {
             <span className={cx("nav-item")}>
               <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
               <span>Quản lý đánh giá</span>
-            </span>
-            <span className={cx("nav-item")}>
-              <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
-              <span>Thống kê</span>
             </span>
           </ul>
         </>

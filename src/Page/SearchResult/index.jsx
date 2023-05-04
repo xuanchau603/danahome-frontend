@@ -208,9 +208,11 @@ function SearchResult() {
     <div className={cx("wrapper")}>
       <MyBreadCrum items={itemsBread}></MyBreadCrum>
       <h1 className={cx("title")}>
-        {`Cho thuê ${roomsTypeName || "bất động sản"} ${province || ""} ${
-          district || ""
-        } ${ward || ""}${
+        {`Cho thuê ${roomsTypeName || "bất động sản"} ${
+          province ? `${province.split(",")[1]}` : ""
+        }${district ? `-${district.split(",")[1]}` : ""}${
+          ward ? `-${ward.split(",")[1]}` : ""
+        }${
           priceFrom || priceTo
             ? `, Giá từ ${priceFrom} triệu ${
                 priceFrom === priceTo ? `` : `đến ${priceTo} triệu`
@@ -290,10 +292,10 @@ function SearchResult() {
                   onClick={() => {
                     setActive("new");
                     setOderType("DESC");
-                    setOrderBy("createdAt");
+                    setOrderBy("news_Views");
                   }}
                 >
-                  Mới nhất
+                  Xem nhiều nhất
                 </span>
                 <span
                   className={
@@ -360,10 +362,10 @@ function SearchResult() {
           current={page}
           onChange={onChange}
           total={totalPagination}
-          pageSize={10}
-          showSizeChanger
+          pageSize={5}
           showQuickJumper
-          // showTotal={(total) => `Total ${total} items`}
+          locale={{ jump_to: "Đi đến trang:", page: null }}
+          showTotal={(total) => `Có tất cả ${total} bài đăng`}
         />
       </div>
     </div>

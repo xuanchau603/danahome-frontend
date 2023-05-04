@@ -5,6 +5,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LanguageIcon from "@mui/icons-material/Language";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ReorderOutlinedIcon from "@mui/icons-material/ReorderOutlined";
+import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
@@ -120,10 +122,24 @@ function Header() {
 
   const contentMenu = auth.login.currentUser ? (
     <div className={cx("menu")}>
-      <Link to={"/new-post"} className={cx("menu-item")}>
-        <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
-        <span>Đăng tin cho thuê</span>
-      </Link>
+      {!auth.login.currentUser.isAdmin && (
+        <Link to={"/new-post"} className={cx("menu-item")}>
+          <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}
+          <span>Đăng tin cho thuê</span>
+        </Link>
+      )}
+      {auth.login.currentUser.isAdmin && (
+        <Link to={"/manage-news"} className={cx("menu-item")}>
+          <ReorderOutlinedIcon></ReorderOutlinedIcon>{" "}
+          <span>Quản lý tin hệ thống</span>
+        </Link>
+      )}
+      {auth.login.currentUser.isAdmin && (
+        <Link to={"/manage-user"} className={cx("menu-item")}>
+          <AccountBoxOutlinedIcon></AccountBoxOutlinedIcon>{" "}
+          <span>Quản lý tài khoản hệ thống</span>
+        </Link>
+      )}
       <Link
         to={"/manage-post"}
         state={{ userId: auth.login.currentUser.ID }}
@@ -139,10 +155,12 @@ function Header() {
         <InfoIcon></InfoIcon>
         <span>Thông tin cá nhân</span>
       </Link>
-      <li className={cx("menu-item")}>
-        <AddTaskIcon></AddTaskIcon>
-        <span>Đăng ký VIP</span>
-      </li>
+      {!auth.login.currentUser.isAdmin && (
+        <li className={cx("menu-item")}>
+          <AddTaskIcon></AddTaskIcon>
+          <span>Đăng ký VIP</span>
+        </li>
+      )}
       <Link to={"/favorite"} className={cx("menu-item")}>
         <FavoriteBorderIcon></FavoriteBorderIcon>
         <span>Tin đã lưu</span>

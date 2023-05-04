@@ -1,6 +1,6 @@
-import style from "./ManagePost.module.scss";
+import style from "./ManageNews.module.scss";
 import classNames from "classnames/bind";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import PreviewIcon from "@mui/icons-material/Preview";
@@ -30,19 +30,22 @@ import Format from "../../components/Format";
 
 const cx = classNames.bind(style);
 
-function ManagePost() {
+function ManageNews() {
   const [listNews, setListNews] = useState([]);
   const [MenuStatus, setMenuStatus] = useState(false);
+  const [MenuPrevNews, setMenuPrevNews] = useState(false);
   const [status, setStatus] = useState();
   const [statusFilter, setstatusFilter] = useState(null);
   const [newsId, setNewsId] = useState();
   const [categoryNewsId, setcategoryNewsId] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPagination, setTotalPagination] = useState();
-
-  const location = useLocation();
-  const userId = location.state.userId;
-  const poster = location.state.poster;
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [address, setAddress] = useState();
+  const [price, setPrice] = useState();
+  const [acreage, setAcreage] = useState();
+  const [object, setObject] = useState();
 
   const onChange = async (page) => {
     setPage(page);
@@ -51,7 +54,6 @@ function ManagePost() {
       const response = await NewsAPI.getAllNews({
         categoryNewsId: categoryNewsId ? categoryNewsId : undefined,
         status: statusFilter ? statusFilter : undefined,
-        userId: userId,
         page,
       });
       if (response.status === 200) {
@@ -84,15 +86,17 @@ function ManagePost() {
     return state;
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChangeCategory = async (value) => {
+    setPage(1);
     setcategoryNewsId(value ? value : undefined);
     try {
       dispatch(loadingStart());
       const response = await NewsAPI.getAllNews({
         categoryNewsId: value ? value : undefined,
-        status: statusFilter,
-        userId: userId,
+        status: statusFilter ? statusFilter : undefined,
+        page: 1,
       });
       if (response.status === 200) {
         setListNews(response.data.data);
@@ -108,14 +112,14 @@ function ManagePost() {
     }
   };
   const handleChangeStatus = async (value) => {
+    setPage(1);
     setstatusFilter(value ? value : undefined);
     try {
       dispatch(loadingStart());
-      setPage(1);
       const response = await NewsAPI.getAllNews({
         status: value ? value : undefined,
-        categoryNewsId: categoryNewsId,
-        userId: userId,
+        categoryNewsId: categoryNewsId ? categoryNewsId : undefined,
+        page: 1,
       });
       if (response.status === 200) {
         setListNews(response.data.data);
@@ -133,12 +137,11 @@ function ManagePost() {
   const getAllNewsByUserId = async () => {
     try {
       dispatch(loadingStart());
-      const response = await NewsAPI.getAllNews({
-        userId: userId,
-      });
+      setPage(1);
+      const response = await NewsAPI.getAllNews();
       if (response.status === 200) {
-        setTotalPagination(response.data.totalNews);
         setListNews(response.data.data);
+        setTotalPagination(response.data.totalNews);
         dispatch(loadingEnd());
       } else {
         message.error(response.message, 2);
@@ -154,7 +157,7 @@ function ManagePost() {
     window.scrollTo(0, 0);
     getAllNewsByUserId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId]);
+  }, []);
 
   const confirm = () => {
     message.error("Không có được xóa!");
@@ -167,12 +170,7 @@ function ManagePost() {
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
       <div className={cx("top")}>
-        <h1>
-          Quản lý tin đăng
-          {poster
-            ? ` (Tài khoản: ${poster})`
-            : ` (Tài khoản: ${auth.login.currentUser.full_Name})`}
-        </h1>
+        <h1>Quản lý tin đăng</h1>
         <div className={cx("filter")}>
           <Select
             className={cx("filter-item")}
@@ -244,13 +242,30 @@ function ManagePost() {
                   </td>
                   <td>
                     <div className={cx("post-info")}>
-                      <Link
-                        to={`/news-detail?newsId=${item.ID}`}
-                        className={cx("title")}
-                      >
+                      <div className={cx("title")}>
                         <p>{item.roomType}</p>
-                        <span className={cx("post-title")}>{item.title}</span>
-                      </Link>
+                        <span
+                          onClick={() => {
+                            if (item.status === 2) {
+                              navigate(`/news-detail?newsId=${item.ID}`);
+                            } else {
+                              setNewsId(item.ID);
+                              setTitle(item.title);
+                              setDescription(item.description);
+                              setAddress(
+                                `${item.province.name},${item.district.name},${item.ward.name},${item.house_Number}`,
+                              );
+                              setPrice(item.price);
+                              setAcreage(item.acreage);
+                              setObject(item.object);
+                              setMenuPrevNews(true);
+                            }
+                          }}
+                          className={cx("post-title")}
+                        >
+                          {item.title}
+                        </span>
+                      </div>
                       <div className={cx("address")}>
                         <b>Địa chỉ: </b>
                         {`${item.house_Number}, ${item.ward.name}, ${item.district.name}, ${item.province.name}`}
@@ -416,7 +431,7 @@ function ManagePost() {
                   <td>
                     <div className={cx("status")}>
                       {Format.formatStatus(item.status)}
-                      {auth.login.currentUser.isAdmin && item.status !== 3 && (
+                      {auth.login.currentUser.isAdmin && (
                         <Tooltip title="Thay đổi trạng thái">
                           <span
                             onClick={() => {
@@ -450,6 +465,7 @@ function ManagePost() {
           bắt đầu đăng tin.
         </div>
       )}
+
       {MenuStatus && (
         <Menu
           classes={cx("menu-status")}
@@ -492,8 +508,9 @@ function ManagePost() {
                 );
                 const jsonData = await response.json();
                 if (response.status === 200) {
+                  await getAllNewsByUserId();
                   message.success(jsonData.message, 2);
-                  getAllNewsByUserId();
+                  setMenuStatus(false);
                 } else {
                   message.error(jsonData.message, 2);
                   dispatch(loadingEnd());
@@ -510,8 +527,45 @@ function ManagePost() {
           </MyButton>
         </Menu>
       )}
+      {MenuPrevNews && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuPrevNews(false);
+          }}
+          open={MenuPrevNews}
+          title={`Xem nhanh thông tin bài đăng(Mã tin: ${
+            newsId.split("-")[0]
+          })`}
+        >
+          <div className={cx("info-group")}>
+            <b>Tiêu đề:</b>
+            <span>{title}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Mô tả:</b>
+            <span>{description}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Địa chỉ:</b>
+            <span>{address}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Giá cho thuê:</b>
+            <span>{Format.formatPrice(price)}/tháng</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Diện tích:</b>
+            <span>{acreage} m2</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Đối tượng:</b>
+            <span>{object}</span>
+          </div>
+        </Menu>
+      )}
     </div>
   );
 }
 
-export default ManagePost;
+export default ManageNews;
