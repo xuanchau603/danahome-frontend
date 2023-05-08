@@ -1,27 +1,25 @@
-import style from "./ExtendPost.module.scss";
+import style from "./PaymentOnline.module.scss";
 import classNames from "classnames/bind";
 import MyBreadCrum from "./../../components/MyBreadcrumb/index";
 import HomeIcon from "@mui/icons-material/Home";
-import { DatePicker, Radio, Select, Space, message } from "antd";
+import { Input, Radio, Space, message } from "antd";
 import Mybuton from "../../components/MyButton";
 import Format from "./../../components/Format/index";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
-import { editUser } from "../../Redux/authSlice";
 import paymentAPI from "../../API/paymentAPI";
 import moment from "moment";
 import { Buffer } from "buffer";
 import authAPI from "../../API/authAPI";
-import NewsAPI from "./../../API/newsAPI";
+import { editUser } from "../../Redux/authSlice";
+import NewsAPI from "../../API/newsAPI";
 const cx = classNames.bind(style);
 
-function ExtendPost() {
-  const [day, setDay] = useState(0);
+function PaymentOnline() {
   const [total, setTotal] = useState(0);
   const [paymentType, setPaymentType] = useState(null);
-  const [expire_At, setExpire_At] = useState();
 
   const location = useLocation();
   const data = location.state;
@@ -29,15 +27,8 @@ function ExtendPost() {
   const dispath = useDispatch();
   const navigate = useNavigate();
 
-  const { auth, category } = useSelector((state) => {
+  const { auth } = useSelector((state) => {
     return state;
-  });
-
-  const optionNews = category.categoryNews.map((item) => {
-    return {
-      value: `${item.ID},${item.price}`,
-      label: `${item.name} (${item.price}/ngày)`,
-    };
   });
 
   const itemsBread = [
@@ -54,26 +45,19 @@ function ExtendPost() {
       },
     },
     {
-      text: "Gia hạn tin",
+      text: data.type === 1 ? "Thanh toán tin" : "Nạp tiền",
     },
   ];
 
-  function disabledDate(current) {
-    // Can not select days before today and today
-    return current.valueOf() < Date.now();
-  }
-
-  const onChangeDate = (date) => {
-    setDay(Math.ceil((date?.$d - new Date()) / 86400000));
-    setExpire_At(date?.$d);
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
-  useEffect(() => {
-    setTotal(data.newsTypePrice * day);
-  }, [data.newsTypePrice, day]);
+    if (data.type === 1) {
+      setTotal(
+        data.newsTypePrice *
+          Math.ceil(moment(data.expire_At).diff(moment(), "hours") / 24),
+      );
+    }
+  }, [data.expire_At, data.newsTypePrice, data.type]);
 
   function onChangeRadio(e) {
     setPaymentType(e.target.value);
@@ -85,49 +69,53 @@ function ExtendPost() {
     formData.append("userId", auth.login.currentUser.ID);
 
     if (paymentType === 1) {
-      try {
-        if (auth.login.currentUser.amount < total) {
-          message.error("Tài khoản của bạn không đủ để thanh toán!", 2);
-        } else {
-          dispath(loadingStart());
-          formData.append("amount", auth.login.currentUser.amount - total);
-          const response = await authAPI.editUser(
-            formData,
-            auth.login.currentUser.access_Token,
-          );
-          if (response.status === 200) {
-            const response = await authAPI.getUserById(
-              auth.login.currentUser.ID,
+      if (data.type === 1) {
+        try {
+          if (auth.login.currentUser.amount < total) {
+            message.error("Tài khoản của bạn không đủ để thanh toán!", 2);
+          } else {
+            dispath(loadingStart());
+            formData.append("amount", auth.login.currentUser.amount - total);
+            const response = await authAPI.editUser(
+              formData,
               auth.login.currentUser.access_Token,
             );
             if (response.status === 200) {
-              dispath(editUser(response.data.user_Info));
-              formData.append("status", "2");
-              formData.append("expire_At", expire_At);
-              const responseNews = await NewsAPI.editNews(
-                formData,
+              const response = await authAPI.getUserById(
+                auth.login.currentUser.ID,
                 auth.login.currentUser.access_Token,
               );
-              const jsonData = await responseNews.json();
-              if (responseNews.status === 200) {
-                formData.append("total", total);
-                formData.append("orderId", new Date().getTime());
-                formData.append("paymentType", "1");
-                formData.append(
-                  "description",
-                  `Gia hạn tin DanaHome (Mã tin: ${data.newsId}) Ngày hết hạn: ${expire_At}`,
-                );
-                const response = await paymentAPI.createPayment(
+              if (response.status === 200) {
+                dispath(editUser(response.data.user_Info));
+                formData.append("status", "2");
+                const responseNews = await NewsAPI.editNews(
                   formData,
                   auth.login.currentUser.access_Token,
                 );
-                message.success(jsonData.message, 2);
-                if (response.status === 200) {
-                  navigate("/manage-post", {
-                    state: {
-                      userId: auth.login.currentUser.ID,
-                    },
-                  });
+                const jsonData = await responseNews.json();
+                if (responseNews.status === 200) {
+                  formData.append("total", total);
+                  formData.append("orderId", new Date().getTime());
+                  formData.append("paymentType", "1");
+                  formData.append(
+                    "description",
+                    `Thanh toán tin DanaHome (Mã tin: ${data.newsId}) Ngày hết hạn: ${data.expire_At}`,
+                  );
+                  const response = await paymentAPI.createPayment(
+                    formData,
+                    auth.login.currentUser.access_Token,
+                  );
+                  message.success(jsonData.message, 2);
+                  if (response.status === 200) {
+                    navigate("/manage-post", {
+                      state: {
+                        userId: auth.login.currentUser.ID,
+                      },
+                    });
+                  } else {
+                    message.error("Gia hạn tin thất bại!", 2);
+                    dispath(loadingEnd());
+                  }
                 } else {
                   message.error("Gia hạn tin thất bại!", 2);
                   dispath(loadingEnd());
@@ -140,84 +128,149 @@ function ExtendPost() {
               message.error("Gia hạn tin thất bại!", 2);
               dispath(loadingEnd());
             }
-          } else {
+          }
+        } catch (error) {
+          message.error("Không thể kết nối đến Server!", 2);
+          dispath(loadingEnd());
+        }
+      }
+    } else if (paymentType === 2) {
+      if (data.type === 1) {
+        try {
+          dispath(loadingStart());
+          formData.append("amount", total);
+          formData.append(
+            "orderInfo",
+            `Thanh toán tin DanaHome(ngày hết hạn: ${moment(
+              data.expire_At,
+            ).format("DD/MM/YYYY-hh:mm:ss A")})`,
+          );
+          formData.append(
+            "extraData",
+            Buffer.from(
+              JSON.stringify({
+                newsId: data.newsId,
+                userId: auth.login.currentUser.ID,
+                expire_At: data.expire_At,
+              }),
+            ).toString("base64"),
+          );
+          const response = await paymentAPI.payWithMomo(
+            formData,
+            auth.login.currentUser.access_Token,
+          );
+          if (response.status === 200) {
+            window.location.replace(response.data.payUrl);
+            dispath(loadingEnd());
+            return;
+          }
+          message.error("Gia hạn tin thất bại!", 2);
+          dispath(loadingEnd());
+        } catch (error) {
+          message.error("Không thể kết nối đến Server!", 2);
+          dispath(loadingEnd());
+        }
+      } else if (data.type === 2) {
+        if (total < 10000) {
+          message.error("Số tiền nạp tối thiểu là 10.000đ!", 2);
+        } else {
+          try {
+            dispath(loadingStart());
+            formData.append("amount", total);
+            formData.append(
+              "orderInfo",
+              `Nạp tiền vào tài khoản: ${auth.login.currentUser.full_Name}`,
+            );
+            formData.append(
+              "extraData",
+              Buffer.from(
+                JSON.stringify({
+                  userId: auth.login.currentUser.ID,
+                }),
+              ).toString("base64"),
+            );
+            const response = await paymentAPI.payWithMomo(
+              formData,
+              auth.login.currentUser.access_Token,
+            );
+            if (response.status === 200) {
+              window.location.replace(response.data.payUrl);
+              dispath(loadingEnd());
+              return;
+            }
             message.error("Gia hạn tin thất bại!", 2);
+            dispath(loadingEnd());
+          } catch (error) {
+            message.error("Không thể kết nối đến Server!", 2);
             dispath(loadingEnd());
           }
         }
-      } catch (error) {
-        message.error("Không thể kết nối đến Server!", 2);
-        dispath(loadingEnd());
-      }
-    } else if (paymentType === 2) {
-      try {
-        dispath(loadingStart());
-        formData.append("amount", total);
-        formData.append(
-          "orderInfo",
-          `Gia hạn tin DanaHome(ngày hết hạn: ${moment(expire_At).format(
-            "DD/MM/YYYY-hh:mm:ss A",
-          )})`,
-        );
-        formData.append(
-          "extraData",
-          Buffer.from(
-            JSON.stringify({
-              newsId: data.newsId,
-              userId: auth.login.currentUser.ID,
-              expire_At: expire_At,
-            }),
-          ).toString("base64"),
-        );
-        const response = await paymentAPI.payWithMomo(
-          formData,
-          auth.login.currentUser.access_Token,
-        );
-        if (response.status === 200) {
-          window.location.replace(response.data.payUrl);
-          dispath(loadingEnd());
-          return;
-        }
-        message.error("Gia hạn tin thất bại!", 2);
-        dispath(loadingEnd());
-      } catch (error) {
-        message.error("Không thể kết nối đến Server!", 2);
-        dispath(loadingEnd());
       }
     } else if (paymentType === 4) {
-      try {
-        dispath(loadingStart());
-        formData.append("amount", total);
-        formData.append(
-          "orderInfo",
-          `${auth.login.currentUser.ID}_${new Date(expire_At).getTime()}`,
-        );
-        const response = await paymentAPI.payWithVNPay(
-          formData,
-          auth.login.currentUser.access_Token,
-        );
-        if (response.status === 200) {
-          window.location.replace(response.data.payUrl);
+      if (data.type === 1) {
+        try {
+          dispath(loadingStart());
+          formData.append("amount", total);
+          formData.append(
+            "orderInfo",
+            `${auth.login.currentUser.ID}_${new Date(
+              data.expire_At,
+            ).getTime()}`,
+          );
+          const response = await paymentAPI.payWithVNPay(
+            formData,
+            auth.login.currentUser.access_Token,
+          );
+          if (response.status === 200) {
+            window.location.replace(response.data.payUrl);
+            dispath(loadingEnd());
+            return;
+          }
+          message.error("Gia hạn tin thất bại!", 2);
           dispath(loadingEnd());
-          return;
+        } catch (error) {
+          message.error("Không thể kết nối đến Server!", 2);
+          dispath(loadingEnd());
         }
-        message.error("Gia hạn tin thất bại!", 2);
-        dispath(loadingEnd());
-      } catch (error) {
-        message.error("Không thể kết nối đến Server!", 2);
-        dispath(loadingEnd());
+      } else if (data.type === 2) {
+        if (total < 10000) {
+          message.error("Số tiền nạp tối thiểu là 10.000đ!", 2);
+        } else {
+          try {
+            dispath(loadingStart());
+            formData.delete("newsId");
+            formData.append("newsId", "naptien");
+            formData.append("amount", total);
+            formData.append("orderInfo", auth.login.currentUser.ID);
+            const response = await paymentAPI.payWithVNPay(
+              formData,
+              auth.login.currentUser.access_Token,
+            );
+            if (response.status === 200) {
+              window.location.replace(response.data.payUrl);
+              dispath(loadingEnd());
+              return;
+            }
+            message.error("Gia hạn tin thất bại!", 2);
+            dispath(loadingEnd());
+          } catch (error) {
+            message.error("Không thể kết nối đến Server!", 2);
+            dispath(loadingEnd());
+          }
+        }
       }
     } else if (paymentType === 5) {
       try {
         formData.append("status", "1");
-        formData.append("expire_At", expire_At);
         const responseNews = await NewsAPI.editNews(
           formData,
           auth.login.currentUser.access_Token,
         );
-        const jsonData = await responseNews.json();
         if (responseNews.status === 200) {
-          message.success(jsonData.message, 2);
+          message.success(
+            "Thanh toán tin thành công! Vui lòng chờ quản trị viên xác nhận.",
+            2,
+          );
           navigate("/manage-post", {
             state: {
               userId: auth.login.currentUser.ID,
@@ -237,41 +290,45 @@ function ExtendPost() {
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrum items={itemsBread}></MyBreadCrum>
-      <h1 className={cx("title")}>
-        Gia hạn tin (Mã tin: {data.newsId.split("-")[0]})
-      </h1>
+      {data.type === 1 && (
+        <h1 className={cx("title")}>
+          Thanh toán tin (Mã tin: {data.newsId.split("-")[0]})
+        </h1>
+      )}
 
       <div className={cx("payment-info")}>
         <h1 className={cx("title-news")}>{data.title}</h1>
       </div>
-      <div className={cx("news-options")}>
-        <div className={cx("option-item")}>
-          <p>Gói tin</p>
-          <Select
-            value={data.newTypeId + "," + data.newsTypePrice}
-            style={{
-              width: 320,
-            }}
-            options={optionNews}
-            disabled
-          />
+      {data.type === 2 && (
+        <div className={cx("news-options")}>
+          <div className={cx("money")}>
+            <h1>Chọn nhanh số tiền muốn nạp:</h1>
+            <Radio.Group onChange={(e) => setTotal(e.target.value)}>
+              <Radio value={50000}>50.000đ</Radio>
+              <Radio value={100000}>100.000đ</Radio>
+              <Radio value={200000}>200.000đ</Radio>
+              <Radio value={500000}>500.000đ</Radio>
+              <Radio value={1000000}>1.000.000đ</Radio>
+              <Radio value={2000000}>2.000.000đ</Radio>
+            </Radio.Group>
+            <p>Hoặc nhập số tiền cần nạp:</p>
+            <Input
+              type="number"
+              value={total}
+              min={0}
+              step={10000}
+              style={{ fontSize: 18 }}
+              onChange={(e) => setTotal(e.target.value)}
+              prefix="đ"
+              suffix="VND"
+            />
+          </div>
         </div>
-        <div className={cx("option-item")}>
-          <p>Chọn ngày hết hạn</p>
-          <DatePicker
-            showTime
-            disabledDate={disabledDate}
-            placeholder="Chọn ngày hết hạn"
-            format={"DD-MM-YYYY"}
-            onChange={onChangeDate}
-            showNow={false}
-          />
-        </div>
-      </div>
+      )}
+
       <div className={cx("total-price")}>
         <h1>
-          Số tiền cần thanh toán:{" "}
-          <b>{expire_At ? Format.formatPrice(total) : "0đ"}</b>
+          Số tiền cần thanh toán: <b>{Format.formatPrice(total)}</b>
         </h1>
       </div>
       <div className={cx("main")}>
@@ -279,30 +336,34 @@ function ExtendPost() {
           <h1>Chọn phương thức thanh toán</h1>
           <Radio.Group onChange={onChangeRadio}>
             <Space direction="vertical">
-              <Radio value={1}>
-                <li className={cx("payment-options-item")}>
-                  <p>
-                    Trừ tiền trong tài khoản Phongtro123 (Bạn đang có: TK Chính{" "}
-                    <b>{Format.formatPrice(auth.login.currentUser.amount)})</b>
-                  </p>
-                  {auth.login.currentUser.amount < total && (
-                    <span>
-                      Số tiền trong tài khoản của bạn không đủ để thực hiện
-                      thanh toán, vui lòng{" "}
-                      <Link
-                        to={"/payment-online"}
-                        state={{
-                          title: `Nạp tiền vào tài khoản: ${auth.login.currentUser.full_Name}`,
-                          type: 2,
-                        }}
-                      >
-                        nạp thêm
-                      </Link>{" "}
-                      hoặc chọn phương thức khác bên dưới
-                    </span>
-                  )}
-                </li>
-              </Radio>
+              {data.type === 1 && (
+                <Radio value={1}>
+                  <li className={cx("payment-options-item")}>
+                    <p>
+                      Trừ tiền trong tài khoản Phongtro123 (Bạn đang có: TK
+                      Chính{" "}
+                      <b>{Format.formatPrice(auth.login.currentUser.amount)}</b>
+                      )
+                    </p>
+                    {auth.login.currentUser.amount < total && (
+                      <span>
+                        Số tiền trong tài khoản của bạn không đủ để thực hiện
+                        thanh toán, vui lòng{" "}
+                        <Link
+                          to={"/payment-online"}
+                          state={{
+                            title: `Nạp tiền vào tài khoản: ${auth.login.currentUser.full_Name}`,
+                            type: 2,
+                          }}
+                        >
+                          nạp thêm
+                        </Link>{" "}
+                        hoặc chọn phương thức khác bên dưới
+                      </span>
+                    )}
+                  </li>
+                </Radio>
+              )}
               <Radio value={2}>
                 <li className={cx("payment-options-item")}>
                   <p>Thanh toán qua ví điện tử MOMO</p>
@@ -331,28 +392,33 @@ function ExtendPost() {
                 </li>
               </Radio>
 
-              <Radio value={5}>
-                <li className={cx("payment-options-item")}>
-                  <p>Chuyển khoản ngân hàng</p>
-                  {paymentType === 5 && (
-                    <p>
-                      Ngân hàng: <span>VIETCOMBANK</span> <br></br>
-                      Số tài khoản: <span>5743895934574</span> <br></br>
-                      Nội dung chuyển khoản:{" "}
-                      <span>
-                        {auth.login.currentUser.full_Name
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")}{" "}
-                        THANHTOAN {data.newsId.split("-")[0]}{" "}
-                        {data.newsTypePrice === 10000
-                          ? "TIN VIP"
-                          : "TIN THUONG"}{" "}
-                        {day} NGAY
-                      </span>
-                    </p>
-                  )}
-                </li>
-              </Radio>
+              {data.type === 1 && (
+                <Radio value={5}>
+                  <li className={cx("payment-options-item")}>
+                    <p>Chuyển khoản ngân hàng</p>
+                    {paymentType === 5 && (
+                      <p>
+                        Ngân hàng: <span>VIETCOMBANK</span> <br></br>
+                        Số tài khoản: <span>5743895934574</span> <br></br>
+                        Nội dung chuyển khoản:{" "}
+                        <span>
+                          {auth.login.currentUser.full_Name
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "")}{" "}
+                          THANHTOAN {data.newsId.split("-")[0]}{" "}
+                          {data.newsTypePrice === 10000
+                            ? "TIN VIP"
+                            : "TIN THUONG"}{" "}
+                          {Math.ceil(
+                            moment(data.expire_At).diff(moment(), "hours") / 24,
+                          )}{" "}
+                          NGAY
+                        </span>
+                      </p>
+                    )}
+                  </li>
+                </Radio>
+              )}
             </Space>
           </Radio.Group>
           <div className={cx("action")}>
@@ -367,8 +433,8 @@ function ExtendPost() {
             <Mybuton
               onClick={handlePayment}
               classes={cx("btn")}
-              primary={expire_At && paymentType}
-              disible={!expire_At || !paymentType}
+              primary={paymentType}
+              disible={!paymentType}
             >
               Thanh toán
             </Mybuton>
@@ -397,4 +463,4 @@ function ExtendPost() {
   );
 }
 
-export default ExtendPost;
+export default PaymentOnline;

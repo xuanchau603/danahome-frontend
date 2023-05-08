@@ -136,6 +136,27 @@
 .menu {
   min-width: 20rem;
   padding: 0 1rem;
+  .title {
+    display: flex;
+    align-items: center;
+    > span {
+      margin-left: 0.4rem;
+      font-weight: 600;
+    }
+    > svg {
+      margin-left: 0.4rem;
+      color: #009c05;
+    }
+  }
+  .amount {
+    display: flex;
+    align-items: center;
+    > span {
+      margin-left: 0.4rem;
+      color: #08571b;
+      font-weight: 600;
+    }
+  }
   .menu-item {
     cursor: pointer;
     padding: 1rem 0 0.4rem 0;

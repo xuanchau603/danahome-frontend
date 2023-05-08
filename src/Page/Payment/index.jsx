@@ -6,10 +6,15 @@ import { DatePicker, Radio, Select, Space, message } from "antd";
 import Mybuton from "../../components/MyButton";
 import Format from "./../../components/Format/index";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NewsAPI from "../../API/newsAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import moment from "moment";
+import { Buffer } from "buffer";
+import paymentAPI from "../../API/paymentAPI";
+import authAPI from "../../API/authAPI";
+import { editUser } from "../../Redux/authSlice";
 
 const cx = classNames.bind(style);
 
@@ -23,9 +28,9 @@ function Payment() {
 
   const location = useLocation();
   const data = location.state;
-  const navigate = useNavigate();
 
   const dispath = useDispatch();
+  const navigate = useNavigate();
 
   const { auth, category } = useSelector((state) => {
     return state;
@@ -79,8 +84,6 @@ function Payment() {
   }
 
   const handlePayment = async () => {
-    if (!paymentType)
-      return message.error("Vui lòng chọn phương thức thanh toán", 2);
     const formData = new FormData();
     formData.append("roomType", data.roomType);
     formData.append("newsType", newsType);
@@ -94,26 +97,187 @@ function Payment() {
     formData.append("expire_At", expire_At);
     formData.append("acreage", data.acreage);
     formData.append("object", data.object);
-    for (var item of data.images) {
-      formData.append("images", item.originFileObj);
-    }
-    try {
-      dispath(loadingStart());
-      const response = await NewsAPI.createNews(
-        formData,
-        auth.login.currentUser.access_Token,
-      );
-      const jsonData = await response.json();
-      if (response.status === 200) {
-        message.success(jsonData.message, 2);
-        dispath(loadingEnd());
-        return navigate("/");
+
+    if (paymentType === 2) {
+      for (let item of data.images) {
+        formData.append("images", item.originFileObj);
       }
-      message.error("Đăng tin thất bại!", 2);
-      dispath(loadingEnd());
-    } catch (error) {
-      message.error("Không thể kết nối đến Server!", 2);
-      dispath(loadingEnd());
+      try {
+        dispath(loadingStart());
+        const response = await NewsAPI.createNews(
+          formData,
+          auth.login.currentUser.access_Token,
+        );
+        const jsonData = await response.json();
+        if (response.status === 200) {
+          formData.append("amount", total);
+          formData.append(
+            "orderInfo",
+            `Thanh toán tin DanaHome(ngày hết hạn: ${moment(expire_At).format(
+              "DD/MM/YYYY-hh:mm:ss A",
+            )})`,
+          );
+          formData.append(
+            "extraData",
+            Buffer.from(
+              JSON.stringify({
+                newsId: jsonData.data.ID,
+                userId: auth.login.currentUser.ID,
+                expire_At: expire_At,
+              }),
+            ).toString("base64"),
+          );
+          const responseMoMo = await paymentAPI.payWithMomo(
+            formData,
+            auth.login.currentUser.access_Token,
+          );
+          if (responseMoMo.status === 200) {
+            window.location.replace(responseMoMo.data.payUrl);
+            dispath(loadingEnd());
+            return;
+          }
+          return;
+        }
+        message.error("Đăng tin thất bại!", 2);
+        dispath(loadingEnd());
+      } catch (error) {
+        message.error("Không thể kết nối đến Server!", 2);
+        dispath(loadingEnd());
+      }
+    } else if (paymentType === 4) {
+      for (let item of data.images) {
+        formData.append("images", item.originFileObj);
+      }
+      try {
+        dispath(loadingStart());
+        const response = await NewsAPI.createNews(
+          formData,
+          auth.login.currentUser.access_Token,
+        );
+        const jsonData = await response.json();
+        if (response.status === 200) {
+          formData.append("amount", total);
+          formData.append("newsId", jsonData.data.ID);
+
+          formData.append(
+            "orderInfo",
+            `${auth.login.currentUser.ID}_${new Date(expire_At).getTime()}`,
+          );
+          const responseVNPAY = await paymentAPI.payWithVNPay(
+            formData,
+            auth.login.currentUser.access_Token,
+          );
+          if (responseVNPAY.status === 200) {
+            window.location.replace(responseVNPAY.data.payUrl);
+            dispath(loadingEnd());
+            return;
+          }
+          message.error("Thanh toán tin thất bại!", 2);
+          dispath(loadingEnd());
+        }
+        message.error("Đăng tin thất bại!", 2);
+        dispath(loadingEnd());
+      } catch (error) {
+        message.error("Không thể kết nối đến Server!", 2);
+        dispath(loadingEnd());
+      }
+    } else if (paymentType === 1) {
+      try {
+        if (auth.login.currentUser.amount < total) {
+          message.error("Tài khoản của bạn không đủ để thanh toán!", 2);
+        } else {
+          dispath(loadingStart());
+          formData.append("amount", auth.login.currentUser.amount - total);
+          const response = await authAPI.editUser(
+            formData,
+            auth.login.currentUser.access_Token,
+          );
+          if (response.status === 200) {
+            const response = await authAPI.getUserById(
+              auth.login.currentUser.ID,
+              auth.login.currentUser.access_Token,
+            );
+            if (response.status === 200) {
+              dispath(editUser(response.data.user_Info));
+              for (let item of data.images) {
+                formData.append("images", item.originFileObj);
+              }
+              formData.append("status", "2");
+              const responseNews = await NewsAPI.createNews(
+                formData,
+                auth.login.currentUser.access_Token,
+              );
+              const jsonData = await responseNews.json();
+              if (responseNews.status === 200) {
+                formData.append("total", total);
+                formData.append("orderId", new Date().getTime());
+                formData.append("paymentType", "1");
+                formData.delete("description");
+                formData.append(
+                  "description",
+                  `Thanh toán đăng tin DanaHome (Mã tin: ${jsonData.data.ID}) Ngày hết hạn: ${expire_At}`,
+                );
+                const response = await paymentAPI.createPayment(
+                  formData,
+                  auth.login.currentUser.access_Token,
+                );
+                message.success(jsonData.message, 2);
+                if (response.status === 200) {
+                  navigate("/manage-post", {
+                    state: {
+                      userId: auth.login.currentUser.ID,
+                    },
+                  });
+                } else {
+                  message.error("Đăng tin thất bại!", 2);
+                  dispath(loadingEnd());
+                }
+              } else {
+                message.error("Đăng tin thất bại!", 2);
+                dispath(loadingEnd());
+              }
+            } else {
+              message.error("Đăng tin thất bại!", 2);
+              dispath(loadingEnd());
+            }
+          } else {
+            message.error("Đăng tin thất bại!", 2);
+            dispath(loadingEnd());
+          }
+        }
+      } catch (error) {
+        message.error("Không thể kết nối đến Server!", 2);
+        dispath(loadingEnd());
+      }
+    } else if (paymentType === 5) {
+      try {
+        dispath(loadingStart());
+        for (let item of data.images) {
+          formData.append("images", item.originFileObj);
+        }
+        formData.append("status", "1");
+        const responseNews = await NewsAPI.createNews(
+          formData,
+          auth.login.currentUser.access_Token,
+        );
+        if (responseNews.status === 200) {
+          message.success(
+            "Đăng tin thành công!Vui lòng đợi quản trị viên xác nhận.",
+            2,
+          );
+          navigate("/manage-post", {
+            state: {
+              userId: auth.login.currentUser.ID,
+            },
+          });
+        } else {
+          message.error("Đăng tin thất bại!", 2);
+          dispath(loadingEnd());
+        }
+      } catch (error) {
+        message.error("Không thể kết nối đến Server!", 2);
+        dispath(loadingEnd());
+      }
     }
   };
 
@@ -123,8 +287,8 @@ function Payment() {
       <h1 className={cx("title")}>Thanh toán tin</h1>
       <p className={cx("warning")}>
         Nếu bạn đã từng đăng tin trên Phongtro123.com, hãy sử dụng chức năng ĐẨY
-        TIN / GIA HẠN / NÂNG CẤP VIP trong mục QUẢN LÝ TIN ĐĂNG để làm mới, đẩy
-        tin lên cao thay vì đăng tin mới. Tin đăng trùng nhau sẽ không được
+        TIN / Thanh toán / NÂNG CẤP VIP trong mục QUẢN LÝ TIN ĐĂNG để làm mới,
+        đẩy tin lên cao thay vì đăng tin mới. Tin đăng trùng nhau sẽ không được
         duyệt.
       </p>
       <div className={cx("payment-info")}>
@@ -167,14 +331,25 @@ function Payment() {
               <Radio value={1}>
                 <li className={cx("payment-options-item")}>
                   <p>
-                    Trừ tiền trong tài khoản Phongtro123 (Bạn đang có: TK Chính
-                    0)
+                    Trừ tiền trong tài khoản Phongtro123 (Bạn đang có: TK Chính{" "}
+                    <b>{Format.formatPrice(auth.login.currentUser.amount)}</b>)
                   </p>
-                  <span>
-                    Số tiền trong tài khoản của bạn không đủ để thực hiện thanh
-                    toán, vui lòng <b>nạp thêm</b> hoặc chọn phương thức khác
-                    bên dưới
-                  </span>
+                  {auth.login.currentUser.amount < total && (
+                    <span>
+                      Số tiền trong tài khoản của bạn không đủ để thực hiện
+                      thanh toán, vui lòng{" "}
+                      <Link
+                        to={"/payment-online"}
+                        state={{
+                          title: `Nạp tiền vào tài khoản: ${auth.login.currentUser.full_Name}`,
+                          type: 2,
+                        }}
+                      >
+                        nạp thêm
+                      </Link>{" "}
+                      hoặc chọn phương thức khác bên dưới
+                    </span>
+                  )}
                 </li>
               </Radio>
               <Radio value={2}>
@@ -214,8 +389,10 @@ function Payment() {
                       Số tài khoản: <span>5743895934574</span> <br></br>
                       Nội dung chuyển khoản:{" "}
                       <span>
-                        DANAHOME THANH TOAN{" "}
-                        {newsTypePrice === "2000" && "TIN THUONG"}{" "}
+                        {auth.login.currentUser.full_Name
+                          .normalize("NFD")
+                          .replace(/[\u0300-\u036f]/g, "")}{" "}
+                        THANH TOAN {newsTypePrice === "2000" && "TIN THUONG"}{" "}
                         {newsTypePrice === "10000" && "TIN VIP"}{" "}
                         {day ? day + " NGAY" : ""}
                       </span>

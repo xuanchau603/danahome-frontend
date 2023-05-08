@@ -1,0 +1,54 @@
+.wrapper {
+  margin: 10rem auto 0 auto;
+  max-width: var(--l-width);
+  position: relative;
+  .info {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    > img {
+      width: 80rem;
+      height: 60rem;
+    }
+    > h1 {
+      position: absolute;
+      font-size: 3.2rem;
+      top: 6rem;
+      color: #202a1f;
+    }
+  }
+  .action {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    > a {
+      padding: 1.6rem 2rem;
+      border-radius: 8px;
+      margin-right: 2rem;
+      cursor: pointer;
+      font-size: 2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      color: #202a1f;
+      > svg {
+        font-size: 2.6rem;
+      }
+      &:first-child {
+        background: #e2ffcd;
+
+        &:hover {
+          background: #bbfd8c;
+        }
+      }
+      &:last-child {
+        background: #9fff5b;
+        &:hover {
+          background: #e2ffcd;
+        }
+      }
+    }
+  }
+}

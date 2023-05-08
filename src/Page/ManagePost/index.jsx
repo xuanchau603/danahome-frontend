@@ -1,11 +1,13 @@
 import style from "./ManagePost.module.scss";
 import classNames from "classnames/bind";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import PreviewIcon from "@mui/icons-material/Preview";
 import BlockIcon from "@mui/icons-material/Block";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import {
@@ -39,10 +41,21 @@ function ManagePost() {
   const [categoryNewsId, setcategoryNewsId] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPagination, setTotalPagination] = useState();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [address, setAddress] = useState();
+  const [price, setPrice] = useState();
+  const [acreage, setAcreage] = useState();
+  const [object, setObject] = useState();
+  const [MenuPrevNews, setMenuPrevNews] = useState(false);
 
   const location = useLocation();
   const userId = location.state.userId;
   const poster = location.state.poster;
+  const { auth, category } = useSelector((state) => {
+    return state;
+  });
+  const dispatch = useDispatch();
 
   const onChange = async (page) => {
     setPage(page);
@@ -69,6 +82,7 @@ function ManagePost() {
 
     window.scrollTo(0, 0);
   };
+  const navigate = useNavigate();
 
   const items = [
     {
@@ -78,17 +92,17 @@ function ManagePost() {
     },
     {
       text: "Quản lý tin đăng",
+      state: {
+        userId: auth.login.currentUser.ID,
+      },
     },
   ];
-  const { auth, category } = useSelector((state) => {
-    return state;
-  });
-  const dispatch = useDispatch();
 
   const handleChangeCategory = async (value) => {
     setcategoryNewsId(value ? value : undefined);
     try {
       dispatch(loadingStart());
+      setPage(1);
       const response = await NewsAPI.getAllNews({
         categoryNewsId: value ? value : undefined,
         status: statusFilter,
@@ -133,6 +147,7 @@ function ManagePost() {
   const getAllNewsByUserId = async () => {
     try {
       dispatch(loadingStart());
+      setPage(1);
       const response = await NewsAPI.getAllNews({
         userId: userId,
       });
@@ -199,6 +214,7 @@ function ManagePost() {
               { value: "3", label: "Tin hết hạn" },
               { value: "1", label: "Tin đang chờ xác nhận" },
               { value: "4", label: "Tin đang ẩn" },
+              { value: "5", label: "Tin chưa thanh toán" },
             ]}
           />
           <Link className={cx("filter-item")} to={"/new-post"}>
@@ -244,13 +260,43 @@ function ManagePost() {
                   </td>
                   <td>
                     <div className={cx("post-info")}>
-                      <Link
-                        to={`/news-detail?newsId=${item.ID}`}
-                        className={cx("title")}
-                      >
+                      <span className={cx("title")}>
                         <p>{item.roomType}</p>
-                        <span className={cx("post-title")}>{item.title}</span>
-                      </Link>
+                        <span
+                          onClick={() => {
+                            if (item.status === 2) {
+                              navigate(`/news-detail?newsId=${item.ID}`);
+                            } else {
+                              setNewsId(item.ID);
+                              setTitle(item.title);
+                              setDescription(item.description);
+                              setAddress(
+                                `${item.province.name},${item.district.name},${item.ward.name},${item.house_Number}`,
+                              );
+                              setPrice(item.price);
+                              setAcreage(item.acreage);
+                              setObject(item.object);
+                              setMenuPrevNews(true);
+                            }
+                          }}
+                          className={cx("post-title")}
+                        >
+                          {item.title}{" "}
+                          {moment(item.expire_At).diff(moment(), "hours") <=
+                            24 &&
+                            moment(item.expire_At).diff(moment(), "hours") >
+                              0 &&
+                            item.status === 3 && (
+                              <small>
+                                <AutoDeleteIcon></AutoDeleteIcon>
+                                {`hết hạn sau: ${moment(item.expire_At).diff(
+                                  moment(),
+                                  "hours",
+                                )} giờ`}
+                              </small>
+                            )}
+                        </span>
+                      </span>
                       <div className={cx("address")}>
                         <b>Địa chỉ: </b>
                         {`${item.house_Number}, ${item.ward.name}, ${item.district.name}, ${item.province.name}`}
@@ -316,7 +362,6 @@ function ManagePost() {
                             placement="topLeft"
                             title={"Hiển thị lại tin này?"}
                             onConfirm={async () => {
-                              console.log(item.ID);
                               dispatch(loadingStart());
                               try {
                                 const formData = new FormData();
@@ -355,7 +400,8 @@ function ManagePost() {
                             </div>
                           </Popconfirm>
                         )}
-                        {item.status === 3 && (
+                        {item.status === 3 &&
+                        moment(item.expire_At).diff(moment(), "hours") <= 24 ? (
                           <Link
                             to={"/extend-post"}
                             state={{
@@ -369,7 +415,24 @@ function ManagePost() {
                             <PublishedWithChangesIcon></PublishedWithChangesIcon>
                             Gia hạn tin
                           </Link>
-                        )}
+                        ) : null}
+                        {item.status === 5 ? (
+                          <Link
+                            to={"/payment-online"}
+                            state={{
+                              newsId: item.ID,
+                              title: item.title,
+                              newTypeId: item.categorys_News_Id,
+                              newsTypePrice: item.newsTypePrice,
+                              expire_At: item.expire_At,
+                              type: 1,
+                            }}
+                            className={cx("btn-extend", "btn")}
+                          >
+                            <AddCardOutlinedIcon></AddCardOutlinedIcon>
+                            Thanh toán tin
+                          </Link>
+                        ) : null}
                         {auth.login.currentUser.isAdmin && (
                           <Popconfirm
                             placement="topLeft"
@@ -416,7 +479,7 @@ function ManagePost() {
                   <td>
                     <div className={cx("status")}>
                       {Format.formatStatus(item.status)}
-                      {auth.login.currentUser.isAdmin && item.status !== 3 && (
+                      {auth.login.currentUser.isAdmin && (
                         <Tooltip title="Thay đổi trạng thái">
                           <span
                             onClick={() => {
@@ -476,6 +539,9 @@ function ManagePost() {
                 <Radio value={4}>
                   <span className={cx("hide")}>Đã ẩn</span>
                 </Radio>
+                <Radio value={5}>
+                  <span className={cx("not-pay")}>Chưa thanh toán</span>
+                </Radio>
               </Space>
             </Radio.Group>
           </ul>
@@ -493,6 +559,7 @@ function ManagePost() {
                 const jsonData = await response.json();
                 if (response.status === 200) {
                   message.success(jsonData.message, 2);
+                  setMenuStatus(false);
                   getAllNewsByUserId();
                 } else {
                   message.error(jsonData.message, 2);
@@ -508,6 +575,43 @@ function ManagePost() {
           >
             Lưu & Cập nhật
           </MyButton>
+        </Menu>
+      )}
+      {MenuPrevNews && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuPrevNews(false);
+          }}
+          open={MenuPrevNews}
+          title={`Xem nhanh thông tin bài đăng(Mã tin: ${
+            newsId.split("-")[0]
+          })`}
+        >
+          <div className={cx("info-group")}>
+            <b>Tiêu đề:</b>
+            <span>{title}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Mô tả:</b>
+            <span>{description}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Địa chỉ:</b>
+            <span>{address}</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Giá cho thuê:</b>
+            <span>{Format.formatPrice(price)}/tháng</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Diện tích:</b>
+            <span>{acreage} m2</span>
+          </div>
+          <div className={cx("info-group")}>
+            <b>Đối tượng:</b>
+            <span>{object}</span>
+          </div>
         </Menu>
       )}
     </div>

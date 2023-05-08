@@ -37,6 +37,8 @@ function UserInfo() {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   const onCancel = () => setOpenMenu(false);
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("userId");
 
   const items = [
     {
@@ -46,16 +48,18 @@ function UserInfo() {
     },
     {
       href: "/manage-post",
-      text: "Quản lý",
+      text: "Quản lý tin đăng",
+      state: {
+        userId: userId,
+      },
     },
     {
+      href: "./?userId=" + userId,
       text: "Cập nhật thông tin cá nhân",
     },
   ];
   const dispatch = useDispatch();
 
-  const [searchParams] = useSearchParams();
-  const userId = searchParams.get("userId");
   const getUser = async () => {
     dispatch(loadingStart());
     const response = await authAPI.getUserById(

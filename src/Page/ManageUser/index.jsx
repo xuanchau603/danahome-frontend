@@ -629,7 +629,6 @@ function ManageUser() {
                 formData.append("image", image);
                 formData.append("zaloPhone", phone);
                 formData.append("facebookUrl", "");
-                console.log(...formData);
                 try {
                   dispatch(loadingStart());
                   const response = await authAPI.editUser(

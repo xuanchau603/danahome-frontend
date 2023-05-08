@@ -24,12 +24,6 @@ function SearchResult() {
   const [orderType, setOderType] = useState("DESC");
   const [page, setPage] = useState(1);
 
-  const dispatch = useDispatch();
-
-  const onChange = (page) => {
-    setPage(page);
-  };
-
   const [searchParam] = useSearchParams();
   const roomsTypeName = searchParam.get("typeName");
   const roomsType = searchParam.get("type");
@@ -40,6 +34,41 @@ function SearchResult() {
   const priceTo = searchParam.get("priceTo");
   const acreageFrom = searchParam.get("acreageFrom");
   const acreageTo = searchParam.get("acreageTo");
+  const filer = {
+    roomsType: roomsType || undefined,
+    province: province || undefined,
+    district: district || undefined,
+    ward: ward || undefined,
+    priceFrom: priceFrom || undefined,
+    priceTo: priceTo || undefined,
+    acreageFrom: acreageFrom || undefined,
+    acreageTo: acreageTo || undefined,
+    orderBy: orderBy,
+    orderType: orderType,
+    status: 2,
+  };
+
+  const dispatch = useDispatch();
+
+  const onChange = async (page) => {
+    setPage(page);
+    try {
+      window.scrollTo(0, 0);
+      dispatch(loadingStart());
+      const responese = await NewsAPI.searchNews({ ...filer, page });
+      if (responese.status === 200) {
+        setSreachResult(responese.data.data);
+        setTotalPagination(responese.data.totalNews);
+        dispatch(loadingEnd());
+      } else {
+        message.error(responese.message);
+        dispatch(loadingEnd());
+      }
+    } catch (error) {
+      message.error("Không thể kết nối đến server", 2);
+      dispatch(loadingEnd());
+    }
+  };
 
   const itemsQuickSeePrice = [
     <span>
@@ -155,24 +184,11 @@ function SearchResult() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const filer = {
-      roomsType: roomsType || undefined,
-      province: province || undefined,
-      district: district || undefined,
-      ward: ward || undefined,
-      priceFrom: priceFrom || undefined,
-      priceTo: priceTo || undefined,
-      acreageFrom: acreageFrom || undefined,
-      acreageTo: acreageTo || undefined,
-      orderBy: orderBy,
-      orderType: orderType,
-      page: page,
-      status: 2,
-    };
 
     const getSearchResult = async () => {
       try {
         dispatch(loadingStart());
+        setPage(1);
         const responese = await NewsAPI.searchNews(filer);
         if (responese.status === 200) {
           setSreachResult(responese.data.data);
@@ -201,7 +217,6 @@ function SearchResult() {
     ward,
     orderBy,
     orderType,
-    page,
   ]);
 
   return (

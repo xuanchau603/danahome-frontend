@@ -31,11 +31,11 @@ function NewPost() {
 
   const location = useLocation();
   const data = location.state;
-  const categoryRooms = useSelector((state) => {
-    return state.category.categoryRooms;
+  const { auth, category } = useSelector((state) => {
+    return state;
   });
 
-  const optionsCateRooms = categoryRooms.map((item) => {
+  const optionsCateRooms = category.categoryRooms.map((item) => {
     return {
       label: item.name,
       value: item.ID,
@@ -111,6 +111,9 @@ function NewPost() {
     {
       href: "/manage-post",
       text: "Quản lý",
+      state: {
+        userId: auth.login.currentUser.ID,
+      },
     },
     {
       text: "Thêm tin mới",

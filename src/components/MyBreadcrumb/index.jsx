@@ -10,7 +10,12 @@ function MyBreadCrumb(props) {
     const to = item.href ? item.href : "";
     return {
       title: (
-        <Link to={to} key={index} className={cx("bread-item")}>
+        <Link
+          to={to}
+          state={item.state}
+          key={index}
+          className={cx("bread-item")}
+        >
           {item.icon}
           <span>{item.text}</span>
         </Link>

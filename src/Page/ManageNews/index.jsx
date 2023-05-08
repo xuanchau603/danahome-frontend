@@ -27,6 +27,8 @@ import moment from "moment";
 import Menu from "../../components/Menu";
 import MyButton from "../../components/MyButton";
 import Format from "../../components/Format";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
+import AddCardOutlinedIcon from "@mui/icons-material/AddCardOutlined";
 
 const cx = classNames.bind(style);
 
@@ -197,6 +199,7 @@ function ManageNews() {
               { value: "3", label: "Tin hết hạn" },
               { value: "1", label: "Tin đang chờ xác nhận" },
               { value: "4", label: "Tin đang ẩn" },
+              { value: "5", label: "Tin chưa thanh toán" },
             ]}
           />
           <Link className={cx("filter-item")} to={"/new-post"}>
@@ -264,6 +267,19 @@ function ManageNews() {
                           className={cx("post-title")}
                         >
                           {item.title}
+                          {moment(item.expire_At).diff(moment(), "hours") <=
+                            24 &&
+                            moment(item.expire_At).diff(moment(), "hours") >
+                              0 &&
+                            item.status === 3 && (
+                              <small>
+                                <AutoDeleteIcon></AutoDeleteIcon>
+                                {`hết hạn sau: ${moment(item.expire_At).diff(
+                                  moment(),
+                                  "hours",
+                                )} giờ`}
+                              </small>
+                            )}
                         </span>
                       </div>
                       <div className={cx("address")}>
@@ -331,7 +347,6 @@ function ManageNews() {
                             placement="topLeft"
                             title={"Hiển thị lại tin này?"}
                             onConfirm={async () => {
-                              console.log(item.ID);
                               dispatch(loadingStart());
                               try {
                                 const formData = new FormData();
@@ -370,7 +385,8 @@ function ManageNews() {
                             </div>
                           </Popconfirm>
                         )}
-                        {item.status === 3 && (
+                        {item.status === 3 &&
+                        moment(item.expire_At).diff(moment(), "hours") <= 24 ? (
                           <Link
                             to={"/extend-post"}
                             state={{
@@ -384,7 +400,24 @@ function ManageNews() {
                             <PublishedWithChangesIcon></PublishedWithChangesIcon>
                             Gia hạn tin
                           </Link>
-                        )}
+                        ) : null}
+                        {item.status === 5 ? (
+                          <Link
+                            to={"/payment-online"}
+                            state={{
+                              newsId: item.ID,
+                              title: item.title,
+                              newTypeId: item.categorys_News_Id,
+                              newsTypePrice: item.newsTypePrice,
+                              expire_At: item.expire_At,
+                              type: 1,
+                            }}
+                            className={cx("btn-extend", "btn")}
+                          >
+                            <AddCardOutlinedIcon></AddCardOutlinedIcon>
+                            Thanh toán tin
+                          </Link>
+                        ) : null}
                         {auth.login.currentUser.isAdmin && (
                           <Popconfirm
                             placement="topLeft"
@@ -491,6 +524,9 @@ function ManageNews() {
                 </Radio>
                 <Radio value={4}>
                   <span className={cx("hide")}>Đã ẩn</span>
+                </Radio>
+                <Radio value={5}>
+                  <span className={cx("not-pay")}>Chưa thanh toán</span>
                 </Radio>
               </Space>
             </Radio.Group>

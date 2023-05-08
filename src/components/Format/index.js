@@ -6,6 +6,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import CreditCardOffOutlinedIcon from "@mui/icons-material/CreditCardOffOutlined";
 
 const Format = {
   formatStatus: (status) => {
@@ -79,6 +80,26 @@ const Format = {
           }}
         >
           <BlockIcon style={{ marginRight: 4 }}></BlockIcon> Đã ẩn
+        </b>
+      );
+    } else if (status === 5) {
+      return (
+        <b
+          style={{
+            color: "#0693a1",
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            fontSize: 14,
+            background: "#cceaed",
+            padding: "0.6rem",
+            borderRadius: 6,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <CreditCardOffOutlinedIcon
+            style={{ marginRight: 4 }}
+          ></CreditCardOffOutlinedIcon>{" "}
+          Chưa thanh toán
         </b>
       );
     }

@@ -13,6 +13,7 @@ import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Format from "./../../../components/Format/index";
 
 const cx = classNames.bind(style);
 
@@ -42,12 +43,20 @@ function ManageSidebar() {
         </div>
         <div className={cx("user-balance")}>
           <p>TK chính: </p>
-          <p>0</p>
+          <p>{Format.formatPrice(currentUser.amount)}</p>
         </div>
       </div>
       <div className={cx("btn")}>
-        <Link to={"#"}>Nạp tiền</Link>
-        <Link to={"#"}>Nhắn tin</Link>
+        <Link
+          to={"/payment-online"}
+          state={{
+            title: `Nạp tiền vào tài khoản: ${currentUser.full_Name}`,
+            type: 2,
+          }}
+        >
+          Nạp tiền
+        </Link>
+        <Link to={"/new-post"}>Đăng tin</Link>
       </div>
       <p>Chung</p>
       <ul className={cx("nav-sidebar")}>

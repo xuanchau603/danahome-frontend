@@ -16,6 +16,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Dropdown, Popover, Switch, Tooltip } from "antd";
 import { useEffect, useRef, useState } from "react";
 import Login from "../../../components/Login";
@@ -24,6 +25,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import MyButton from "../../../components/MyButton";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../../Redux/authSlice";
+import Format from "../../../components/Format";
 
 const cx = classNames.bind(style);
 
@@ -122,6 +124,23 @@ function Header() {
 
   const contentMenu = auth.login.currentUser ? (
     <div className={cx("menu")}>
+      <div className={cx("title")}>
+        <h1>Xin chào: </h1>
+        <span
+          style={{
+            color: auth.login.currentUser.type === 1 ? "#ad9403" : "#2b291a",
+          }}
+        >
+          {auth.login.currentUser.full_Name}
+        </span>
+        {auth.login.currentUser.type === 1 && (
+          <CheckCircleIcon></CheckCircleIcon>
+        )}
+      </div>
+      <div className={cx("amount")}>
+        <h1>Số dư TK: </h1>
+        <span>{Format.formatPrice(auth.login.currentUser.amount)}</span>
+      </div>
       {!auth.login.currentUser.isAdmin && (
         <Link to={"/new-post"} className={cx("menu-item")}>
           <AddCircleOutlineIcon></AddCircleOutlineIcon>{" "}

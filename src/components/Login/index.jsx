@@ -5,10 +5,10 @@ import style from "./Login.module.scss";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EastIcon from "@mui/icons-material/East";
 import LockIcon from "@mui/icons-material/Lock";
-import { Checkbox, message } from "antd";
+import { message } from "antd";
 import classNames from "classnames/bind";
 import { background } from "../../Image";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import MyInput from "../MyInput";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../Redux/authSlice";
@@ -20,8 +20,6 @@ import authAPI from "../../API/authAPI";
 const cx = classNames.bind(style);
 
 function Login(props) {
-  const [remember, setRemember] = useState(false);
-
   const passwordRef = useRef();
 
   const dispath = useDispatch();
@@ -50,10 +48,8 @@ function Login(props) {
               access_Token: response.data.access_Token,
             }),
           );
-          if (remember) {
-            localStorage.setItem("user_Id", response.data.user_Info.ID);
-            localStorage.setItem("token", response.data.access_Token);
-          }
+          localStorage.setItem("user_Id", response.data.user_Info.ID);
+          localStorage.setItem("token", response.data.access_Token);
           dispath(loadingEnd());
           props.onCancel();
         } else {
@@ -107,11 +103,11 @@ function Login(props) {
           }
         ></MyInput>
         <div className={cx("btn")}>
-          <div className={cx("remember")}>
-            <Checkbox onChange={() => setRemember(!remember)}>
+          {/* <div className={cx("remember")}>
+            <Checkbox defaultChecked >
               Ghi nhớ đăng nhập
             </Checkbox>
-          </div>
+          </div> */}
           <MyButton
             onClick={formik.handleSubmit}
             disible={

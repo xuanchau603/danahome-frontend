@@ -10,6 +10,8 @@ import ManageUser from "../Page/ManageUser";
 import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
 import Payment from "../Page/Payment";
+import PaymentOnline from "../Page/PaymentOnline";
+import Return from "../Page/Return";
 import SearchResult from "../Page/SearchResult";
 import UserInfo from "../Page/UserInfo";
 
@@ -31,6 +33,10 @@ const publicRoute = [
   {
     path: "/news-detail",
     component: NewsDetail,
+  },
+  {
+    path: "/return",
+    component: Return,
   },
 ];
 
@@ -73,6 +79,11 @@ const UserRouter = [
   {
     path: "/extend-post",
     component: ExtendPost,
+    layout: ManageLayout,
+  },
+  {
+    path: "/payment-online",
+    component: PaymentOnline,
     layout: ManageLayout,
   },
 ];

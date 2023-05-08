@@ -116,8 +116,6 @@ function SearchBox() {
     setShowMenuSize(false);
   };
 
-  console.log(address);
-
   const handleSearch = () => {
     const filter = {
       typeName: type.split(",")[1] || undefined,
@@ -130,7 +128,6 @@ function SearchBox() {
       acreageFrom: size.split(" -")[0] || undefined,
       acreageTo: size.split("- ")[1] || undefined,
     };
-    console.log(filter);
     navigate(`/search-result?${queryString.stringify(filter)}`);
   };
 

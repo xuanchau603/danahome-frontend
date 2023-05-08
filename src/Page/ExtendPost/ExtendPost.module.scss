@@ -47,6 +47,7 @@
     align-items: flex-start;
     .payment-options {
       padding: 2rem 0;
+      min-width: 80rem;
       h1 {
         font-size: 2rem;
         padding: 2rem 0;
@@ -58,8 +59,9 @@
         > span {
           color: red;
           font-size: 1.4rem;
-          > b {
+          > a {
             color: #057a3a;
+            font-weight: 600;
             &:hover {
               text-decoration: underline;
             }

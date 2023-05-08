@@ -54,8 +54,9 @@
   }
   > table {
     width: 100%;
-    > tbody > tr > th {
+    > tbody > tr > td {
       padding: 1rem;
+      position: relative;
     }
     .post-id {
       padding: 1rem;
@@ -94,6 +95,15 @@
           font-weight: 700;
           color: #2c72b0;
           cursor: pointer;
+          > small {
+            font-size: 1.4rem;
+            color: rgb(255, 65, 65);
+            display: inline-flex;
+            align-items: flex-end;
+            position: absolute;
+            top: 0.6rem;
+            left: 2rem;
+          }
           &:hover {
             text-decoration: underline;
           }
@@ -250,6 +260,10 @@
       font-weight: 600;
     }
     .hide {
+      font-weight: 600;
+    }
+    .not-pay {
+      color: #3aa1fb;
       font-weight: 600;
     }
   }
