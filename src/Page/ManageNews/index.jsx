@@ -271,7 +271,7 @@ function ManageNews() {
                             24 &&
                             moment(item.expire_At).diff(moment(), "hours") >
                               0 &&
-                            item.status === 3 && (
+                            item.status === 2 && (
                               <small>
                                 <AutoDeleteIcon></AutoDeleteIcon>
                                 {`hết hạn sau: ${moment(item.expire_At).diff(
@@ -385,7 +385,7 @@ function ManageNews() {
                             </div>
                           </Popconfirm>
                         )}
-                        {item.status === 3 &&
+                        {item.status === 3 ||
                         moment(item.expire_At).diff(moment(), "hours") <= 24 ? (
                           <Link
                             to={"/extend-post"}

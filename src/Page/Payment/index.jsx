@@ -84,6 +84,9 @@ function Payment() {
   }
 
   const handlePayment = async () => {
+    if (day < 3) {
+      return message.error("Vui lòng đăng tin ít nhất 3 ngày!", 2);
+    }
     const formData = new FormData();
     formData.append("roomType", data.roomType);
     formData.append("newsType", newsType);

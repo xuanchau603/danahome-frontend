@@ -83,6 +83,9 @@ function ExtendPost() {
     const formData = new FormData();
     formData.append("newsId", data.newsId);
     formData.append("userId", auth.login.currentUser.ID);
+    if (day < 3) {
+      return message.error("Vui lòng đăng tin ít nhất 3 ngày!", 2);
+    }
 
     if (paymentType === 1) {
       try {

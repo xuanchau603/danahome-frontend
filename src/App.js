@@ -87,7 +87,6 @@ function App() {
         <Routes>
           {publicRoute.map((element, index) => {
             const Layout = element.layout || DefaultLayout;
-
             return (
               <Route
                 key={index}
