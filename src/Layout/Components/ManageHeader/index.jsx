@@ -10,6 +10,9 @@ function ManageHeader() {
   const listCategoryRooms = useSelector((state) => {
     return state.category.categoryRooms;
   });
+  const currentUser = useSelector((state) => {
+    return state.auth.login.currentUser;
+  });
 
   return (
     <div className={cx("header")}>
@@ -35,10 +38,18 @@ function ManageHeader() {
                 );
               })}
             <li className={cx("nav-item")}>
-              <Link>Dịch vụ</Link>
+              <Link
+                to={"/payment-online"}
+                state={{
+                  title: `Nạp tiền vào tài khoản: ${currentUser.full_Name}`,
+                  type: 2,
+                }}
+              >
+                Nạp tiền
+              </Link>
             </li>
             <li className={cx("nav-item")}>
-              <Link to={"#"}>Bảng giá dịch vụ</Link>
+              <Link to={"/"}>Bảng giá dịch vụ</Link>
             </li>
           </ul>
         </div>

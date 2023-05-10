@@ -41,6 +41,8 @@ function ManageUser() {
   const [userId, setUserId] = useState();
   const [roleId, setRoleId] = useState();
   const [phone, setPhone] = useState();
+  const [isVIP, setIsVIP] = useState();
+  const [vipExpire, setVipExpire] = useState();
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState("");
@@ -283,6 +285,8 @@ function ManageUser() {
                             setPhone(item.phone);
                             setEmail(item.email);
                             setPrevImage(item.image_URL);
+                            setIsVIP(item.type === 1);
+                            setVipExpire(item.VIP_Expire_At);
                             setMenuUser(true);
                           }}
                           className={cx("btn-edit", "btn")}
@@ -533,6 +537,18 @@ function ManageUser() {
               <Input className={cx("input")} value={userId} disabled />
             </div>
             <div className={cx("form-group")}>
+              <b>Loại tài khoản:</b>
+
+              {isVIP ? (
+                <span style={{ color: "#988509" }}>
+                  Tài khoản VIP (Ngày hết hạn:{" "}
+                  {moment(vipExpire).format("DD/MM/YYYY-hh:mm:ss A")})
+                </span>
+              ) : (
+                <span>Tài khoản thường</span>
+              )}
+            </div>
+            <div className={cx("form-group")}>
               <b>Số điện thoại:</b>
               <Input
                 onChange={(e) => {
@@ -562,13 +578,7 @@ function ManageUser() {
               <b>Số Zalo:</b>
               <Input value={phone} className={cx("input")} />
             </div>
-            <div className={cx("form-group")}>
-              <b>Facebook:</b>
-              <Input
-                className={cx("input")}
-                placeholder="Liên kết trang cá nhân của bạn"
-              />
-            </div>
+
             <div style={{ margin: "4rem 0" }} className={cx("form-action")}>
               <div className={cx("password")}>
                 <b>Mật khẩu:</b>
@@ -628,7 +638,6 @@ function ManageUser() {
                 formData.append("fullName", fullName);
                 formData.append("image", image);
                 formData.append("zaloPhone", phone);
-                formData.append("facebookUrl", "");
                 try {
                   dispatch(loadingStart());
                   const response = await authAPI.editUser(

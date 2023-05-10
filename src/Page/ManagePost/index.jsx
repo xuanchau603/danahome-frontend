@@ -93,7 +93,8 @@ function ManagePost() {
     {
       text: "Quản lý tin đăng",
       state: {
-        userId: auth.login.currentUser.ID,
+        userId,
+        poster,
       },
     },
   ];

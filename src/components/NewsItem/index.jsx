@@ -14,6 +14,8 @@ import {
   addToListNewsFavorite,
   removeFromListNewsFavorite,
 } from "../../Redux/newsFavoriteSlice";
+import VerifiedIcon from "@mui/icons-material/Verified";
+import { vip } from "../../Image";
 
 const cx = classNames.bind(style);
 
@@ -37,6 +39,11 @@ function NewsItem(props) {
         <span className={cx("image-count")}>
           {props.data.total_Image || props.data.images.length} ảnh
         </span>
+        {props.data.newsTypePrice === 10000 && (
+          <span className={cx("tag-vip")}>
+            <img src={vip} alt="" />
+          </span>
+        )}
         {listNewsFavorite.find((item) => {
           return item.newsId === props.data.ID;
         }) ? (
@@ -76,7 +83,16 @@ function NewsItem(props) {
           to={`/news-detail?newsId=${props.data.ID}`}
           className={cx("title-news")}
         >
-          <b>{props.data.title.toUpperCase()}</b>
+          {props.data.newsTypePrice === 10000 ? (
+            <b>
+              <VerifiedIcon />
+              <VerifiedIcon />
+              <VerifiedIcon /> {props.data.title.toUpperCase()}
+            </b>
+          ) : (
+            <span>{props.data.title}</span>
+          )}
+
           <small>
             <RemoveRedEyeIcon></RemoveRedEyeIcon> {props.data.news_Views} đã xem
           </small>

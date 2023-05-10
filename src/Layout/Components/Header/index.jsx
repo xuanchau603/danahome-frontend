@@ -174,11 +174,18 @@ function Header() {
         <InfoIcon></InfoIcon>
         <span>Thông tin cá nhân</span>
       </Link>
-      {!auth.login.currentUser.isAdmin && (
-        <li className={cx("menu-item")}>
+      {auth.login.currentUser.type !== 1 && (
+        <Link
+          to={"/payment-online"}
+          state={{
+            title: `Đăng ký vip tài khoản: ${auth.login.currentUser.full_Name}`,
+            type: 3,
+          }}
+          className={cx("menu-item")}
+        >
           <AddTaskIcon></AddTaskIcon>
           <span>Đăng ký VIP</span>
-        </li>
+        </Link>
       )}
       <Link to={"/favorite"} className={cx("menu-item")}>
         <FavoriteBorderIcon></FavoriteBorderIcon>

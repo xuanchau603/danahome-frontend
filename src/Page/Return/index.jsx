@@ -77,7 +77,10 @@ function Return() {
             <Link to={"/"}>
               <HomeOutlinedIcon></HomeOutlinedIcon> Trang chủ
             </Link>
-            <Link to={"/manage-post"} state={{ userId: currentUser.ID }}>
+            <Link
+              to={"/manage-post"}
+              state={{ userId: currentUser.ID, poster: currentUser.full_Name }}
+            >
               <FeedOutlinedIcon></FeedOutlinedIcon> Quản lý tin đăng
             </Link>
           </div>

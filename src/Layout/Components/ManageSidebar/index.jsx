@@ -9,6 +9,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined";
 import StarOutlineOutlinedIcon from "@mui/icons-material/StarOutlineOutlined";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
@@ -78,6 +79,20 @@ function ManageSidebar() {
         >
           <EditNoteOutlinedIcon></EditNoteOutlinedIcon>
           <span to={"/user-information"}>Sửa thông tin cá nhân</span>
+        </NavLink>
+        <NavLink
+          to={`/payment-history`}
+          state={{
+            userId: currentUser.ID,
+            poster: currentUser.full_Name,
+            amount: currentUser.amount,
+          }}
+          className={(active) => {
+            return active.isActive ? cx("nav-item", "active") : cx("nav-item");
+          }}
+        >
+          <HistoryOutlinedIcon></HistoryOutlinedIcon>
+          <span>Lịch sử thanh toán</span>
         </NavLink>
         <span className={cx("nav-item")}>
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>

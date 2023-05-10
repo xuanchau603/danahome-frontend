@@ -1,11 +1,12 @@
 import { Col, Row, Skeleton, Tooltip, message } from "antd";
 import style from "./Home.module.scss";
 import classNames from "classnames/bind";
-import { banner } from "../../Image";
+import { banner, vip } from "../../Image";
 import MyButton from "./../../components/MyButton/index";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import StarIcon from "@mui/icons-material/Star";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import StairsIcon from "@mui/icons-material/Stairs";
 import CallIcon from "@mui/icons-material/Call";
 import CarRepairIcon from "@mui/icons-material/CarRepair";
@@ -226,6 +227,9 @@ function Home() {
                         <WhatshotIcon fontSize="large"></WhatshotIcon> Tin VIP
                         nổi bật
                       </span>
+                      <span className={cx("tag-vip")}>
+                        <img src={vip} alt=""></img>
+                      </span>
                       <MyButton
                         to={`/news-detail?newsId=${item.ID}`}
                         classes={cx("btn-detail")}
@@ -270,7 +274,11 @@ function Home() {
                       )}
                     </div>
                     <div className={cx("news-name")}>
-                      <span title={item.title}>{item.title}</span>
+                      <span title={item.title}>
+                        <VerifiedIcon />
+                        <VerifiedIcon />
+                        <VerifiedIcon /> {item.title}
+                      </span>
                     </div>
                     <div className={cx("news-price")}>
                       <p>

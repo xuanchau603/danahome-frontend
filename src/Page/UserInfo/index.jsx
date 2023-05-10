@@ -8,10 +8,11 @@ import MyButton from "../../components/MyButton";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import authAPI from "../../API/authAPI";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { loadingStart, loadingEnd } from "../../Redux/loadingSlice";
 import { editUser } from "../../Redux/authSlice";
 import Menu from "../../components/Menu";
+import moment from "moment";
 
 const cx = classNames.bind(style);
 const getBase64 = (img, callback) => {
@@ -28,6 +29,8 @@ function UserInfo() {
   const [imagePreview, setImagePreview] = useState([]);
   const [image, setImage] = useState();
   const [phone, setPhone] = useState();
+  const [isVIP, setIsVIP] = useState();
+  const [VIPExpire, setVIPExpire] = useState();
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
   const [zaloPhone, setZaloPhone] = useState();
@@ -71,6 +74,8 @@ function UserInfo() {
     setFullName(response.data.user_Info.full_Name);
     setEmail(response.data.user_Info.email);
     setZaloPhone(response.data.user_Info.phone);
+    setIsVIP(response.data.user_Info.type === 1);
+    setVIPExpire(response.data.user_Info.VIP_Expire_At);
     dispatch(editUser(response.data.user_Info));
     dispatch(loadingEnd());
   };
@@ -121,6 +126,26 @@ function UserInfo() {
           <Input className={cx("input")} value={currentUser.ID} disabled />
         </div>
         <div className={cx("form-group")}>
+          <span>Loại tài khoản: </span>
+          {isVIP ? (
+            <div>
+              <b style={{ color: "#988509" }}>Tài khoản VIP</b>
+              (Ngày hết hạn: {moment(VIPExpire).format("DD/MM/YYYY-hh:mm:ss A")}
+              )
+            </div>
+          ) : (
+            <div>
+              <b>Tài khoản thường</b>{" "}
+              <Link
+                to={"/payment-online"}
+                state={{ title: `Đăng ký vip tài khoản: ${fullName}`, type: 3 }}
+              >
+                Đăng ký VIP
+              </Link>{" "}
+            </div>
+          )}
+        </div>
+        <div className={cx("form-group")}>
           <span>Số điện thoại:</span>
           <Input
             onChange={(e) => {
@@ -150,13 +175,7 @@ function UserInfo() {
           <span>Số Zalo:</span>
           <Input value={currentUser.phone} className={cx("input")} />
         </div>
-        <div className={cx("form-group")}>
-          <span>Facebook:</span>
-          <Input
-            className={cx("input")}
-            placeholder="Liên kết trang cá nhân của bạn"
-          />
-        </div>
+
         <div style={{ margin: "4rem 0" }} className={cx("form-group")}>
           <span>Mật khẩu:</span>
           <MyButton

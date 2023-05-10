@@ -33,6 +33,7 @@ import {
 } from "../../Redux/newsFavoriteSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import VerifiedIcon from "@mui/icons-material/Verified";
 
 const cx = classNames.bind(style);
 
@@ -154,7 +155,19 @@ function NewsDetail() {
               </div>
               <div className={cx("post-header")}>
                 <div className={cx("title")}>
-                  <h1>{newsInfo.title}</h1>{" "}
+                  {newsInfo.newsTypePrice === 10000 ? (
+                    <>
+                      <VerifiedIcon />
+                      <VerifiedIcon />
+                      <VerifiedIcon />{" "}
+                      <h1 style={{ color: "#20710a" }}>
+                        {newsInfo.title.toUpperCase()}
+                      </h1>
+                    </>
+                  ) : (
+                    <h1>{newsInfo.title}</h1>
+                  )}
+
                   <small>
                     <RemoveRedEyeIcon></RemoveRedEyeIcon> {newsInfo.news_Views}{" "}
                     đã xem

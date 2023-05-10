@@ -46,6 +46,14 @@ const paymentAPI = {
       },
     );
   },
+  getPayment: (userId, token, params) => {
+    return axiosClient.get(`/payment/${userId}`, {
+      headers: {
+        token: `Bearer ${token}`,
+      },
+      params,
+    });
+  },
 };
 
 export default paymentAPI;

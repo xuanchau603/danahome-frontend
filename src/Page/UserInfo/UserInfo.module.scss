@@ -18,6 +18,20 @@
         font-weight: 600;
         font-size: 1.8rem;
       }
+      > div {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        > a {
+          color: rgb(5, 98, 28);
+          margin-left: 2rem;
+          font-weight: 600;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
       .input {
         height: 100%;
         font-size: 1.8rem;

@@ -20,7 +20,7 @@ function SearchResult() {
   const [active, setActive] = useState("default");
   const [totalPagination, setTotalPagination] = useState(0);
   const [searchResults, setSreachResult] = useState([]);
-  const [orderBy, setOrderBy] = useState("createdAt");
+  const [orderBy, setOrderBy] = useState("categorys_News_Id");
   const [orderType, setOderType] = useState("DESC");
   const [page, setPage] = useState(1);
 
@@ -293,10 +293,24 @@ function SearchResult() {
                   onClick={() => {
                     setActive("default");
                     setOderType("DESC");
-                    setOrderBy("createdAt");
+                    setOrderBy("categorys_News_Id");
                   }}
                 >
                   Mặc định
+                </span>
+                <span
+                  className={
+                    active === "recently"
+                      ? cx("sort-item", "active")
+                      : cx("sort-item")
+                  }
+                  onClick={() => {
+                    setActive("recently");
+                    setOderType("DESC");
+                    setOrderBy("createdAt");
+                  }}
+                >
+                  Mới đăng
                 </span>
                 <span
                   className={

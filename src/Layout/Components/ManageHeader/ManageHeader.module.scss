@@ -29,11 +29,9 @@
     .navbar {
       display: flex;
       > li {
-        margin-right: 5rem;
-
+        margin-right: 8rem;
         > a {
           color: #fff;
-          padding: 2rem;
           text-align: center;
           &:hover {
             color: orange;

@@ -10,6 +10,7 @@ import ManageUser from "../Page/ManageUser";
 import NewPost from "../Page/NewPost";
 import NewsDetail from "../Page/NewsDetail";
 import Payment from "../Page/Payment";
+import PaymentHistory from "../Page/PaymentHistory";
 import PaymentOnline from "../Page/PaymentOnline";
 import Return from "../Page/Return";
 import SearchResult from "../Page/SearchResult";
@@ -84,6 +85,11 @@ const UserRouter = [
   {
     path: "/payment-online",
     component: PaymentOnline,
+    layout: ManageLayout,
+  },
+  {
+    path: "/payment-history",
+    component: PaymentHistory,
     layout: ManageLayout,
   },
 ];

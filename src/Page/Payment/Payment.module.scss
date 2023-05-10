@@ -42,6 +42,10 @@
         color: red;
       }
     }
+    > p {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+    }
   }
   .main {
     display: flex;

@@ -36,13 +36,16 @@
         align-items: center;
         > h1 {
           font-size: 2rem;
-          color: #20710a;
           font-weight: 700;
           padding-right: 16rem;
           cursor: pointer;
           &:hover {
             text-decoration: underline;
           }
+        }
+        > svg {
+          font-size: 2rem;
+          color: #d8e300;
         }
         > small {
           position: absolute;

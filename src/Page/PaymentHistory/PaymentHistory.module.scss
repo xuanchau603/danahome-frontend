@@ -16,6 +16,20 @@
         > div > span {
           font-size: 1.4rem;
         }
+        &:last-child {
+          background: #dc3545;
+          color: #fff;
+          width: fit-content;
+          font-size: 1.4rem;
+          border-radius: 4px;
+          line-height: 3rem;
+          padding: 0 1rem;
+          margin: 0;
+          &:hover {
+            background: #464b0f;
+            background: #b82e3b;
+          }
+        }
       }
     }
   }
@@ -43,20 +57,28 @@
     > tbody > tr > th {
       padding: 1rem;
     }
+    > tbody > tr > td {
+      padding: 1rem;
+      position: relative;
+    }
     .post-id {
       padding: 1rem;
     }
     .post-image {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 22rem;
-      height: 20rem;
-      padding: 1rem;
-      > img {
-        width: 90%;
-        height: 80%;
-        border-radius: 0.6rem;
+      .news-info {
+        display: block;
+        min-width: 20rem;
+        height: 20rem;
+        padding: 1rem;
+        > h1 {
+          color: #2a7117;
+        }
+        > img {
+          margin-top: 1rem;
+          width: 80%;
+          height: 80%;
+          border-radius: 0.6rem;
+        }
       }
     }
     .post-info {
@@ -65,21 +87,55 @@
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
-        > b {
+        > p {
+          font-size: 1rem;
+          font-weight: 600;
+          padding: 0.4rem;
+          background-color: orange;
+          border-radius: 1rem;
           margin-right: 0.4rem;
           color: #000;
         }
         .post-title {
+          font-size: 1.4rem;
           font-weight: 700;
-          color: #3fb31b;
+          color: #2c72b0;
           cursor: pointer;
+          > small {
+            font-size: 1.4rem;
+            color: rgb(255, 65, 65);
+            display: inline-flex;
+            align-items: flex-end;
+            position: absolute;
+            top: 0.6rem;
+            left: 2rem;
+          }
           &:hover {
             text-decoration: underline;
           }
         }
       }
-      .info {
+      .address {
         margin-bottom: 1rem;
+        padding-right: 2rem;
+        font-size: 1.4rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+      }
+      .actor {
+        margin: -0.4rem 0 1rem 0;
+        font-size: 1.4rem;
+        color: #2a7117;
+        font-weight: 600;
+        > b {
+          color: #000;
+        }
+      }
+      .views {
+        font-size: 1.4rem;
+        margin-bottom: 0.6rem;
       }
       .btn-wrapper {
         margin-bottom: 1rem;
@@ -135,44 +191,32 @@
         }
       }
     }
-    .totalNews {
-      display: block;
+    .price {
       padding: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 40rem;
       > p {
-        color: #3d8c27;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
+        color: #a0c297;
       }
     }
-    .created {
+    .post-date {
       padding: 1rem;
       > p {
         color: #000;
       }
     }
-    .role {
+    .expire-date {
       padding: 1rem;
-      display: flex;
-      align-items: center;
-      .btn-edit {
-        cursor: pointer;
-        background: #ffffca;
-        margin-left: 1rem;
-        border-radius: 4px;
-        padding: 0.4rem;
-        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-        > svg {
-          color: rgb(102, 102, 36);
-        }
-      }
+      width: 16rem;
     }
 
     .status {
       padding: 1rem;
       display: flex;
       align-items: center;
+      width: 16rem;
       .btn-edit {
         cursor: pointer;
         background: #ffffca;
@@ -222,30 +266,20 @@
     .hide {
       font-weight: 600;
     }
-  }
-  .container {
-    .form-group {
-      margin-bottom: 1rem;
-      > span {
-        font-size: 1.5rem;
-        margin-left: 0.6rem;
-        font-weight: 500;
-      }
+    .not-pay {
+      color: #3aa1fb;
+      font-weight: 600;
     }
-    .form-action {
-      display: flex;
-      justify-content: space-between;
-      .avatar {
-        > div {
-          display: flex;
-          flex-direction: column;
-          > img {
-            width: 10rem;
-            height: 10rem;
-            border-radius: 50%;
-          }
-        }
-      }
+  }
+  .info-group {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    > b {
+      flex: 0 0 11rem;
+    }
+    > span {
+      font-size: 1.4rem;
     }
   }
   .btn-submit {

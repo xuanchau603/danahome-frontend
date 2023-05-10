@@ -72,8 +72,10 @@ function ExtendPost() {
     window.scrollTo(0, 0);
   }, []);
   useEffect(() => {
-    setTotal(data.newsTypePrice * day);
-  }, [data.newsTypePrice, day]);
+    auth.login.currentUser.type === 1
+      ? setTotal(data.newsTypePrice * day * 0.8)
+      : setTotal(data.newsTypePrice * day);
+  }, [auth.login.currentUser.type, data.newsTypePrice, day]);
 
   function onChangeRadio(e) {
     setPaymentType(e.target.value);
@@ -276,6 +278,18 @@ function ExtendPost() {
           Số tiền cần thanh toán:{" "}
           <b>{expire_At ? Format.formatPrice(total) : "0đ"}</b>
         </h1>
+        {auth.login.currentUser.type === 1 && (
+          <p>
+            Tài khoản vip được giảm:{" "}
+            {day ? (
+              <>
+                <b>{Format.formatPrice(data.newsTypePrice * day * 0.2)}</b>(20%)
+              </>
+            ) : (
+              "0đ"
+            )}
+          </p>
+        )}
       </div>
       <div className={cx("main")}>
         <div className={cx("payment-options")}>
