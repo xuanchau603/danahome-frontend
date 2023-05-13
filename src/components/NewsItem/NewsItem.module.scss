@@ -75,19 +75,22 @@
     .title-news {
       display: flex;
       position: relative;
-      align-items: flex-start;
+      align-items: center;
+      > svg {
+        color: #d8e300;
+      }
       > b {
-        display: flex;
-        align-items: center;
+        width: 50rem;
         font-weight: 700;
         font-size: 1.5rem;
         color: #20710a;
         padding-right: 10rem;
         line-height: 2.4rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
         cursor: pointer;
-        > svg {
-          color: #d8e300;
-        }
         &:hover {
           text-decoration: underline;
         }

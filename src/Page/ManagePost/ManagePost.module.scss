@@ -78,9 +78,11 @@
     .post-info {
       padding: 1rem;
       .title {
+        width: 50rem;
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
+        overflow: hidden;
         > p {
           font-size: 1rem;
           font-weight: 600;
@@ -95,6 +97,9 @@
           font-weight: 700;
           color: #2c72b0;
           cursor: pointer;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          overflow: hidden;
           > small {
             font-size: 1.4rem;
             color: rgb(255, 65, 65);

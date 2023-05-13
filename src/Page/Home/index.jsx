@@ -277,7 +277,7 @@ function Home() {
                       <span title={item.title}>
                         <VerifiedIcon />
                         <VerifiedIcon />
-                        <VerifiedIcon /> {item.title}
+                        <VerifiedIcon /> <p>{item.title}</p>
                       </span>
                     </div>
                     <div className={cx("news-price")}>

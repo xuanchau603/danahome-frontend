@@ -78,6 +78,12 @@ function NewPost() {
         return message.error("Vui lòng chọn loại bất động sản");
       } else if (images.length === 0) {
         return message.error("Vui lòng chọn ít nhất 1 ảnh");
+      } else if (formik.values.house_Number.startsWith(" ")) {
+        return message.error("Số nhà không hợp lệ");
+      } else if (formik.values.title.startsWith(" ")) {
+        return message.error("Tiêu đề không hợp lệ");
+      } else if (formik.values.description.startsWith(" ")) {
+        return message.error("Mô tả không hợp lệ");
       }
 
       navigate("/payment", {
@@ -476,7 +482,10 @@ function NewPost() {
               !province ||
               !district ||
               !ward ||
-              !roomTypeId
+              !roomTypeId ||
+              formik.values.house_Number.startsWith(" ") ||
+              formik.values.title.startsWith(" ") ||
+              formik.values.description.startsWith(" ")
             }
             primary={
               Object.keys(formik.errors).length === 0 &&
@@ -484,7 +493,10 @@ function NewPost() {
               province &&
               district &&
               ward &&
-              roomTypeId
+              roomTypeId &&
+              formik.values.house_Number.startsWith(" ") &&
+              formik.values.title.startsWith(" ") &&
+              formik.values.description.startsWith(" ")
             }
           >
             Tiếp theo

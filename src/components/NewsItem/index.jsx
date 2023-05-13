@@ -84,11 +84,12 @@ function NewsItem(props) {
           className={cx("title-news")}
         >
           {props.data.newsTypePrice === 10000 ? (
-            <b>
+            <>
               <VerifiedIcon />
               <VerifiedIcon />
-              <VerifiedIcon /> {props.data.title.toUpperCase()}
-            </b>
+              <VerifiedIcon />
+              <b>{props.data.title.toUpperCase()}</b>
+            </>
           ) : (
             <span>{props.data.title}</span>
           )}

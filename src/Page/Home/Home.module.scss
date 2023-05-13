@@ -220,14 +220,18 @@
       .news-name {
         min-height: 6.2rem;
         margin-top: 2rem;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
         > span {
-          font-size: 2.6rem;
-          font-weight: 700;
-          color: #185918;
+          display: flex;
+          align-items: center;
+          > p {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            color: #185918;
+            font-size: 2.6rem;
+            font-weight: 700;
+            overflow: hidden;
+          }
           > svg {
             font-size: 2rem;
             color: #d8e300;

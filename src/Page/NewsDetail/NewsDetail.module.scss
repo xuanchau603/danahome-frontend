@@ -34,11 +34,16 @@
       .title {
         display: flex;
         align-items: center;
+
         > h1 {
           font-size: 2rem;
           font-weight: 700;
-          padding-right: 16rem;
           cursor: pointer;
+          margin-right: 16rem;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
           &:hover {
             text-decoration: underline;
           }
