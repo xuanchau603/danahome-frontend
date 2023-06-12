@@ -29,6 +29,10 @@ function WebsiteRate() {
         <h2>Chọn mức đánh giá:</h2>
         <Rate allowHalf defaultValue={2.5} />
       </div>
+      <div className={cx("rate-title")}>
+        <h2>Tiêu đề</h2>
+        <input type="text" />
+      </div>
       <div className={cx("rate-content")}>
         <h2>Nội dung bài đánh giá</h2>
         <textarea className={cx("content")}></textarea>
