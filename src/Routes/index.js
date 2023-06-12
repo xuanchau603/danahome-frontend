@@ -15,6 +15,11 @@ import PaymentOnline from "../Page/PaymentOnline";
 import Return from "../Page/Return";
 import SearchResult from "../Page/SearchResult";
 import UserInfo from "../Page/UserInfo";
+import WebsiteRate from "../Page/WebsiteRate";
+import ManageCatePost from "../Page/ManageCatePost";
+import ManageRoom from "../Page/ManageRoom";
+import ManageRate from "../Page/ManageRate";
+import Statistic from "../Page/Statistic";
 
 const publicRoute = [
   {
@@ -39,6 +44,7 @@ const publicRoute = [
     path: "/return",
     component: Return,
   },
+  
 ];
 
 const UserRouter = [
@@ -90,6 +96,31 @@ const UserRouter = [
   {
     path: "/payment-history",
     component: PaymentHistory,
+    layout: ManageLayout,
+  },
+  {
+    path: "/web-rate",
+    component: WebsiteRate,
+    layout: ManageLayout,
+  },
+  {
+    path: "/manage-cate-post",
+    component: ManageCatePost,
+    layout: ManageLayout,
+  },
+  {
+    path: "/manage-room",
+    component: ManageRoom,
+    layout: ManageLayout,
+  },
+  {
+    path: "/manage-rate",
+    component: ManageRate,
+    layout: ManageLayout,
+  },
+  {
+    path: "/statistic",
+    component: Statistic,
     layout: ManageLayout,
   },
 ];

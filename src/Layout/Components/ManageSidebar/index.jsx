@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import style from "./ManageSidebar.module.scss";
 import classNames from "classnames/bind";
+import StarRateIcon from '@mui/icons-material/StarRate';
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
@@ -15,6 +16,8 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Format from "./../../../components/Format/index";
+import FeedIcon from '@mui/icons-material/Feed';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 
 const cx = classNames.bind(style);
 
@@ -98,6 +101,10 @@ function ManageSidebar() {
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>
           <span>Bảng giá dịch vụ</span>
         </span>
+        <NavLink to={`/web-rate`} className={cx("nav-item")}>
+          <StarRateIcon></StarRateIcon>
+          <span>Đánh giá</span>
+        </NavLink>
         <span className={cx("nav-item")}>
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
           <span>Liên hệ</span>
@@ -116,10 +123,10 @@ function ManageSidebar() {
         <>
           <p>Quản lý</p>
           <ul className={cx("nav-sidebar")}>
-            <span className={cx("nav-item")}>
+            <NavLink to={"/statistic"} className={cx("nav-item")}>
               <AssessmentOutlinedIcon></AssessmentOutlinedIcon>
               <span>Thống kê</span>
-            </span>
+            </NavLink>
             <NavLink
               to={`/manage-news`}
               className={(active) => {
@@ -142,10 +149,18 @@ function ManageSidebar() {
               <AssignmentIndOutlinedIcon></AssignmentIndOutlinedIcon>
               <span>Quản lý tài khoản</span>
             </NavLink>
-            <span className={cx("nav-item")}>
+            <NavLink to={"/manage-cate-post"} className={cx("nav-item")}>
+              <FeedIcon></FeedIcon>
+              <span>Quản lý loại tin</span>
+            </NavLink>
+            <NavLink to={"/manage-room"} className={cx("nav-item")}>
+              <MeetingRoomIcon></MeetingRoomIcon>
+              <span>Quản lý loại phòng</span>
+            </NavLink>
+            <NavLink to={"/manage-rate"} className={cx("nav-item")}>
               <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
               <span>Quản lý đánh giá</span>
-            </span>
+            </NavLink>
           </ul>
         </>
       )}
