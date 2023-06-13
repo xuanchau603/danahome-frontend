@@ -46,3 +46,31 @@
     margin-right: 12rem;
   }
 }
+.menu-status {
+  .container {
+    height: 22rem;
+    .form-group {
+      margin-bottom: 1rem;
+      > span {
+        font-size: 1.5rem;
+        margin-left: 0.6rem;
+        font-weight: 500;
+      }
+      > input {
+        margin-top: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 0.4rem;
+        box-sizing: border-box;
+        padding: 0.6rem;
+        &:focus {
+          border: 1px solid #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+    }
+    .btn-confirm {
+      float: right;
+      margin-top: 1rem;
+    }
+  }
+}
