@@ -4,7 +4,8 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import MyButton from "../../components/MyButton";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
-
+import { useState } from "react";
+import Menu from "../../components/Menu";
 
 const cx = classNames.bind(style);
 
@@ -21,6 +22,8 @@ const items = [
 ];
 
 function ManageCatePost() {
+  const [MenuCatePost, setMenuCatePost] = useState();
+
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
@@ -54,9 +57,43 @@ function ManageCatePost() {
           </li>
         </ul>
       </div>
-      <MyButton primary classes={cx("btn-add")}>
+      <MyButton
+        onClick={() => {
+          setMenuCatePost(true);
+        }}
+        primary
+        classes={cx("btn-add")}
+      >
         Thêm loại tin mới
       </MyButton>
+      {MenuCatePost && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuCatePost(false);
+          }}
+          open={MenuCatePost}
+          title={`Thêm loại tin`}
+        >
+          <div className={cx("container")}>
+            <div className={cx("form-group")}>
+              <b>Mã loại tin:</b>
+              <input type="text" disabled placeholder="#0001" />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Loại tin:</b>
+              <input type="text" />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Giá tiền:</b>
+              <input type="text" />
+            </div>
+            <MyButton primary classes={cx("btn-confirm")}>
+              Thêm mới
+            </MyButton>
+          </div>
+        </Menu>
+      )}
     </div>
   );
 }
