@@ -67,9 +67,10 @@
     .post-image {
       .news-info {
         display: block;
-        min-width: 20rem;
+        width: 40rem;
         height: 20rem;
         padding: 1rem;
+        overflow: hidden;
         > h1 {
           color: #2a7117;
         }

@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import style from "./ManageSidebar.module.scss";
 import classNames from "classnames/bind";
-import StarRateIcon from '@mui/icons-material/StarRate';
+import StarRateIcon from "@mui/icons-material/StarRate";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import ContentPasteOutlinedIcon from "@mui/icons-material/ContentPasteOutlined";
@@ -16,8 +16,8 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { logoutSuccess } from "../../../Redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Format from "./../../../components/Format/index";
-import FeedIcon from '@mui/icons-material/Feed';
-import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import FeedIcon from "@mui/icons-material/Feed";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 
 const cx = classNames.bind(style);
 
@@ -101,11 +101,21 @@ function ManageSidebar() {
           <ContentPasteOutlinedIcon></ContentPasteOutlinedIcon>
           <span>Bảng giá dịch vụ</span>
         </span>
-        <NavLink to={`/web-rate`} className={cx("nav-item")}>
+        <NavLink
+          to={`/web-rate`}
+          className={(active) => {
+            return active.isActive ? cx("nav-item", "active") : cx("nav-item");
+          }}
+        >
           <StarRateIcon></StarRateIcon>
           <span>Đánh giá</span>
         </NavLink>
-        <NavLink to={"/contact"} className={cx("nav-item")}>
+        <NavLink
+          to={"/contact"}
+          className={(active) => {
+            return active.isActive ? cx("nav-item", "active") : cx("nav-item");
+          }}
+        >
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
           <span>Liên hệ</span>
         </NavLink>
@@ -149,15 +159,36 @@ function ManageSidebar() {
               <AssignmentIndOutlinedIcon></AssignmentIndOutlinedIcon>
               <span>Quản lý tài khoản</span>
             </NavLink>
-            <NavLink to={"/manage-cate-post"} className={cx("nav-item")}>
+            <NavLink
+              to={"/manage-cate-post"}
+              className={(active) => {
+                return active.isActive
+                  ? cx("nav-item", "active")
+                  : cx("nav-item");
+              }}
+            >
               <FeedIcon></FeedIcon>
               <span>Quản lý loại tin</span>
             </NavLink>
-            <NavLink to={"/manage-room"} className={cx("nav-item")}>
+            <NavLink
+              to={"/manage-room"}
+              className={(active) => {
+                return active.isActive
+                  ? cx("nav-item", "active")
+                  : cx("nav-item");
+              }}
+            >
               <MeetingRoomIcon></MeetingRoomIcon>
               <span>Quản lý loại phòng</span>
             </NavLink>
-            <NavLink to={"/manage-rate"} className={cx("nav-item")}>
+            <NavLink
+              to={"/manage-rate"}
+              className={(active) => {
+                return active.isActive
+                  ? cx("nav-item", "active")
+                  : cx("nav-item");
+              }}
+            >
               <StarOutlineOutlinedIcon></StarOutlineOutlinedIcon>
               <span>Quản lý đánh giá</span>
             </NavLink>

@@ -2,9 +2,11 @@ import style from "./WebsiteRade.module.scss";
 import classNames from "classnames/bind";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
-import React from "react";
-import { Rate } from "antd";
+import React, { useState } from "react";
+import { Rate, message } from "antd";
 import MyButton from "../../components/MyButton";
+import reviewsAPI from "../../API/reviewsAPI";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -21,24 +23,59 @@ const items = [
 ];
 
 function WebsiteRate() {
+  const [point, setPoint] = useState();
+  const [title, settitle] = useState();
+  const [description, setDescription] = useState();
+
+  const { auth } = useSelector((state) => {
+    return state;
+  });
+
+  const handleSubmitReview = async () => {
+    const response = await reviewsAPI.createReview(
+      { point, title, description },
+      auth.login.currentUser.access_Token,
+    );
+    if (response.status === 200) {
+      message.success(response.data.message, 2);
+    }
+  };
+
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
       <h1>Đánh giá website</h1>
       <div className={cx("rate-select")}>
         <h2>Chọn mức đánh giá:</h2>
-        <Rate allowHalf defaultValue={2.5} />
+        <Rate
+          onChange={(value) => {
+            setPoint(value);
+          }}
+        />
       </div>
       <div className={cx("rate-title")}>
         <h2>Tiêu đề</h2>
-        <input type="text" />
+        <input
+          value={title}
+          onChange={(e) => settitle(e.target.value)}
+          type="text"
+        />
       </div>
       <div className={cx("rate-content")}>
         <h2>Nội dung bài đánh giá</h2>
-        <textarea className={cx("content")}></textarea>
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className={cx("content")}
+        ></textarea>
       </div>
-      <MyButton primary classes={cx("btn-submit")}>
-        Tiếp theo
+      <MyButton
+        disible={!point || !title || !description}
+        onClick={handleSubmitReview}
+        primary
+        classes={cx("btn-submit")}
+      >
+        Gửi đánh giá
       </MyButton>
     </div>
   );

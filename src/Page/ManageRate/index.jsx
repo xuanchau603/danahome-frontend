@@ -5,9 +5,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import ReplyIcon from "@mui/icons-material/Reply";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Menu from "../../components/Menu";
 import MyButton from "../../components/MyButton";
+import reviewsAPI from "../../API/reviewsAPI";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -25,6 +27,23 @@ const items = [
 
 function ManageRate() {
   const [MenuRate, setMenuRate] = useState();
+  const [reviews, setReviews] = useState([]);
+  const { auth } = useSelector((state) => {
+    return state;
+  });
+
+  useEffect(() => {
+    const getStatistics = async () => {
+      const response = await reviewsAPI.getAllReviews(
+        auth.login.currentUser.access_Token,
+      );
+      if (response.status === 200) {
+        setReviews(response.data.data);
+      }
+    };
+    getStatistics();
+  }, []);
+
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
@@ -36,28 +55,21 @@ function ManageRate() {
             <th>Tiêu đề</th>
             <th>Nội dung bài đánh giá</th>
             <th>Mức đánh giá</th>
-            <th>ID người dùng</th>
+            <th>Người đánh giá</th>
           </tr>
-          <tr>
-            <th>#acqrv510</th>
-            <th>Tôi thực sự thích giao diện của website</th>
-            <th>
-              Giao diện cực thân thiện với người dùng, tôi có thể thanh thục nó
-              trong chưa đầy 1 tiếng
-            </th>
-            <th>4.5</th>
-            <th>#agvzx210</th>
-          </tr>
-          <tr>
-            <th>#acqrv510</th>
-            <th>Website đã giúp tôi rất nhiều</th>
-            <th>
-              Nhờ vào website mà tôi đã có thể tìm được căn hộ mong muốn mà
-              không mất quá nhiều thời gian để tìm kiếm
-            </th>
-            <th>4.5</th>
-            <th>#agvzx210</th>
-          </tr>
+          {reviews.length > 0
+            ? reviews.map((item) => {
+                return (
+                  <tr>
+                    <th>#{item.ID.split("-")[0]}</th>
+                    <th>{item.title}</th>
+                    <th>{item.description}</th>
+                    <th>{item.point}</th>
+                    <th>{item.user.full_Name}</th>
+                  </tr>
+                );
+              })
+            : null}
         </table>
         <ul className={cx("btn-delete")}>
           <li className={cx("list-items")}>
@@ -72,9 +84,14 @@ function ManageRate() {
         <ul className={cx("btn-reply")}>
           <li className={cx("list-items")}>
             <ReplyIcon></ReplyIcon>
-            <NavLink onClick={() => {
+            <NavLink
+              onClick={() => {
                 setMenuRate(true);
-              }} href="#">Phản hồi</NavLink>
+              }}
+              href="#"
+            >
+              Phản hồi
+            </NavLink>
           </li>
           <li className={cx("list-items")}>
             <ReplyIcon></ReplyIcon>

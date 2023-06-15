@@ -2,6 +2,10 @@ import style from "./Statistic.module.scss";
 import classNames from "classnames/bind";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
+import { useEffect, useState } from "react";
+import statisticsAPI from "../../API/statisticsAPI";
+import { useSelector } from "react-redux";
+import reviewsAPI from "../../API/reviewsAPI";
 
 const cx = classNames.bind(style);
 const items = [
@@ -17,6 +21,25 @@ const items = [
 ];
 
 function Statistic() {
+  const [statistics, setStatistics] = useState();
+  const { auth } = useSelector((state) => {
+    return state;
+  });
+
+  useEffect(() => {
+    const getStatistics = async () => {
+      const response = await reviewsAPI.getAllReviews(
+        auth.login.currentUser.access_Token,
+      );
+      if (response.status === 200) {
+        console.log(response);
+        setStatistics(response.data);
+        console.log(statistics);
+      }
+    };
+    getStatistics();
+  }, []);
+
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
