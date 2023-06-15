@@ -20,6 +20,7 @@ import ManageCatePost from "../Page/ManageCatePost";
 import ManageRoom from "../Page/ManageRoom";
 import ManageRate from "../Page/ManageRate";
 import Statistic from "../Page/Statistic";
+import Contact from "../Page/Contact";
 
 const publicRoute = [
   {
@@ -123,6 +124,11 @@ const UserRouter = [
     component: Statistic,
     layout: ManageLayout,
   },
+  {
+    path: "/contact",
+    component: Contact,
+    layout: ManageLayout
+  }
 ];
 
 // const privateRouter = [];

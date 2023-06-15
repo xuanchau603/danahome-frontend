@@ -26,6 +26,7 @@
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
+        margin-right: 1rem;
         padding: 0.6rem;
         border-radius: 1rem;
         background-color: #dc3545;
@@ -35,7 +36,29 @@
           cursor: pointer;
         }
         > a {
+          margin-left: 0.4rem;
           color: #fff;
+        }
+      }
+    }
+    .btn-edit {
+      margin-top: 5rem;
+      .list-items {
+        width: 7rem;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.6rem;
+        border-radius: 1rem;
+        background-color: #00aeff;
+        color: #fff;
+        &:hover {
+          background-color: #42c3ff;
+          cursor: pointer;
+        }
+        > a {
+          color: #fff;
+          margin-left: 0.4rem;
         }
       }
     }
@@ -43,7 +66,7 @@
   .btn-add {
     margin-top: 1rem;
     float: right;
-    margin-right: 12rem;
+    margin-right: 15rem;
   }
 }
 .menu-status {

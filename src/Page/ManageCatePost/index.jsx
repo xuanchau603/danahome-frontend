@@ -6,6 +6,8 @@ import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import { useState } from "react";
 import Menu from "../../components/Menu";
+import { NavLink } from "react-router-dom";
+import EditIcon from '@mui/icons-material/Edit';
 
 const cx = classNames.bind(style);
 
@@ -23,6 +25,7 @@ const items = [
 
 function ManageCatePost() {
   const [MenuCatePost, setMenuCatePost] = useState();
+  const [MenuEditPost, setMenuEditPost] = useState();
 
   return (
     <div className={cx("wrapper")}>
@@ -54,6 +57,30 @@ function ManageCatePost() {
           <li className={cx("list-items")}>
             <RemoveCircleIcon></RemoveCircleIcon>
             <a href="/">Xoá</a>
+          </li>
+        </ul>
+        <ul className={cx("btn-edit")}>
+          <li className={cx("list-items")}>
+            <EditIcon></EditIcon>
+            <NavLink
+              onClick={() => {
+                setMenuEditPost(true);
+              }}
+              href="#"
+            >
+              Sửa
+            </NavLink>
+          </li>
+          <li className={cx("list-items")}>
+            <EditIcon></EditIcon>
+            <NavLink
+              onClick={() => {
+                setMenuEditPost(true);
+              }}
+              href="#"
+            >
+              Sửa
+            </NavLink>
           </li>
         </ul>
       </div>
@@ -90,6 +117,34 @@ function ManageCatePost() {
             </div>
             <MyButton primary classes={cx("btn-confirm")}>
               Thêm mới
+            </MyButton>
+          </div>
+        </Menu>
+      )}
+      {MenuEditPost && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuEditPost(false);
+          }}
+          open={MenuEditPost}
+          title={`Sửa loại tin`}
+        >
+          <div className={cx("container")}>
+            <div className={cx("form-group")}>
+              <b>Mã loại tin:</b>
+              <input type="text" disabled placeholder="#0001" />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Loại tin:</b>
+              <input type="text" />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Giá tiền:</b>
+              <input type="text" />
+            </div>
+            <MyButton primary classes={cx("btn-confirm")}>
+              Cập nhật
             </MyButton>
           </div>
         </Menu>

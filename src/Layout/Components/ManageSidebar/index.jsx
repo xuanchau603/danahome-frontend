@@ -105,10 +105,10 @@ function ManageSidebar() {
           <StarRateIcon></StarRateIcon>
           <span>Đánh giá</span>
         </NavLink>
-        <span className={cx("nav-item")}>
+        <NavLink to={"/contact"} className={cx("nav-item")}>
           <PhoneOutlinedIcon></PhoneOutlinedIcon>
           <span>Liên hệ</span>
-        </span>
+        </NavLink>
         <NavLink
           onClick={() => {
             dispatch(logoutSuccess());

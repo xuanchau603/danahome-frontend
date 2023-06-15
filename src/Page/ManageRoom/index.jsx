@@ -6,6 +6,9 @@ import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import { useState } from "react";
 import Menu from "../../components/Menu";
+import { NavLink } from "react-router-dom";
+import EditIcon from '@mui/icons-material/Edit';
+
 
 const cx = classNames.bind(style);
 
@@ -22,6 +25,8 @@ const items = [
 ];
 function ManageRoom() {
   const [MenuRoom, setMenuRoom] = useState();
+  const [MenuEditRoom, setMenuEditRoom] = useState();
+
   return (
     <div className={cx("wrapper")}>
       <MyBreadCrumb items={items}></MyBreadCrumb>
@@ -59,6 +64,41 @@ function ManageRoom() {
             <a href="/">Xoá</a>
           </li>
         </ul>
+        <ul className={cx("btn-edit")}>
+          <li className={cx("list-items")}>
+            <EditIcon></EditIcon>
+            <NavLink
+              onClick={() => {
+                setMenuEditRoom(true);
+              }}
+              href="#"
+            >
+              Sửa
+            </NavLink>
+          </li>
+          <li className={cx("list-items")}>
+            <EditIcon></EditIcon>
+            <NavLink
+              onClick={() => {
+                setMenuEditRoom(true);
+              }}
+              href="#"
+            >
+              Sửa
+            </NavLink>
+          </li>
+          <li className={cx("list-items")}>
+            <EditIcon></EditIcon>
+            <NavLink
+              onClick={() => {
+                setMenuEditRoom(true);
+              }}
+              href="#"
+            >
+              Sửa
+            </NavLink>
+          </li>
+        </ul>
       </div>
       <MyButton
         onClick={() => {
@@ -88,6 +128,28 @@ function ManageRoom() {
               <input type="text" />
             </div>
             <MyButton primary classes={cx("btn-confirm")}>Thêm mới</MyButton>
+          </div>
+        </Menu>
+      )}
+      {MenuEditRoom && (
+        <Menu
+          classes={cx("menu-status")}
+          onCancel={() => {
+            setMenuEditRoom(false);
+          }}
+          open={MenuEditRoom}
+          title={`Thêm loại phòng`}
+        >
+          <div className={cx("container")}>
+            <div className={cx("form-group")}>
+              <b>Mã loại phòng:</b>
+              <input type="text" disabled placeholder="#0001" />
+            </div>
+            <div className={cx("form-group")}>
+              <b>Loại phòng:</b>
+              <input type="text" />
+            </div>
+            <MyButton primary classes={cx("btn-confirm")}>Cập nhật</MyButton>
           </div>
         </Menu>
       )}
