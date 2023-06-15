@@ -72,7 +72,9 @@ function ManageRate() {
         <ul className={cx("btn-reply")}>
           <li className={cx("list-items")}>
             <ReplyIcon></ReplyIcon>
-            <a href="/">Phản hồi</a>
+            <NavLink onClick={() => {
+                setMenuRate(true);
+              }} href="#">Phản hồi</NavLink>
           </li>
           <li className={cx("list-items")}>
             <ReplyIcon></ReplyIcon>
