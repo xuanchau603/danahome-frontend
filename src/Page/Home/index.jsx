@@ -38,7 +38,7 @@ const cx = classNames.bind(style);
 function Home() {
   const [listHotNews, setListHotNews] = useState([]);
   const [roomTypeId, setRoomTypeId] = useState(
-    "9789b48f-e417-11ed-99e0-ecf4bbc11824",
+    "4c1ea538-6cf3-11ee-812d-ecf4bbc11824",
   );
   const dispath = useDispatch();
 
@@ -171,7 +171,7 @@ function Home() {
           <div className={cx("news-button")}>
             <NavLink
               onClick={() => {
-                setRoomTypeId("9789b48f-e417-11ed-99e0-ecf4bbc11824");
+                setRoomTypeId("4c1ea538-6cf3-11ee-812d-ecf4bbc11824");
               }}
               to={"/"}
               className={!url ? cx("button-item", "active") : cx("button-item")}
@@ -180,7 +180,7 @@ function Home() {
             </NavLink>
             <NavLink
               onClick={() => {
-                setRoomTypeId("8870c827-e417-11ed-99e0-ecf4bbc11824");
+                setRoomTypeId("d5edb92e-681e-11ee-812d-ecf4bbc11824");
               }}
               to={"?roomType=motel"}
               className={
@@ -193,7 +193,7 @@ function Home() {
             </NavLink>
             <NavLink
               onClick={() => {
-                setRoomTypeId("97899ed0-e417-11ed-99e0-ecf4bbc11824");
+                setRoomTypeId("d5edd16c-681e-11ee-812d-ecf4bbc11824");
               }}
               to={"?roomType=apartment"}
               className={
