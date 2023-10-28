@@ -9,7 +9,7 @@ import Menu from "../../components/Menu";
 import EditIcon from "@mui/icons-material/Edit";
 import categoryAPI from "../../API/categoryAPI";
 import Format from "../../components/Format";
-import { message } from "antd";
+import { Popconfirm, message } from "antd";
 
 const cx = classNames.bind(style);
 
@@ -39,16 +39,17 @@ function ManageCatePost() {
   const [NamePost, SetNamePost] = useState();
   const [PricePost, SetPricePost] = useState();
 
-  useEffect(() => {
-    const GetAllCateNews = async () => {
-      const response = await categoryAPI.getAllCategoryNews();
+  const GetAllCateNews = async () => {
+    const response = await categoryAPI.getAllCategoryNews();
 
-      if (response.status === 200) {
-        SetListCatePost(response.data.data);
-      } else {
-        message.error(response.message);
-      }
-    };
+    if (response.status === 200) {
+      SetListCatePost(response.data.data);
+    } else {
+      message.error(response.message);
+    }
+  };
+
+  useEffect(() => {
     GetAllCateNews();
   }, []);
 
@@ -72,10 +73,22 @@ function ManageCatePost() {
                 <th>{Format.formatPrice(item.price)}</th>
                 <th>
                   <div className={cx("action")}>
-                    <span className={cx("btn-remove")}>
+                  <Popconfirm
+                            placement="topLeft"
+                            title={"Bạn có chắc xóa tin này?"}
+                            onConfirm={()=>{
+                              message.info("Không thể xóa!")
+                            }}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <span className={cx("btn-remove")}>
                       <RemoveCircleIcon></RemoveCircleIcon>
-                      <a href="">Xoá</a>
+                      <span onClick={()=>{
+                        
+                      }}>Xoá</span>
                     </span>
+                          </Popconfirm>
                     <span
                       onClick={() => {
                         SetIDPostEdit(item.ID);
@@ -137,10 +150,19 @@ function ManageCatePost() {
             <MyButton
               onClick={() => {
                 //Request post add news
-                console.log({
-                  NamePost,
-                  PricePost,
-                });
+                const AddNews = async ()=>{
+                  const response = await categoryAPI.createCategoryNews({
+                    name:NamePostEdit,
+                    price:PricePostEdit,
+                  });
+                  if (response.status === 200) {
+                    GetAllCateNews();
+                    message.success(response.data.message);
+                  } else {
+                    message.error(response.message);
+                  }
+                }
+                AddNews();
               }}
               primary
               classes={cx("btn-confirm")}
@@ -188,11 +210,20 @@ function ManageCatePost() {
               onClick={() => {
                 //Request handle edit category news
 
-                console.log({
-                  IDPostEdit,
-                  NamePostEdit,
-                  PricePostEdit,
-                });
+                const EditNews = async ()=>{
+                  const response = await categoryAPI.editCategoryNews({
+                    id:IDPostEdit,
+                    name:NamePostEdit,
+                    price:PricePostEdit,
+                  });
+                  if (response.status === 200) {
+                    GetAllCateNews();
+                    message.success(response.data.message);
+                  } else {
+                    message.error(response.message);
+                  }
+                }
+                EditNews();
               }}
               primary
               classes={cx("btn-confirm")}

@@ -9,7 +9,7 @@ import Menu from "../../components/Menu";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import categoryAPI from "../../API/categoryAPI";
-import { message } from "antd";
+import { Popconfirm, message } from "antd";
 
 const cx = classNames.bind(style);
 
@@ -36,17 +36,17 @@ function ManageRoom() {
   //Edit rooms
   const [IDRoomEdit, SetIDRoomEdit] = useState();
   const [NameRoomEdit, SetNameRoomEdit] = useState();
+  const GetAllCateRooms = async () => {
+    const response = await categoryAPI.getAllCategoryRooms();
 
+    if (response.status === 200) {
+      setListRoom(response.data.data);
+    } else {
+      message.error(response.message);
+    }
+  };
   useEffect(() => {
-    const GetAllCateRooms = async () => {
-      const response = await categoryAPI.getAllCategoryRooms();
-
-      if (response.status === 200) {
-        setListRoom(response.data.data);
-      } else {
-        message.error(response.message);
-      }
-    };
+    
     GetAllCateRooms();
   }, []);
 
@@ -68,10 +68,23 @@ function ManageRoom() {
                 <th>{item.name}</th>
                 <th>
                   <div className={cx("action")}>
-                    <span className={cx("btn-remove")}>
+                        <Popconfirm
+                            placement="topLeft"
+                            title={"Bạn có chắc xóa tin này?"}
+                            onConfirm={()=>{
+                              message.info("Không thể xóa!")
+                            }}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <span className={cx("btn-remove")}>
                       <RemoveCircleIcon></RemoveCircleIcon>
-                      <a href="">Xoá</a>
+                      <span onClick={()=>{
+                        
+                      }}>Xoá</span>
                     </span>
+                          </Popconfirm>
+                    
                     <span
                       onClick={() => {
                         SetIDRoomEdit(item.ID);
@@ -133,10 +146,18 @@ function ManageRoom() {
             <MyButton
               onClick={() => {
                 //Request post add rooms
-                console.log({
-                  IDRoom,
-                  NameRoom,
-                });
+                const AddNews = async ()=>{
+                  const response = await categoryAPI.createCategoryRooms({
+                    name:NameRoom,
+                  });
+                  if (response.status === 200) {
+                    GetAllCateRooms();
+                    message.success(response.data.message);
+                  } else {
+                    message.error(response.message);
+                  }
+                }
+                AddNews();
               }}
               primary
               classes={cx("btn-confirm")}
@@ -181,10 +202,19 @@ function ManageRoom() {
               onClick={() => {
                 //Request handle edit category news
 
-                console.log({
-                  IDRoomEdit,
-                  NameRoomEdit,
-                });
+                const EditNews = async ()=>{
+                  const response = await categoryAPI.editCategoryRooms({
+                    id: IDRoomEdit,
+                    name:NameRoomEdit,
+                  });
+                  if (response.status === 200) {
+                    GetAllCateRooms();
+                    message.success(response.data.message);
+                  } else {
+                    message.error(response.message);
+                  }
+                }
+                EditNews();
               }}
               primary
               classes={cx("btn-confirm")}

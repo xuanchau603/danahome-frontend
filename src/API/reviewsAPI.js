@@ -17,6 +17,15 @@ const reviewsAPI = {
       },
     });
   },
+
+  GetStatictis: (token)=>{
+    const url = `/statistics`;
+    return axiosClient.get(url, {
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
+  }
 };
 
 export default reviewsAPI;
