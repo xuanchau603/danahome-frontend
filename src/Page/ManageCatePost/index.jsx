@@ -4,10 +4,13 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import MyButton from "../../components/MyButton";
 import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Menu from "../../components/Menu";
 import { NavLink } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import categoryAPI from "../../API/categoryAPI";
+import Format from "../../components/Format"
+import { message } from "antd";
 
 const cx = classNames.bind(style);
 
@@ -26,6 +29,32 @@ const items = [
 function ManageCatePost() {
   const [MenuCatePost, setMenuCatePost] = useState();
   const [MenuEditPost, setMenuEditPost] = useState();
+  const [ListCatePost, SetListCatePost] = useState([]);
+
+  //Edit news
+  const [IDPostEdit, SetIDPostEdit] = useState();
+  const [NamePostEdit, SetNamePostEdit] = useState();
+  const [PricePostEdit, SetPricePostEdit] = useState();
+
+
+  //Add news
+  const [NamePost, SetNamePost] = useState();
+  const [PricePost, SetPricePost] = useState();
+
+
+  useEffect(()=>{
+    const GetAllCateNews = async ()=>{
+        const response = await categoryAPI.getAllCategoryNews();
+
+        if (response.status === 200) {
+          SetListCatePost(response.data.data);
+        } else {
+          message.error(response.message);
+        }
+    }
+    GetAllCateNews();
+  },[])
+
 
   return (
     <div className={cx("wrapper")}>
@@ -37,52 +66,37 @@ function ManageCatePost() {
             <th>Mã loại tin</th>
             <th>Loại tin</th>
             <th>Giá loại tin</th>
+            <th>Chức năng</th>
           </tr>
-          <tr>
-            <th>#cfas501</th>
-            <th>Tin thường</th>
-            <th>20.000đ</th>
-          </tr>
-          <tr>
-            <th>#afcaq502</th>
-            <th>Tin VIP</th>
-            <th>50.000đ</th>
-          </tr>
+          {ListCatePost.map((item)=>{
+            return <tr>
+                      <th>#{item.ID.split("-")[0]}</th>
+                      <th>{item.name}</th>
+                      <th>{Format.formatPrice(item.price)}</th>
+                      <th>
+                        <div className={cx("action")}>
+                          <span className={cx("btn-remove")}>
+                            <RemoveCircleIcon></RemoveCircleIcon>
+                            <span href="">Xoá</span>
+                          </span>
+                          <span className={cx("btn-edit")}>
+                            <EditIcon></EditIcon>
+                            <span
+                              onClick={() => {
+                                SetIDPostEdit(item.ID)
+                                SetNamePostEdit(item.name)
+                                SetPricePostEdit(item.price)
+                                setMenuEditPost(true);
+                              }}
+                            >
+                              Sửa
+                            </span>
+                           </span>
+                      </div>
+                      </th>
+                  </tr>
+          })}
         </table>
-        <ul className={cx("btn-delete")}>
-          <li className={cx("list-items")}>
-            <RemoveCircleIcon></RemoveCircleIcon>
-            <a href="/">Xoá</a>
-          </li>
-          <li className={cx("list-items")}>
-            <RemoveCircleIcon></RemoveCircleIcon>
-            <a href="/">Xoá</a>
-          </li>
-        </ul>
-        <ul className={cx("btn-edit")}>
-          <li className={cx("list-items")}>
-            <EditIcon></EditIcon>
-            <NavLink
-              onClick={() => {
-                setMenuEditPost(true);
-              }}
-              href="#"
-            >
-              Sửa
-            </NavLink>
-          </li>
-          <li className={cx("list-items")}>
-            <EditIcon></EditIcon>
-            <NavLink
-              onClick={() => {
-                setMenuEditPost(true);
-              }}
-              href="#"
-            >
-              Sửa
-            </NavLink>
-          </li>
-        </ul>
       </div>
       <MyButton
         onClick={() => {
@@ -104,18 +118,27 @@ function ManageCatePost() {
         >
           <div className={cx("container")}>
             <div className={cx("form-group")}>
-              <b>Mã loại tin:</b>
-              <input type="text" disabled placeholder="#0001" />
-            </div>
-            <div className={cx("form-group")}>
               <b>Loại tin:</b>
-              <input type="text" />
+              <input value={NamePost} type="text" onChange={(event)=>{
+                SetNamePost(event.target.value);
+              }}/>
             </div>
             <div className={cx("form-group")}>
               <b>Giá tiền:</b>
-              <input type="text" />
+              <input value={PricePost} type="text" onChange={(event)=>{
+                SetPricePost(event.target.value);
+              }}/>
             </div>
-            <MyButton primary classes={cx("btn-confirm")}>
+            <MyButton onClick={()=>{
+
+              //Request post add news
+              console.log(
+                {
+                  NamePost,
+                  PricePost
+                }
+              );
+            }} primary classes={cx("btn-confirm")}>
               Thêm mới
             </MyButton>
           </div>
@@ -133,17 +156,33 @@ function ManageCatePost() {
           <div className={cx("container")}>
             <div className={cx("form-group")}>
               <b>Mã loại tin:</b>
-              <input type="text" disabled placeholder="#0001" />
+              <input type="text" value={IDPostEdit} disabled/>
             </div>
             <div className={cx("form-group")}>
               <b>Loại tin:</b>
-              <input type="text" />
+              <input type="text" value={NamePostEdit} onChange={(event)=>{
+                SetNamePostEdit(event.target.value)
+              }}/>
             </div>
             <div className={cx("form-group")}>
               <b>Giá tiền:</b>
-              <input type="text" />
+              <input type="text" value={PricePostEdit} onChange={(event)=>{
+                SetPricePost(event.target.value)
+              }} />
             </div>
-            <MyButton primary classes={cx("btn-confirm")}>
+            <MyButton onClick={()=>{
+                //Request handle edit category news
+
+                console.log(
+                  {
+                    IDPostEdit,
+                    NamePostEdit,
+                    PricePostEdit
+                  }
+                );
+
+
+            }} primary classes={cx("btn-confirm")}>
               Cập nhật
             </MyButton>
           </div>
