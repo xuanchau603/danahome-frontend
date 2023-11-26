@@ -6,10 +6,11 @@ import MyBreadCrumb from "../../components/MyBreadcrumb";
 import HomeIcon from "@mui/icons-material/Home";
 import { useEffect, useState } from "react";
 import Menu from "../../components/Menu";
-import { NavLink } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import categoryAPI from "../../API/categoryAPI";
 import { Popconfirm, message } from "antd";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -36,7 +37,15 @@ function ManageRoom() {
   //Edit rooms
   const [IDRoomEdit, SetIDRoomEdit] = useState();
   const [NameRoomEdit, SetNameRoomEdit] = useState();
+
+  const dispatch = useDispatch();
+
+  const ShowLoading = (active)=>{
+    active ? dispatch(loadingStart()) : dispatch(loadingEnd());
+  }
+
   const GetAllCateRooms = async () => {
+    ShowLoading(true)
     const response = await categoryAPI.getAllCategoryRooms();
 
     if (response.status === 200) {
@@ -44,6 +53,7 @@ function ManageRoom() {
     } else {
       message.error(response.message);
     }
+    ShowLoading(false)
   };
   useEffect(() => {
     
@@ -147,6 +157,7 @@ function ManageRoom() {
               onClick={() => {
                 //Request post add rooms
                 const AddNews = async ()=>{
+                  ShowLoading(true)
                   const response = await categoryAPI.createCategoryRooms({
                     name:NameRoom,
                   });
@@ -156,6 +167,7 @@ function ManageRoom() {
                   } else {
                     message.error(response.message);
                   }
+                  ShowLoading(false)
                 }
                 AddNews();
               }}
@@ -203,6 +215,7 @@ function ManageRoom() {
                 //Request handle edit category news
 
                 const EditNews = async ()=>{
+                  ShowLoading(true)
                   const response = await categoryAPI.editCategoryRooms({
                     id: IDRoomEdit,
                     name:NameRoomEdit,
@@ -213,6 +226,7 @@ function ManageRoom() {
                   } else {
                     message.error(response.message);
                   }
+                  ShowLoading(false)
                 }
                 EditNews();
               }}

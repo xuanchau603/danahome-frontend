@@ -10,6 +10,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import categoryAPI from "../../API/categoryAPI";
 import Format from "../../components/Format";
 import { Popconfirm, message } from "antd";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -40,6 +42,7 @@ function ManageCatePost() {
   const [PricePost, SetPricePost] = useState();
 
   const GetAllCateNews = async () => {
+    ShowLoading(true)
     const response = await categoryAPI.getAllCategoryNews();
 
     if (response.status === 200) {
@@ -47,10 +50,19 @@ function ManageCatePost() {
     } else {
       message.error(response.message);
     }
+    ShowLoading(false)
+
   };
+
+  const dispatch = useDispatch();
+
+  const ShowLoading = (active)=>{
+    active ? dispatch(loadingStart()) : dispatch(loadingEnd());
+  }
 
   useEffect(() => {
     GetAllCateNews();
+    console.log(ListCatePost);
   }, []);
 
   return (
@@ -151,9 +163,10 @@ function ManageCatePost() {
               onClick={() => {
                 //Request post add news
                 const AddNews = async ()=>{
+                  ShowLoading(true)
                   const response = await categoryAPI.createCategoryNews({
-                    name:NamePostEdit,
-                    price:PricePostEdit,
+                    name:NamePost,
+                    price:PricePost,
                   });
                   if (response.status === 200) {
                     GetAllCateNews();
@@ -161,6 +174,7 @@ function ManageCatePost() {
                   } else {
                     message.error(response.message);
                   }
+                  ShowLoading(false)
                 }
                 AddNews();
               }}
@@ -211,6 +225,7 @@ function ManageCatePost() {
                 //Request handle edit category news
 
                 const EditNews = async ()=>{
+                  ShowLoading(true)
                   const response = await categoryAPI.editCategoryNews({
                     id:IDPostEdit,
                     name:NamePostEdit,
@@ -222,6 +237,7 @@ function ManageCatePost() {
                   } else {
                     message.error(response.message);
                   }
+                  ShowLoading(false)
                 }
                 EditNews();
               }}

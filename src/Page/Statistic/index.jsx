@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import statisticsAPI from "../../API/statisticsAPI";
 import { useSelector } from "react-redux";
 import Format from "../../components/Format";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import { useDispatch } from "react-redux";
+
 
 const cx = classNames.bind(style);
 const items = [
@@ -25,17 +28,23 @@ function Statistic() {
   const { auth } = useSelector((state) => {
     return state;
   });
+  const dispatch = useDispatch();
+
+  const ShowLoading = (active)=>{
+    active ? dispatch(loadingStart()) : dispatch(loadingEnd());
+  }
 
   useEffect(() => {
     const getStatistics = async () => {
+      ShowLoading(true)
       const response = await statisticsAPI.getStatistics(
         auth.login.currentUser.access_Token,
       );
 
       if (response.status === 200) {
         setStatistics(response.data);
-        console.log(statistics);
       }
+      ShowLoading(false)
     };
 
     getStatistics();
