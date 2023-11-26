@@ -203,7 +203,7 @@ function NewsDetail() {
               </div>
               <div className={cx("post-description")}>
                 <h2>Thông tin mô tả</h2>
-                <p>{newsInfo.description}</p>
+                <p>{newsInfo.description.length > 30 ? `${newsInfo.description.replace(/(.{30})/g, "$1\n")}` : `${newsInfo.description}`}</p>
               </div>
               <div className={cx("post-overview")}>
                 <h2>Đặc điểm bài đăng</h2>
