@@ -7,6 +7,8 @@ import { Rate, message } from "antd";
 import MyButton from "../../components/MyButton";
 import reviewsAPI from "../../API/reviewsAPI";
 import { useSelector } from "react-redux";
+import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
+import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(style);
 
@@ -31,7 +33,14 @@ function WebsiteRate() {
     return state;
   });
 
+  const dispatch = useDispatch();
+
+  const ShowLoading = (active)=>{
+    active ? dispatch(loadingStart()) : dispatch(loadingEnd());
+  }
+
   const handleSubmitReview = async () => {
+    ShowLoading(true)
     const response = await reviewsAPI.createReview(
       { point, title, description },
       auth.login.currentUser.access_Token,
@@ -39,6 +48,7 @@ function WebsiteRate() {
     if (response.status === 200) {
       message.success(response.data.message, 2);
     }
+    ShowLoading(false)
   };
 
   return (

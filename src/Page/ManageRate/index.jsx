@@ -11,7 +11,7 @@ import MyButton from "../../components/MyButton";
 import reviewsAPI from "../../API/reviewsAPI";
 import { useSelector } from "react-redux";
 import verifyAPI from "../../API/verifyAPI";
-import { message } from "antd";
+import { Popconfirm, message } from "antd";
 import { loadingEnd, loadingStart } from "../../Redux/loadingSlice";
 import { useDispatch } from "react-redux";
 
@@ -48,18 +48,20 @@ function ManageRate() {
     active ? dispatch(loadingStart()) : dispatch(loadingEnd());
   }
 
+  const GetAllReviews = async () => {
+    ShowLoading(true)
+    const response = await reviewsAPI.getAllReviews(
+      auth.login.currentUser.access_Token,
+    );
+    if (response.status === 200) {
+      setReviews(response.data.data);
+    }
+    ShowLoading(false)
+  };
+
   useEffect(() => {
-    const getStatistics = async () => {
-      ShowLoading(true)
-      const response = await reviewsAPI.getAllReviews(
-        auth.login.currentUser.access_Token,
-      );
-      if (response.status === 200) {
-        setReviews(response.data.data);
-      }
-      ShowLoading(false)
-    };
-    getStatistics();
+    
+    GetAllReviews();
   }, []);
 
   
@@ -89,10 +91,29 @@ function ManageRate() {
                     <th>{item.user.full_Name}</th>
                     <th>
                       <ul className={cx("btn")}>
-                        <li className={cx("btn-delete")}>
-                          <RemoveCircleIcon></RemoveCircleIcon>
-                          <a href="/">Xoá</a>
-                        </li>
+                      <Popconfirm
+                            placement="topLeft"
+                            title={"Bạn có chắc phản hồi này?"}
+                            onConfirm={async ()=>{
+                              ShowLoading(true)
+                              const response = await reviewsAPI.DeleteReview(item.ID, auth.login.currentUser.access_Token);
+                              if(response.status === 200){
+                                message.success(response.data.message)
+                                GetAllReviews();
+                              }else{
+                                message.error("Xóa thất bại!")
+                              }
+                              ShowLoading(false)
+                            }}
+                            okText="Có"
+                            cancelText="Không"
+                          >
+                            <li className={cx("btn-delete")}>
+                            <RemoveCircleIcon></RemoveCircleIcon>
+                            <p >Xoá</p>
+                          </li>   
+                      </Popconfirm>
+                                               
                         <li className={cx("btn-reply")}>
                           <ReplyIcon></ReplyIcon>
                           <NavLink

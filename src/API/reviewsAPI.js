@@ -25,6 +25,15 @@ const reviewsAPI = {
         token: `Bearer ${token}`,
       },
     });
+  },
+
+  DeleteReview: (id, token)=>{
+    const url = `/reviews/delete/${id}`;
+    return axiosClient.delete(url, {
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
   }
 };
 
