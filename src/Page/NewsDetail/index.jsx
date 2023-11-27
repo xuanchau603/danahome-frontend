@@ -203,7 +203,11 @@ function NewsDetail() {
               </div>
               <div className={cx("post-description")}>
                 <h2>Thông tin mô tả</h2>
-                <p>{newsInfo.description.length > 30 ? `${newsInfo.description.replace(/(.{30})/g, "$1\n")}` : `${newsInfo.description}`}</p>
+                <p>
+                  {newsInfo.description.length > 30
+                    ? `${newsInfo.description.replace(/(.{30})/g, "$1\n")}`
+                    : `${newsInfo.description}`}
+                </p>
               </div>
               <div className={cx("post-overview")}>
                 <h2>Đặc điểm bài đăng</h2>
@@ -235,7 +239,7 @@ function NewsDetail() {
                       <td>Ngày đăng:</td>
                       <td>
                         {moment(new Date(newsInfo.createdAt)).format(
-                          "DD/MM/YYYY, hh:mm:ss A",
+                          "DD/MM/YYYY, hh:mm:ss A"
                         )}
                       </td>
                     </tr>
@@ -243,7 +247,7 @@ function NewsDetail() {
                       <td>Ngày hết hạn:</td>
                       <td>
                         {moment(new Date(newsInfo.expire_At)).format(
-                          "DD/MM/YYYY, hh:mm:ss A",
+                          "DD/MM/YYYY, hh:mm:ss A"
                         )}
                       </td>
                     </tr>
@@ -296,22 +300,19 @@ function NewsDetail() {
               </div>
               <div className={cx("action")}>
                 <div className={cx("action-left")}>
-                  <MyButton onClick={(e) => {}} classes={cx("btn")} primary>
-                    <PaidIcon></PaidIcon> Đặt cọc ngay
-                  </MyButton>
                   <MyButton
                     classes={cx("btn")}
                     outline
                     onClick={() => {
                       const isFavorite = listNewsFavorite.listNewsFavorite.find(
-                        (item) => item.newsId === newsInfo.ID,
+                        (item) => item.newsId === newsInfo.ID
                       );
                       if (isFavorite) {
                         const index =
                           listNewsFavorite.listNewsFavorite.findIndex(
                             (item) => {
                               return item.newsId === newsInfo.ID;
-                            },
+                            }
                           );
                         dispatch(removeFromListNewsFavorite(index));
                       } else {
@@ -319,13 +320,13 @@ function NewsDetail() {
                           addToListNewsFavorite({
                             newsId: newsInfo.ID,
                             createAt: new Date().toLocaleString(),
-                          }),
+                          })
                         );
                       }
                     }}
                   >
                     {listNewsFavorite.listNewsFavorite.find(
-                      (item) => item.newsId === newsInfo.ID,
+                      (item) => item.newsId === newsInfo.ID
                     ) ? (
                       <FavoriteIcon style={{ color: "red" }}></FavoriteIcon>
                     ) : (
@@ -342,15 +343,17 @@ function NewsDetail() {
                   >
                     <CallIcon></CallIcon> {newsInfo.poster_Phone}
                   </MyButton>
-                  <MyButton
-                    href={`https://zalo.me/${newsInfo.poster_Phone}`}
-                    target={"_blank"}
-                    classes={cx("btn")}
-                    primary
-                  >
-                    Nhắn Zalo
-                  </MyButton>
                 </div>
+              </div>
+              <div className={cx("action-call")}>
+                <MyButton
+                  href={`https://zalo.me/${newsInfo.poster_Phone}`}
+                  target={"_blank"}
+                  classes={cx("btn")}
+                  primary
+                >
+                  Nhắn Zalo
+                </MyButton>
               </div>
             </div>
           ) : (

@@ -68,7 +68,7 @@ function NewsItem(props) {
                 addToListNewsFavorite({
                   newsId: props.data.ID,
                   createAt: new Date().toLocaleString(),
-                }),
+                })
               );
             }}
             title="Lưu tin này"
@@ -112,7 +112,11 @@ function NewsItem(props) {
             {moment(new Date(props.data.createdAt)).fromNow()}
           </span>
         </div>
-        <p className={cx("info-description")}>{props.data.description.length > 30 ? `${props.data.description.replace(/(.{30})/g, "$1\n")}` : `${props.data.description}`}</p>
+        <p className={cx("info-description")}>
+          {props.data.description.length > 30
+            ? `${props.data.description.replace(/(.{30})/g, "$1\n")}`
+            : `${props.data.description}`}
+        </p>
         <div className={cx("footer")}>
           <div className={cx("actor")}>
             <div className={cx("actor-image")}>
@@ -124,7 +128,6 @@ function NewsItem(props) {
             </span>
           </div>
           <div className={cx("btn")}>
-            <MyButton primary>Đặt cọc ngay</MyButton>
             <MyButton outline>{props.data.poster_Phone}</MyButton>
           </div>
         </div>
