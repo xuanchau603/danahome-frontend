@@ -158,10 +158,10 @@ function NewPost() {
       setRoomTypeId(data.roomType);
       const Init = async () => {
         const response = await addressAPI.getDistrictByCode(
-          data.province.split(",")[0],
+          data.province.split(",")[0]
         );
         const response1 = await addressAPI.getWardsByCode(
-          data.district.split(",")[0],
+          data.district.split(",")[0]
         );
         setListDictrict(response.data.districts);
         setListWard(response1.data.wards);
@@ -448,7 +448,7 @@ function NewPost() {
                     file.type === "image/jpg";
                   if (!isPNG) {
                     message.error(
-                      `Chỉ được phép chọn file có đuôi .png/.jpeg/.jpg`,
+                      `Chỉ được phép chọn file có đuôi .png/.jpeg/.jpg`
                     );
                   }
                   return isPNG || Upload.LIST_IGNORE;
@@ -494,9 +494,9 @@ function NewPost() {
               district &&
               ward &&
               roomTypeId &&
-              formik.values.house_Number.startsWith(" ") &&
-              formik.values.title.startsWith(" ") &&
-              formik.values.description.startsWith(" ")
+              !formik.values.house_Number.startsWith(" ") &&
+              !formik.values.title.startsWith(" ") &&
+              !formik.values.description.startsWith(" ")
             }
           >
             Tiếp theo
