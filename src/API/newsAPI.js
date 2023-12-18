@@ -56,6 +56,14 @@ const NewsAPI = {
       },
     });
   },
+  deleteNews: (id, token, body = {})=>{
+    return axiosClient.delete(`/news//delete/${id}`, {
+      data: body,
+      headers: {
+        token: `Bearer ${token}`,
+      },
+    });
+  }
 };
 
 export default NewsAPI;

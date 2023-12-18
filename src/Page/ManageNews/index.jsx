@@ -136,7 +136,7 @@ function ManageNews() {
       dispatch(loadingEnd());
     }
   };
-  const getAllNewsByUserId = async () => {
+  const getAllNews = async () => {
     try {
       dispatch(loadingStart());
       setPage(1);
@@ -155,14 +155,27 @@ function ManageNews() {
     }
   };
 
+  const ShowLoading = (active)=>{
+    active ? dispatch(loadingStart()) : dispatch(loadingEnd());
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0);
-    getAllNewsByUserId();
+    getAllNews();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const confirm = () => {
-    message.error("Không có được xóa!");
+  const confirm = async (id) => {
+    ShowLoading(true)
+    const response = await NewsAPI.deleteNews(id, auth.login.currentUser.access_Token);
+    console.log(response)
+    if(response.status === 200){
+      message.success(response.data.message)
+      getAllNews();
+    }else{
+      message.error("Xóa thất bại!")
+    }
+    ShowLoading(false)
   };
   const onChangeRadio = (e) => {
     setStatus(e.target.value);
@@ -314,7 +327,7 @@ function ManageNews() {
                                 );
                                 const jsonData = await response.json();
                                 if (response.status === 200) {
-                                  getAllNewsByUserId();
+                                  getAllNews();
                                   notification.success({
                                     placement: "topRight",
                                     duration: 2,
@@ -358,7 +371,7 @@ function ManageNews() {
                                 );
                                 const jsonData = await response.json();
                                 if (response.status === 200) {
-                                  getAllNewsByUserId();
+                                  getAllNews();
                                   notification.success({
                                     placement: "topRight",
                                     duration: 2,
@@ -422,7 +435,9 @@ function ManageNews() {
                           <Popconfirm
                             placement="topLeft"
                             title={"Bạn có chắc xóa tin này?"}
-                            onConfirm={confirm}
+                            onConfirm={()=>{
+                              confirm(item.ID)
+                            }}
                             okText="Có"
                             cancelText="Không"
                           >
@@ -544,7 +559,7 @@ function ManageNews() {
                 );
                 const jsonData = await response.json();
                 if (response.status === 200) {
-                  await getAllNewsByUserId();
+                  await getAllNews();
                   message.success(jsonData.message, 2);
                   setMenuStatus(false);
                 } else {
